@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notif Sepulang Sekolah</title>
+    <title>Persimpangan Hati</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,19 +11,33 @@
     <div id="toast-notif" class="hidden">
         <span class="icon">✨</span>
         <div class="toast-text">
-            <h4>Quote Baru Terbuka!</h4>
-            <p>Cek menu Galeri untuk melihatnya.</p>
+            <h4>Sesuatu Terbuka!</h4>
+            <p>Cek menu untuk melihatnya.</p>
         </div>
     </div>
 
     <div id="game-container">
         <div id="main-menu" class="screen">
-            <h1>Notif Sepulang Sekolah</h1>
-            <p>Melodi di Atas Atap</p>
+            <div class="menu-title-box">
+                <h1>PERSIMPANGAN HATI</h1>
+                <p>Visual Novel Romansa Sekolah</p>
+            </div>
             <div class="menu-buttons">
-                <button onclick="startGame('cowok')">Main sbg Cowok (Adit)</button>
-                <button onclick="startGame('cewek')">Main sbg Cewek (Adinda)</button>
-                <button onclick="showGallery()">Koleksi Quotes 🔒</button>
+                <button onclick="showNameInput()">▶ Mulai Game (Play)</button>
+                <button onclick="showSettings()">⚙️ Pengaturan</button>
+                <button onclick="showGallery()">📖 Koleksi Quotes 🔒</button>
+            </div>
+        </div>
+
+        <div id="name-input-screen" class="screen hidden">
+            <div class="menu-title-box">
+                <h2>SIAPA NAMA KAMU?</h2>
+                <p>Masukkan nama panggilan karakter utama</p>
+            </div>
+            <div class="menu-buttons">
+                <input type="text" id="player-name-input" placeholder="Contoh: Adi" value="Adi" maxlength="15">
+                <button onclick="startGameWithCustomName()">Mulai Masuk Cerita</button>
+                <button onclick="backToMenu()" style="background: #e74c3c; border-color: #c0392b;">Batal</button>
             </div>
         </div>
 
@@ -45,9 +59,9 @@
             </div>
         </div>
 
-        <div id="gallery-screen" class="screen hidden">
-            <h2>Koleksi Quotes</h2>
-            <div id="quotes-list"></div>
+        <div id="sub-menu-screen" class="screen hidden">
+            <h2 id="sub-menu-title">Judul Menu</h2>
+            <div id="sub-menu-content"></div>
             <button onclick="backToMenu()" class="back-btn">Kembali ke Menu</button>
         </div>
     </div>
