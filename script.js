@@ -1,109 +1,102 @@
-// --- VARIABEL GLOBAL ---
 let playerGender = '';
 let playerName = '';
 let namaKetos = '';
 let namaAnakSeni = '';
-
-// Kumpulan ID Quote yang udah didapet (Ambil dari Local Storage)
 let unlockedQuotes = JSON.parse(localStorage.getItem('vn_quotes')) || [];
 
-// Data Quotes yang bisa dikoleksi
 const allQuotes = {
     quote_raka: "Kadang, keajaiban bukan datang dari rencana yang sempurna, tapi dari seseorang yang berani menggenggam tanganmu saat keadaan sedang gelap.",
     quote_devan: "Warna yang paling indah bukan yang paling cerah, tapi warna yang berani muncul di atas kanvas yang pudar.",
     quote_bad: "Kesempatan yang terlewat tidak akan pernah mengirimkan notifikasi untuk kedua kalinya."
 };
 
-// --- DATA CERITA (NODE SYSTEM) ---
-// Pakai {ketos} dan {seni} biar namanya otomatis ganti sesuai gender!
+// URL Placeholder gambar (Ganti dengan nama filemu nanti, misal: 'kelas.jpg')
+const bgLorong = "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=800"; 
+const bgRooftop = "https://images.unsplash.com/photo-1502003148287-a82ef80a6abc?w=800";
+const charKetos = "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"; // Karakter kartun dummy
+const charSeni = "https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka"; 
+
 const storyData = {
-    prolog: {
+    // --- ADEGAN PENDAHULUAN (TANPA PILIHAN) ---
+    prolog_1: {
+        speaker: "Narator",
+        text: "Sore itu, angin berhembus pelan di koridor SMA Nusantara. Sekolah sudah sepi, tapi kamu masih duduk di kelas sambil asyik push rank.",
+        bg: bgLorong, char: "",
+        choices: [{ text: "Lanjut...", nextScene: "prolog_2" }]
+    },
+    prolog_2: {
+        speaker: "Pak Hartono (Guru)",
+        text: "HEH! Kamu ini jam segini bukannya pulang malah main HP terus. Sini HP kamu bapak sita!",
+        bg: bgLorong, char: "",
+        choices: [{ text: "Lanjut...", nextScene: "prolog_3" }]
+    },
+    prolog_3: {
+        speaker: "Kamu",
+        text: "Yah, Pak! Jangan dong, besok ada event gacha! Gimana caranya biar HP saya balik?",
+        bg: bgLorong, char: "",
+        choices: [{ text: "Lanjut...", nextScene: "prolog_4" }]
+    },
+    prolog_4: {
         speaker: "Pak Hartono",
-        text: "Heh! Ngapain main HP terus di kelas? HP kamu bapak sita! Syarat ambilnya, kamu harus bantu {ketos} dan {seni} ngurus dekorasi panggung festival!",
-        bg: "lorong.jpg", // Nanti kamu bisa siapin gambar lorong.jpg di foldermu
-        choices: [
-            { text: "Maaf Pak, iya saya bantu...", nextScene: "rapat_pertama" }
-        ]
+        text: "Syaratnya gampang. Kamu harus gabung jadi panitia festival bantu {ketos} dan {seni}. Mereka berdua nggak akur. Kalau festival berantakan, HP kamu bapak sita sampai lulus!",
+        bg: bgLorong, char: "",
+        choices: [{ text: "Bergegas ke ruang panitia...", nextScene: "konflik_awal" }]
     },
-    rapat_pertama: {
-        speaker: "Pemikiranmu",
-        text: "Di ruang rapat, {ketos} ngotot mau konsep mewah, tapi {seni} mau konsep daur ulang yang hemat. Mereka berantem, aku harus dukung siapa?",
-        bg: "ruang_osis.jpg",
-        choices: [
-            { text: "Dukung ide {ketos} (Konsep Mewah)", nextScene: "rute_ambis" },
-            { text: "Dukung ide {seni} (Konsep Hemat)", nextScene: "rute_santuy" }
-        ]
+
+    // --- ADEGAN BERCABANG (ADA PILIHAN) ---
+    konflik_awal: {
+        speaker: "Narator",
+        text: "Di ruang panitia, suasananya tegang. {ketos} menggebrak meja, sementara {seni} asyik mainin senar gitarnya tanpa peduli.",
+        bg: bgLorong, char: "",
+        choices: [{ text: "Lanjut...", nextScene: "konflik_dialog" }]
     },
-    rute_ambis: {
+    konflik_dialog: {
         speaker: "{ketos}",
-        text: "Makasih udah dukung ideku. Kamu mending ikut aku lembur di perpus malam ini buat revisi proposal.",
-        bg: "perpus.jpg",
+        text: "Proposal ini berantakan! Kita butuh dekorasi yang elegan, bukan kayak rongsokan pasar loak!",
+        bg: bgLorong, char: charKetos, // Menampilkan gambar ketos
         choices: [
-            { text: "Lanjut ke Hari H (Dapat True Ending Ambis)", nextScene: "ending_ambis" },
-            { text: "Kabur aja ah capek (Dapat Bad Ending)", nextScene: "ending_bad" }
+            { text: "Bela {ketos} (Setuju desain elegan)", nextScene: "ending_ambis" },
+            { text: "Bela {seni} (Setuju desain hemat & nyeni)", nextScene: "ending_santuy" }
         ]
     },
-    rute_santuy: {
-        speaker: "{seni}",
-        text: "Asyik! Keputusan bagus. Mending sekarang kita cabut ke taman belakang, dengerin aku main gitar.",
-        bg: "taman.jpg",
-        choices: [
-            { text: "Lanjut ke Hari H (Dapat True Ending Santuy)", nextScene: "ending_santuy" },
-            { text: "Marahin karena males-malesan (Dapat Bad Ending)", nextScene: "ending_bad" }
-        ]
-    },
+
+    // --- ENDING ---
     ending_ambis: {
         speaker: "{ketos}",
-        text: "Panggungnya sukses! Makasih ya udah nemenin lembur. Kamu... mau nonton kembang api bareng di atap?",
-        bg: "rooftop.jpg",
-        unlockQuote: "quote_raka", // Ini trigger buat buka gembok quote!
-        choices: [
-            { text: "Kembali ke Menu Utama", nextScene: "menu" }
-        ]
+        text: "Aku tahu kamu pasti paham soal efisiensi. Terima kasih ya. Omong-omong... mau lihat bintang di atap sebentar sebelum pulang?",
+        bg: bgRooftop, char: charKetos,
+        unlockQuote: "quote_raka", // Memicu notifikasi
+        choices: [{ text: "Kembali ke Menu Utama", nextScene: "menu" }]
     },
     ending_santuy: {
         speaker: "{seni}",
-        text: "Lagu tadi di panggung... aku ciptain khusus buat kamu. Makasih udah percaya sama seniku.",
-        bg: "rooftop.jpg",
+        text: "Hahaha, bener kan! Estetika itu nggak harus mahal. Sebagai hadiah, lagu di atap ini spesial buat kamu.",
+        bg: bgRooftop, char: charSeni,
         unlockQuote: "quote_devan",
-        choices: [
-            { text: "Kembali ke Menu Utama", nextScene: "menu" }
-        ]
-    },
-    ending_bad: {
-        speaker: "Pemikiranmu",
-        text: "Panggungnya roboh karena kalian nggak kompak. HP-ku ditahan sampe lulus. Nasib...",
-        bg: "lorong.jpg",
-        unlockQuote: "quote_bad",
-        choices: [
-            { text: "Kembali ke Menu Utama", nextScene: "menu" }
-        ]
+        choices: [{ text: "Kembali ke Menu Utama", nextScene: "menu" }]
     }
 };
 
-// --- FUNGSI-FUNGSI GAME ---
-
-// 1. Mulai Game & Set Gender Swap
+// --- FUNGSI GAME ---
 function startGame(gender) {
     playerGender = gender;
     
     if (gender === 'cowok') {
         playerName = 'Adit';
-        namaKetos = 'Rania';   // Target cewek
-        namaAnakSeni = 'Danisa'; // Target cewek
+        namaKetos = 'Rania';   
+        namaAnakSeni = 'Danisa'; 
     } else {
         playerName = 'Adinda';
-        namaKetos = 'Raka';    // Target cowok
-        namaAnakSeni = 'Devan';  // Target cowok
+        namaKetos = 'Raka';    
+        namaAnakSeni = 'Devan';  
     }
 
     document.getElementById('main-menu').classList.add('hidden');
     document.getElementById('game-screen').classList.remove('hidden');
     
-    loadScene('prolog'); // Mulai dari awal cerita
+    loadScene('prolog_1'); // Mulai dari scene pertama narator
 }
 
-// 2. Muat Adegan (Render Scene)
 function loadScene(sceneKey) {
     if (sceneKey === 'menu') {
         backToMenu();
@@ -111,72 +104,86 @@ function loadScene(sceneKey) {
     }
 
     const scene = storyData[sceneKey];
-    
-    // Ganti kata kunci {ketos} dan {seni} jadi nama asli sesuai gender
     let processedText = scene.text.replace(/{ketos}/g, namaKetos).replace(/{seni}/g, namaAnakSeni);
     let processedSpeaker = scene.speaker.replace(/{ketos}/g, namaKetos).replace(/{seni}/g, namaAnakSeni);
 
-    // Tampilkan ke layar
-    document.getElementById('speaker-name').innerText = processedSpeaker;
-    document.getElementById('dialogue-text').innerText = processedText;
-    
-    // Nanti kalau gambar udah siap, kodenya ini:
-    // document.getElementById('background-image').style.backgroundImage = `url('${scene.bg}')`;
+    // Ganti warna teks Narator biar beda dari karakter
+    let speakerEl = document.getElementById('speaker-name');
+    speakerEl.innerText = processedSpeaker;
+    if (processedSpeaker === "Narator") {
+        speakerEl.style.color = "#bdc3c7"; 
+    } else {
+        speakerEl.style.color = "#f1c40f"; 
+    }
 
-    // Cek apakah scene ini ngasih Quote baru?
+    document.getElementById('dialogue-text').innerText = processedText;
+    document.getElementById('background-image').style.backgroundImage = `url('${scene.bg}')`;
+
+    // Atur gambar karakter
+    const charImg = document.getElementById('character-image');
+    if (scene.char && scene.char !== "") {
+        charImg.src = scene.char;
+        charImg.classList.remove('hidden');
+    } else {
+        charImg.classList.add('hidden');
+    }
+
     if (scene.unlockQuote) {
         saveQuote(scene.unlockQuote);
     }
 
-    // Tampilkan tombol pilihan
     const choicesContainer = document.getElementById('choices-container');
-    choicesContainer.innerHTML = ''; // Kosongkan tombol lama
+    choicesContainer.innerHTML = ''; 
 
     scene.choices.forEach(choice => {
         const btn = document.createElement('button');
         btn.className = 'choice-btn';
-        
-        // Ganti teks nama di dalam pilihan juga
         let choiceText = choice.text.replace(/{ketos}/g, namaKetos).replace(/{seni}/g, namaAnakSeni);
         btn.innerText = choiceText;
-        
         btn.onclick = () => loadScene(choice.nextScene);
         choicesContainer.appendChild(btn);
     });
 }
 
-// 3. Simpan Quote ke Local Storage
+// FUNGSI NOTIFIKASI TOAST IN-GAME
 function saveQuote(quoteId) {
     if (!unlockedQuotes.includes(quoteId)) {
         unlockedQuotes.push(quoteId);
         localStorage.setItem('vn_quotes', JSON.stringify(unlockedQuotes));
-        alert("✨ Kamu membuka Quote Baru! Cek di Galeri.");
+        
+        // Tampilkan Toast
+        const toast = document.getElementById('toast-notif');
+        toast.classList.remove('hidden');
+        
+        // Sedikit delay biar transisi CSS jalan
+        setTimeout(() => toast.classList.add('show'), 100);
+
+        // Sembunyikan otomatis setelah 4 detik
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.classList.add('hidden'), 500); // Tunggu animasi slide selesai
+        }, 4000);
     }
 }
 
-// 4. Navigasi Menu & Galeri
-function showGallery() {
+function showGallery() { /* Sama seperti sebelumnya */
     document.getElementById('main-menu').classList.add('hidden');
     document.getElementById('gallery-screen').classList.remove('hidden');
-    
     const list = document.getElementById('quotes-list');
-    list.innerHTML = ''; // Kosongin dulu
-
-    // Looping semua quote yang ada di sistem
+    list.innerHTML = '';
     for (const [key, text] of Object.entries(allQuotes)) {
         const item = document.createElement('div');
         item.className = 'quote-item';
-        
         if (unlockedQuotes.includes(key)) {
             item.innerHTML = `<strong>Terbuka:</strong> "${text}"`;
         } else {
-            item.innerHTML = `🔒 <em>(Quote ini masih terkunci. Mainkan rute lain untuk membuka!)</em>`;
+            item.innerHTML = `🔒 <em>(Terkunci)</em>`;
         }
         list.appendChild(item);
     }
 }
 
-function backToMenu() {
+function backToMenu() { /* Sama seperti sebelumnya */
     document.getElementById('game-screen').classList.add('hidden');
     document.getElementById('gallery-screen').classList.add('hidden');
     document.getElementById('main-menu').classList.remove('hidden');
