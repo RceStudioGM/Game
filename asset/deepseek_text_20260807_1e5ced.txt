@@ -1,0 +1,30 @@
+# --- ALEXANDRA WIJAYA ---
+alexandra_netral    = netral.jpg
+alexandra_tegas     = tegas.jpg
+alexandra_terkejut  = terkejut.jpg
+alexandra_gugup     = gugup.jpg
+alexandra_bahagia   = bahagia.jpg
+alexandra_kecewa    = kecewa.jpg
+alexandra_sedih     = sedih.jpg
+
+# --- KIRANA MAHESWARI ---
+kirana_netral       = netral.jpg
+kirana_ceria        = ceria.jpg
+kirana_tersenyum    = tersenyum.jpg
+kirana_terkejut     = terkejut.jpg
+kirana_tertawa      = tertawa.jpg
+kirana_kesal        = kesal.jpg
+kirana_cemas        = cemas.jpg
+kirana_sedih        = sedih.jpg
+kirana_melankolis   = melankolis.jpg
+kirana_bahagia      = bahagia.jpg
+kirana_terharu      = terharu.jpg
+
+# --- NPC LAINNYA ---
+bima_ejekan         = ejekan.jpg
+rangga_curiga       = curiga.jpg
+rangga_lega         = lega.jpg
+pak_hendra_tegas    = tegas.jpg
+pak_hendra_ramah    = ramah.jpg
+bu_sari_tersenyum   = tersenyum.jpg
+farah_ramah         = ramah.jpg
