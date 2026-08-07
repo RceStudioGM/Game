@@ -1,235 +1,365 @@
-let playerGender = '';
-let playerName = '';
-let namaKetos = '';
-let namaAnakSeni = '';
-let imgPlayer = ''; // Tambahin variabel ini buat nyimpen gambar player yang lagi main!
+/* ============================================================
+   PERSIMPANGAN HATI — script.js
+   Semua state disimpan di memori (localStorage dibungkus try/catch
+   supaya tetap aman dijalankan di preview mana pun).
+   ============================================================ */
 
-// --- 1. TEMPAT MASUKIN LINK GAMBAR ---
+let playerName = 'Adi';
+let unlockedQuotes = [];
+try {
+    unlockedQuotes = JSON.parse(localStorage.getItem('vn_quotes')) || [];
+} catch (e) {
+    unlockedQuotes = [];
+}
+
+/* ------------------------------------------------------------
+   1. HELPER PEMBUAT AVATAR (Dicebear avataaars)
+   Setiap karakter punya "identitas dasar" (rambut/baju/aksesoris)
+   yang tetap sama, lalu ekspresi diubah lewat parameter
+   mouth / eyebrows / eyes supaya wajah cocok dengan momen cerita.
+   ------------------------------------------------------------ */
+function buildAvatar(seed, base, expr) {
+    const params = new URLSearchParams({ seed, ...base, ...expr });
+    return `https://api.dicebear.com/7.x/avataaars/svg?${params.toString()}`;
+}
+
+function placeholderBg(label, bgColor) {
+    return `https://placehold.co/960x600/${bgColor}/f1c40f?font=roboto&text=${encodeURIComponent(label)}`;
+}
+
+/* ------------------------------------------------------------
+   2. ASSETS — dikelompokkan per kategori
+   ------------------------------------------------------------ */
 const ASSETS = {
-    // ... (background dan karakter lain tetep sama) ...
-    
-    // Tambahin aset buat Player:
-    charPlayerCowok: "https://api.dicebear.com/7.x/avataaars/svg?seed=Adit&clothing=shirt", 
-    charPlayerCewek: "https://api.dicebear.com/7.x/avataaars/svg?seed=Adinda&clothing=shirt",
-    bgLorong: "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=900&q=80",
-    bgRooftop: "https://images.unsplash.com/photo-1502003148287-a82ef80a6abc?w=900&q=80",
-    bgPerpus: "https://images.unsplash.com/photo-1568667256549-094345857637?w=900&q=80",
-    bgTaman: "https://images.unsplash.com/photo-1588880331179-bc9b93a8cb65?w=900&q=80",
-    
-    charKetos: "https://api.dicebear.com/7.x/avataaars/svg?seed=Raka&clothing=blazerAndShirt&accessories=prescription02", 
-    charSeni: "https://api.dicebear.com/7.x/avataaars/svg?seed=Devan&clothing=hoodie",
-    charGuru: "https://api.dicebear.com/7.x/avataaars/svg?seed=Hartono&top=shortHair&facialHair=mustache" // Gambar Pak Guru
-   };
 
-// --- 2. KOLEKSI QUOTES (MAKIN BANYAK) ---
-const allQuotes = {
-    quote_raka: "Logika memang penting, tapi keberanianmu menemaniku di saat sulit adalah rumus yang tak terduga.",
-    quote_devan: "Karya seni terindah bukan dari kanvas mahal, tapi dari momen tak terduga bersamamu.",
-    quote_normal: "Kadang kita nggak butuh akhir yang romantis, cukup persahabatan konyol yang bikin masa SMA berkesan.",
-    quote_bad: "Ego yang tinggi hanya akan meruntuhkan panggung yang susah payah dibangun bersama.",
-    quote_guru: "Kedisiplinan itu pahit di awal, tapi penyesalan main game saat jam pelajaran jauh lebih pahit.",
-    quote_secret: "Daripada pusing mikirin drama panitia, mending push rank sampai Mythic! (Error: Notifikasi Dihapus)."
+    // --- BACKGROUND, dikelompokkan per lokasi/tempat di cerita ---
+    BACKGROUNDS: {
+        sekolahUmum: {
+            koridor:     placeholderBg('Koridor Sekolah', '2c3e50'),
+            kelas:       placeholderBg('Ruang Kelas', '2c3e50'),
+            ruangGuruBK: placeholderBg('Ruang Guru / BK', '2c3e50'),
+        },
+        osis: {
+            sekretariat: placeholderBg('Sekretariat OSIS', '1b2838'),
+        },
+        seni: {
+            ruangSeni:   placeholderBg('Ruang Seni', '4a235a'),
+            sanggarLuar: placeholderBg('Sanggar Lukis', '4a235a'),
+        },
+        luarSekolah: {
+            taman:       placeholderBg('Taman Sekolah', '145a32'),
+            pasarMalam:  placeholderBg('Pasar Malam', '145a32'),
+        },
+        spesial: {
+            atapMalam:    placeholderBg('Atap Sekolah - Malam Kembang Api', '0d0d0d'),
+            aulaFestival: placeholderBg('Aula Festival Sekolah', '0d0d0d'),
+        }
+    },
+
+    // --- KARAKTER, tiap karakter = identitas dasar + kumpulan ekspresi ---
+    CHARACTERS: {
+
+        // MC bisa cowok/cewek, disiapkan dua identitas dasar
+        mc: {
+            cowok: {
+                base: { top: 'shortHairShortFlat', clothing: 'hoodie', skinColor: 'light' },
+                normal:  { mouth: 'default', eyebrows: 'default', eyes: 'default' },
+                senang:  { mouth: 'smile',   eyebrows: 'raisedExcited', eyes: 'happy' },
+                gugup:   { mouth: 'twinkle', eyebrows: 'raisedExcitedNatural', eyes: 'surprised' },
+                cemas:   { mouth: 'concerned', eyebrows: 'sadConcerned', eyes: 'default' },
+                marah:   { mouth: 'grimace', eyebrows: 'angry', eyes: 'default' },
+                terharu: { mouth: 'smile',   eyebrows: 'sadConcerned', eyes: 'cry' },
+            },
+            cewek: {
+                base: { top: 'longHairStraight2', clothing: 'hoodie', skinColor: 'light' },
+                normal:  { mouth: 'default', eyebrows: 'default', eyes: 'default' },
+                senang:  { mouth: 'smile',   eyebrows: 'raisedExcited', eyes: 'happy' },
+                gugup:   { mouth: 'twinkle', eyebrows: 'raisedExcitedNatural', eyes: 'surprised' },
+                cemas:   { mouth: 'concerned', eyebrows: 'sadConcerned', eyes: 'default' },
+                marah:   { mouth: 'grimace', eyebrows: 'angry', eyes: 'default' },
+                terharu: { mouth: 'smile',   eyebrows: 'sadConcerned', eyes: 'cry' },
+            }
+        },
+
+        // Alexandra — Ketua OSIS: tegas & kaku, tapi ada momen lelah/gugup/marah/senyum langka
+        alexandra: {
+            base: { top: 'straightAndStrand', clothing: 'blazerAndShirt', accessories: 'prescription02', hairColor: 'black' },
+            tegas:    { mouth: 'serious',  eyebrows: 'angryNatural', eyes: 'default' },   // default sehari-hari
+            lelah:    { mouth: 'sad',      eyebrows: 'sadConcernedNatural', eyes: 'squint' },
+            gugup:    { mouth: 'twinkle',  eyebrows: 'raisedExcitedNatural', eyes: 'default' }, // tersipu, jarang muncul
+            marah:    { mouth: 'grimace',  eyebrows: 'angry', eyes: 'default' },
+            tersenyum:{ mouth: 'smile',    eyebrows: 'default', eyes: 'happy' },          // ending good route
+        },
+
+        // Kirana — jenius seni: ceria & bebas, tapi ada momen insecure & terharu
+        kirana: {
+            base: { top: 'curly', clothing: 'graphicShirt', hairColor: 'blue' },
+            ceria:   { mouth: 'smile',   eyebrows: 'raisedExcited', eyes: 'happy' },      // default sehari-hari
+            cemas:   { mouth: 'sad',     eyebrows: 'sadConcerned', eyes: 'default' },
+            terharu: { mouth: 'twinkle', eyebrows: 'default', eyes: 'cry' },
+            tertawa: { mouth: 'smile',   eyebrows: 'raisedExcited', eyes: 'squint' },
+        },
+
+        // --- NPC pendukung ---
+        bima: {
+            base: { top: 'shortHairFrizzle', clothing: 'shirtCrewNeck', hairColor: 'brownDark' },
+            jahil: { mouth: 'twinkle', eyebrows: 'upDown', eyes: 'wink' },
+        },
+        rangga: {
+            base: { top: 'shortHairShortWaved', clothing: 'blazerAndShirt', hairColor: 'black' },
+            curiga: { mouth: 'serious', eyebrows: 'angryNatural', eyes: 'side' },
+            lega:   { mouth: 'smile',   eyebrows: 'default', eyes: 'default' },
+        },
+        buSari: {
+            base: { top: 'bob', clothing: 'blazerAndSweater', accessories: 'round', hairColor: 'brown' },
+            normal: { mouth: 'smile', eyebrows: 'default', eyes: 'default' },
+        },
+        dewi: {
+            base: { top: 'longHairStraight', clothing: 'shirtVNeck', hairColor: 'black' },
+            maluMalu: { mouth: 'twinkle', eyebrows: 'default', eyes: 'side' },
+        },
+        farah: {
+            base: { top: 'longHairBun', clothing: 'collarAndSweater', hairColor: 'brownDark' },
+            ramah: { mouth: 'smile', eyebrows: 'default', eyes: 'happy' },
+        },
+        bangYusuf: {
+            base: { top: 'shortHairShortCurly', facialHair: 'beardLight', clothing: 'hoodie', hairColor: 'black' },
+            kalem: { mouth: 'serious', eyebrows: 'defaultNatural', eyes: 'default' },
+        },
+        pakHendra: {
+            base: { top: 'shortHairShortFlat', facialHair: 'moustacheFancy', clothing: 'blazerAndShirt', hairColor: 'silverGray' },
+            tegas:  { mouth: 'serious', eyebrows: 'angryNatural', eyes: 'default' },
+            lembut: { mouth: 'smile',   eyebrows: 'default', eyes: 'default' },
+        },
+    }
 };
 
-// --- 3. ALUR CERITA (ZIG-ZAG & BERCABANG) ---
+/* Helper singkat supaya pemanggilan di storyData tetap ringkas,
+   contoh: img('alexandra','tegas') / img('mc','cowok','senang') */
+function img(name, exprOrGender, exprIfMc) {
+    const c = ASSETS.CHARACTERS[name];
+    if (name === 'mc') {
+        const genderData = c[exprOrGender];         // 'cowok' | 'cewek'
+        return buildAvatar(name + '-' + exprOrGender, genderData.base, genderData[exprIfMc]);
+    }
+    return buildAvatar(name, c.base, c[exprOrGender]);
+}
+
+/* ------------------------------------------------------------
+   3. KOLEKSI QUOTES
+   ------------------------------------------------------------ */
+const allQuotes = {
+    quote_alexandra: "Logika memang penting, tapi keberanianmu menemaniku di saat sulit adalah rumus yang tak terduga.",
+    quote_kirana: "Karya seni terindah bukan dari kanvas mahal, tapi dari momen tak terduga bersamamu.",
+    quote_normal: "Kadang kita nggak butuh akhir yang romantis, cukup persahabatan konyol yang bikin masa SMA berkesan.",
+    quote_bad: "Ego yang tinggi hanya akan meruntuhkan panggung yang susah payah dibangun bersama.",
+    quote_guru: "Kedisiplinan itu pahit di awal, tapi penyesalan datang jauh lebih pahit kalau kamu nggak jujur sama diri sendiri.",
+};
+
+/* ------------------------------------------------------------
+   4. ALUR CERITA
+   Nama karakter memakai {player}, {alexandra}, {kirana}
+   ------------------------------------------------------------ */
 const storyData = {
-    // --- PROLOG ---
     prolog_1: {
-        speaker: "Narator", // Kotak nama bakal otomatis hilang!
-        text: "Sore itu, angin berhembus pelan di koridor SMA Nusantara. Sekolah sudah sepi, tapi kamu masih duduk di kelas sambil asyik push rank.",
-        bg: ASSETS.bgLorong, charLeft: "", charRight: "",
+        speaker: "Narator",
+        text: "Sore itu, koridor SMA Nusantara sudah sepi. {player} masih duduk sendirian di kelas, menunda pulang.",
+        bg: ASSETS.BACKGROUNDS.sekolahUmum.kelas, charLeft: "", charRight: "",
         choices: [{ text: "Lanjut...", nextScene: "prolog_2" }]
     },
     prolog_2: {
-        speaker: "Pak Hartono",
-        text: "HEH! Kamu ini jam segini bukannya pulang malah nge-game terus. Sini HP kamu bapak sita!",
-        bg: ASSETS.bgLorong, charLeft: ASSETS.charGuru, charRight: "", // Pak Guru Muncul!
-        choices: [{ text: "Maaf Pak! Syarat balikinnya gimana?", nextScene: "prolog_3" }]
+        speaker: "Pak Hendra",
+        text: "Adi. Bapak lihat nilai ulanganmu turun. Daripada bengong di kelas kosong, mending kamu ikut bantu persiapan Festival Sekolah.",
+        bg: ASSETS.BACKGROUNDS.sekolahUmum.ruangGuruBK, charLeft: img('pakHendra', 'tegas'), charRight: "",
+        choices: [{ text: "Baik, Pak. Saya bantu siapa?", nextScene: "prolog_3" }]
     },
     prolog_3: {
-        speaker: "Pak Hartono",
-        text: "Kamu harus gabung panitia festival bantu {ketos} dan {seni}. Kalau festival berantakan, HP kamu bapak sita sampai lulus!",
-        bg: ASSETS.bgLorong, charLeft: ASSETS.charGuru, charRight: "",
-        choices: [{ text: "Bergegas ke ruang panitia...", nextScene: "konflik_awal" }]
+        speaker: "Pak Hendra",
+        text: "Ada dua tempat yang butuh orang: sekretariat OSIS-nya {alexandra}, dan ruang seni tempat {kirana} bikin mural. Pilih salah satu, atau coba dua-duanya kalau kamu yakin sanggup.",
+        bg: ASSETS.BACKGROUNDS.sekolahUmum.ruangGuruBK, charLeft: img('pakHendra', 'lembut'), charRight: "",
+        choices: [{ text: "Menuju koridor sekolah...", nextScene: "bima_sindir" }]
+    },
+    bima_sindir: {
+        speaker: "Bima",
+        text: "Woy! Denger-denger kamu ditarik OSIS sama anak seni sekaligus? Kamu ini pemeran utama drama apaan sih, Di.",
+        bg: ASSETS.BACKGROUNDS.sekolahUmum.koridor, charLeft: img('bima', 'jahil'), charRight: "",
+        choices: [{ text: "Terserah, yang penting nilai aman.", nextScene: "konflik_awal" }]
     },
 
-    // --- PERCABANGAN UTAMA ---
     konflik_awal: {
         speaker: "Narator",
-        text: "Di ruang panitia, {ketos} menggebrak meja dengan proposal elegan, sementara {seni} bersikeras pakai konsep daur ulang.",
-        bg: ASSETS.bgLorong, charLeft: ASSETS.charKetos, charRight: ASSETS.charSeni,
+        text: "Di persimpangan koridor, {alexandra} berjalan cepat sambil membawa map, sementara dari arah lain {kirana} melambai riang dari pintu ruang seni.",
+        bg: ASSETS.BACKGROUNDS.sekolahUmum.koridor,
+        charLeft: img('alexandra', 'tegas'), charRight: img('kirana', 'ceria'),
         choices: [
-            { text: "Dukung {ketos} (Rute A1: Ambis)", nextScene: "rute_a1" },
-            { text: "Dukung {seni} (Rute B1: Santuy)", nextScene: "rute_b1" },
-            { text: "Tinggalin mereka, tidur di kelas (Secret Route)", nextScene: "rute_secret" }
+            { text: "Bantu {alexandra} di sekretariat OSIS (Rute Alexandra)", nextScene: "rute_a1" },
+            { text: "Bantu {kirana} bikin mural (Rute Kirana)", nextScene: "rute_b1" },
         ]
     },
 
-    // --- RUTE A1 (Fokus Ketos) ---
+    /* ================= RUTE ALEXANDRA ================= */
     rute_a1: {
-        speaker: "{ketos}",
-        text: "Pilihan logis. Temani aku ke perpustakaan sekarang, kita harus merombak anggaran ini sampai selesai.",
-        bg: ASSETS.bgPerpus, charLeft: ASSETS.charKetos, charRight: "",
-        choices: [{ text: "Lanjut ke Perpus...", nextScene: "rute_a1_lanjut" }]
+        speaker: "Alexandra",
+        text: "Kamu yang dikirim Pak Hendra? Bagus. Ikut aku ke sekretariat, banyak proposal yang harus dicek sebelum sore ini.",
+        bg: ASSETS.BACKGROUNDS.osis.sekretariat, charLeft: img('alexandra', 'tegas'), charRight: "",
+        choices: [{ text: "Ikut ke sekretariat...", nextScene: "rute_a1_rangga" }]
     },
-    rute_a1_lanjut: {
-        speaker: "Narator",
-        text: "Di perpustakaan, {ketos} kelihatan sangat lelah dan mulai kehilangan fokus membaca angka-angka.",
-        bg: ASSETS.bgPerpus, charLeft: ASSETS.charKetos, charRight: "",
-        choices: [
-            { text: "Bantu dia menghitung sampai selesai (Tetap di Rute A - Lanjut A2)", nextScene: "rute_a2" },
-            { text: "Tarik tangannya, ajak cari udara segar ke taman (Nyebrang ke Rute B!)", nextScene: "cross_a_to_b" } // ZIG-ZAG!
-        ]
+    rute_a1_rangga: {
+        speaker: "Rangga",
+        text: "Kamu yang mau bantu-bantu di sini? Aku Rangga, wakil ketua. ...Jangan macam-macam sama Alexandra, ya.",
+        bg: ASSETS.BACKGROUNDS.osis.sekretariat, charLeft: img('alexandra', 'tegas'), charRight: img('rangga', 'curiga'),
+        choices: [{ text: "Lanjut kerja sampai malam...", nextScene: "rute_a2" }]
     },
-
-    // --- RUTE B1 (Fokus Seni) ---
-    rute_b1: {
-        speaker: "{seni}",
-        text: "Asyik! Keputusan bagus. Mending sekarang kita cabut ke taman belakang, dengerin ide liarku.",
-        bg: ASSETS.bgTaman, charLeft: "", charRight: ASSETS.charSeni,
-        choices: [{ text: "Ikut ke taman...", nextScene: "rute_b1_lanjut" }]
-    },
-    rute_b1_lanjut: {
-        speaker: "Narator",
-        text: "Di taman, {seni} malah asyik main gitar dan lupa soal dekorasi panggung.",
-        bg: ASSETS.bgTaman, charLeft: "", charRight: ASSETS.charSeni,
-        choices: [
-            { text: "Biarkan dia mencari inspirasi (Tetap di Rute B - Lanjut B2)", nextScene: "rute_b2" },
-            { text: "Tegur dia dan paksa kerjain proposal (Nyebrang ke Rute A!)", nextScene: "cross_b_to_a" } // ZIG-ZAG!
-        ]
-    },
-
-    // --- CROSS ROUTES (ZIG-ZAG SCENES) ---
-    cross_a_to_b: {
-        speaker: "{ketos}",
-        text: "Eh? Mau ke mana? ...Taman? Hmm, sesekali keluar dari logika mungkin nggak buruk.",
-        bg: ASSETS.bgTaman, charLeft: ASSETS.charKetos, charRight: ASSETS.charSeni,
-        choices: [{ text: "Berakhir kerja bareng {seni} juga (Normal Ending)", nextScene: "ending_normal" }]
-    },
-    cross_b_to_a: {
-        speaker: "{seni}",
-        text: "Bawel banget sih kayak {ketos}. Ya udah, ayo kita ke perpus ngerjain proposal yang ngebosenin itu.",
-        bg: ASSETS.bgPerpus, charLeft: ASSETS.charKetos, charRight: ASSETS.charSeni,
-        choices: [{ text: "Ketemu {ketos} di perpus (Normal Ending)", nextScene: "ending_normal" }]
-    },
-
-    // --- RUTE A2 & B2 (CLIMAX SEBELUM ENDING) ---
     rute_a2: {
-        speaker: "{ketos}",
-        text: "Anggarannya beres! Tapi... vendor panggung tiba-tiba membatalkan pesanan kita secara sepihak!",
-        bg: ASSETS.bgLorong, charLeft: ASSETS.charKetos, charRight: "",
+        speaker: "Narator",
+        text: "Beberapa jam berlalu. {alexandra} mulai kelihatan lelah, matanya berat menahan kantuk di depan tumpukan proposal.",
+        bg: ASSETS.BACKGROUNDS.osis.sekretariat, charLeft: img('alexandra', 'lelah'), charRight: "",
         choices: [
-            { text: "Genggam tangannya, cari solusi bareng (True Ambis End)", nextScene: "ending_ambis" },
-            { text: "Panik dan menyalahkan {ketos} (Bad End)", nextScene: "ending_bad" }
+            { text: "Selimuti dia dengan jaket, biarkan istirahat sebentar", nextScene: "rute_a3_baik" },
+            { text: "Bangunkan paksa, kerjaan belum selesai", nextScene: "ending_bad" },
         ]
+    },
+    rute_a3_baik: {
+        speaker: "Alexandra",
+        text: "...Kenapa kamu masih di sini? ...Nggak perlu nungguin aku bangun kayak gini.",
+        bg: ASSETS.BACKGROUNDS.osis.sekretariat, charLeft: img('alexandra', 'gugup'), charRight: "",
+        choices: [{ text: "Nungguin kamu bangun. Kamu kerja keras banget.", nextScene: "ending_ambis" }]
+    },
+    ending_ambis: {
+        speaker: "Alexandra",
+        text: "Festival sukses berkat kerja kerasmu juga. ...Malam ini bintangnya indah, ya. Terima kasih sudah bertahan bersamaku.",
+        bg: ASSETS.BACKGROUNDS.spesial.atapMalam, charLeft: img('alexandra', 'tersenyum'), charRight: "",
+        unlockQuote: "quote_alexandra",
+        choices: [{ text: "Kembali ke Menu Utama", nextScene: "menu" }]
+    },
+
+    /* ================= RUTE KIRANA ================= */
+    rute_b1: {
+        speaker: "Kirana",
+        text: "Asyik, ada bala bantuan! Sini, tanganmu masih bersih kan? Pegangin kanvas ini dulu!",
+        bg: ASSETS.BACKGROUNDS.seni.ruangSeni, charLeft: "", charRight: img('kirana', 'ceria'),
+        choices: [{ text: "Bantu pegang kanvas...", nextScene: "rute_b1_busari" }]
+    },
+    rute_b1_busari: {
+        speaker: "Bu Sari",
+        text: "Wah, tumben Kirana nggak ngusir orang di hari pertama. Tolong dibantu terus ya, dia susah kerja bareng orang lain biasanya.",
+        bg: ASSETS.BACKGROUNDS.seni.ruangSeni, charLeft: img('buSari', 'normal'), charRight: img('kirana', 'ceria'),
+        choices: [{ text: "Lanjut membantu sampai sore...", nextScene: "rute_b2" }]
     },
     rute_b2: {
-        speaker: "{seni}",
-        text: "Dekorasi dari barang bekasnya udah siap, tapi sekolah tiba-tiba melarang konsep ini dipakai!",
-        bg: ASSETS.bgLorong, charLeft: "", charRight: ASSETS.charSeni,
+        speaker: "Kirana",
+        text: "...Kadang aku takut, semua orang cuma suka 'Kirana yang jago gambar', bukan aku yang beneran.",
+        bg: ASSETS.BACKGROUNDS.seni.ruangSeni, charLeft: "", charRight: img('kirana', 'cemas'),
         choices: [
-            { text: "Bela {seni} di depan guru (True Santuy End)", nextScene: "ending_santuy" },
-            { text: "Nyerah dan setuju sama guru (Bad End)", nextScene: "ending_bad" }
+            { text: "Aku suka kamu bukan karena kamu jago gambar.", nextScene: "ending_santuy" },
+            { text: "(diam, tidak tahu harus bilang apa)", nextScene: "ending_bad" },
         ]
     },
-
-    // --- ENDINGS ---
-    ending_ambis: {
-        speaker: "{ketos}",
-        text: "Berkat solusimu, festival sukses besar. Malam ini bintangnya indah ya... Terima kasih sudah bertahan bersamaku.",
-        bg: ASSETS.bgRooftop, charLeft: ASSETS.charKetos, charRight: "",
-        unlockQuote: "quote_raka",
-        choices: [{ text: "Kembali ke Menu Utama", nextScene: "menu" }]
-    },
     ending_santuy: {
-        speaker: "{seni}",
-        text: "Panggung ini keren banget karena kamu percaya sama seniku. Lagu ini... spesial buat kamu.",
-        bg: ASSETS.bgRooftop, charLeft: "", charRight: ASSETS.charSeni,
-        unlockQuote: "quote_devan",
+        speaker: "Kirana",
+        text: "Itu... kalimat paling nggak romantis tapi paling bikin aku pengen nangis yang pernah aku denger. Makasih ya.",
+        bg: ASSETS.BACKGROUNDS.spesial.aulaFestival, charLeft: "", charRight: img('kirana', 'terharu'),
+        unlockQuote: "quote_kirana",
         choices: [{ text: "Kembali ke Menu Utama", nextScene: "menu" }]
     },
-    ending_normal: {
-        speaker: "Narator",
-        text: "Kalian bertiga akhirnya bekerja sama. Tidak ada kisah romantis, tapi kalian sering nongkrong di kantin sebagai sahabat karib.",
-        bg: ASSETS.bgLorong, charLeft: ASSETS.charKetos, charRight: ASSETS.charSeni,
-        unlockQuote: "quote_normal",
-        choices: [{ text: "Kembali ke Menu Utama", nextScene: "menu" }]
-    },
+
+    /* ================= ENDING NETRAL/BAD ================= */
     ending_bad: {
-        speaker: "Narator",
-        text: "Kepanitiaan bubar jalan. Panggung berantakan. Pak Hartono menahan HP-mu selamanya. Nasib...",
-        bg: ASSETS.bgLorong, charLeft: ASSETS.charGuru, charRight: "",
-        unlockQuote: "quote_bad",
+        speaker: "Pak Hendra",
+        text: "Adi... Bapak nggak bisa maksa kamu jujur sama perasaanmu sendiri. Tapi coba pikirkan lagi baik-baik, ya.",
+        bg: ASSETS.BACKGROUNDS.sekolahUmum.ruangGuruBK, charLeft: img('pakHendra', 'tegas'), charRight: "",
+        unlockQuote: "quote_guru",
         choices: [{ text: "Kembali ke Menu Utama", nextScene: "menu" }]
     },
-    rute_secret: {
-        speaker: "Pak Hartono",
-        text: "KAMU MALAH TIDUR?! Bagus! Berani-beraninya. HP kamu bapak lelang buat dana sekolah!",
-        bg: ASSETS.bgLorong, charLeft: ASSETS.charGuru, charRight: "",
-        unlockQuote: "quote_secret",
-        choices: [{ text: "Kembali ke Menu Utama", nextScene: "menu" }]
-    }
 };
 
-function startGame(gender) {
-    playerGender = gender;
-    
-    if (gender === 'cowok') {
-        playerName = 'Adit';
-        imgPlayer = ASSETS.charPlayerCowok; // Set gambar cowok
-        namaKetos = 'Rania';   
-        namaAnakSeni = 'Danisa'; 
-    } else {
-        playerName = 'Adinda';
-        imgPlayer = ASSETS.charPlayerCewek; // Set gambar cewek
-        namaKetos = 'Raka';    
-        namaAnakSeni = 'Devan';  
-    }
-
-    document.getElementById('main-menu').classList.add('hidden');
-    document.getElementById('game-screen').classList.remove('hidden');
-    
-    loadScene('prolog_1'); 
+/* ------------------------------------------------------------
+   5. NAVIGASI ANTAR LAYAR
+   ------------------------------------------------------------ */
+function hideAllScreens() {
+    ['main-menu', 'name-input-screen', 'game-screen', 'sub-menu-screen'].forEach(id => {
+        document.getElementById(id).classList.add('hidden');
+    });
 }
 
+function showNameInput() {
+    hideAllScreens();
+    document.getElementById('name-input-screen').classList.remove('hidden');
+}
+
+function startGameWithCustomName() {
+    const input = document.getElementById('player-name-input');
+    playerName = (input.value || '').trim() || 'Adi';
+    hideAllScreens();
+    document.getElementById('game-screen').classList.remove('hidden');
+    loadScene('prolog_1');
+}
+
+function backToMenu() {
+    hideAllScreens();
+    document.getElementById('main-menu').classList.remove('hidden');
+}
+
+function showSettings() {
+    hideAllScreens();
+    document.getElementById('sub-menu-screen').classList.remove('hidden');
+    document.getElementById('sub-menu-title').innerText = 'Pengaturan';
+    document.getElementById('sub-menu-content').innerHTML =
+        '<p style="opacity:.8">Pengaturan suara & teks belum tersedia di build ini.</p>';
+}
+
+function showGallery() {
+    hideAllScreens();
+    document.getElementById('sub-menu-screen').classList.remove('hidden');
+    document.getElementById('sub-menu-title').innerText = 'Koleksi Quotes';
+    const box = document.getElementById('sub-menu-content');
+    box.innerHTML = '';
+    for (const [key, text] of Object.entries(allQuotes)) {
+        const item = document.createElement('div');
+        item.className = 'quote-item';
+        item.innerHTML = unlockedQuotes.includes(key)
+            ? `<strong>Terbuka:</strong> "${text}"`
+            : `🔒 <em>(Mainkan rute lain untuk membuka)</em>`;
+        box.appendChild(item);
+    }
+}
+
+/* ------------------------------------------------------------
+   6. ENGINE UTAMA
+   ------------------------------------------------------------ */
 function loadScene(sceneKey) {
     if (sceneKey === 'menu') {
         backToMenu();
         return;
-        function loadScene(sceneKey) {
-    if (sceneKey === 'menu') {
-        backToMenu();
+    }
+
+    const scene = storyData[sceneKey];
+    if (!scene) {
+        console.error('Scene tidak ditemukan:', sceneKey);
         return;
     }
 
-    const scene = storyData[sceneKey];
-    
-    // Update bagian ini: Tambahin replace buat {player}
-    let processedText = scene.text.replace(/{ketos}/g, namaKetos).replace(/{seni}/g, namaAnakSeni).replace(/{player}/g, playerName);
-    let processedSpeaker = scene.speaker.replace(/{ketos}/g, namaKetos).replace(/{seni}/g, namaAnakSeni).replace(/{player}/g, playerName);
-    
-    // ... (sisa kodenya tetep sama ke bawah) ...
-    }
+    const replaceTags = (str) => str
+        .replace(/{alexandra}/g, 'Alexandra')
+        .replace(/{kirana}/g, 'Kirana')
+        .replace(/{player}/g, playerName);
 
-    const scene = storyData[sceneKey];
-    let processedText = scene.text.replace(/{ketos}/g, namaKetos).replace(/{seni}/g, namaAnakSeni);
-    let processedSpeaker = scene.speaker.replace(/{ketos}/g, namaKetos).replace(/{seni}/g, namaAnakSeni);
+    const processedText = replaceTags(scene.text);
+    const processedSpeaker = replaceTags(scene.speaker);
 
-    // LOGIKA MENYEMBUNYIKAN KOTAK NAMA JIKA NARATOR
     const speakerBox = document.getElementById('speaker-name-box');
     if (processedSpeaker === "Narator") {
-        speakerBox.classList.add('hide-name-box'); // Hilangkan kotak nama
+        speakerBox.classList.add('hide-name-box');
     } else {
-        speakerBox.classList.remove('hide-name-box'); // Munculkan lagi
+        speakerBox.classList.remove('hide-name-box');
         document.getElementById('speaker-name').innerText = processedSpeaker;
     }
 
     document.getElementById('dialogue-text').innerText = processedText;
     document.getElementById('background-image').style.backgroundImage = `url('${scene.bg}')`;
 
-    // Render Gambar Karakter Kiri & Kanan
     const charL = document.getElementById('char-left');
-    if (scene.charLeft && scene.charLeft !== "") {
+    if (scene.charLeft) {
         charL.src = scene.charLeft;
         charL.classList.remove('hidden');
     } else {
@@ -237,66 +367,36 @@ function loadScene(sceneKey) {
     }
 
     const charR = document.getElementById('char-right');
-    if (scene.charRight && scene.charRight !== "") {
+    if (scene.charRight) {
         charR.src = scene.charRight;
         charR.classList.remove('hidden');
     } else {
         charR.classList.add('hidden');
     }
 
-    // Tembak Notif
     if (scene.unlockQuote) saveQuote(scene.unlockQuote);
 
-    // Render Tombol
     const choicesContainer = document.getElementById('choices-container');
-    choicesContainer.innerHTML = ''; 
-
+    choicesContainer.innerHTML = '';
     scene.choices.forEach(choice => {
         const btn = document.createElement('button');
         btn.className = 'choice-btn';
-        let choiceText = choice.text.replace(/{ketos}/g, namaKetos).replace(/{seni}/g, namaAnakSeni);
-        btn.innerText = choiceText;
+        btn.innerText = replaceTags(choice.text);
         btn.onclick = () => loadScene(choice.nextScene);
         choicesContainer.appendChild(btn);
     });
 }
 
 function saveQuote(quoteId) {
-    if (!unlockedQuotes.includes(quoteId)) {
-        unlockedQuotes.push(quoteId);
-        localStorage.setItem('vn_quotes', JSON.stringify(unlockedQuotes));
-        
-        const toast = document.getElementById('toast-notif');
-        toast.classList.remove('hidden');
-        setTimeout(() => toast.classList.add('show'), 100);
-        setTimeout(() => {
-            toast.classList.remove('show');
-            setTimeout(() => toast.classList.add('hidden'), 500); 
-        }, 4000);
-    }
-}
+    if (unlockedQuotes.includes(quoteId)) return;
+    unlockedQuotes.push(quoteId);
+    try { localStorage.setItem('vn_quotes', JSON.stringify(unlockedQuotes)); } catch (e) { /* abaikan bila tak tersedia */ }
 
-function showGallery() {
-    document.getElementById('main-menu').classList.add('hidden');
-    document.getElementById('gallery-screen').classList.remove('hidden');
-    const list = document.getElementById('quotes-list');
-    list.innerHTML = '';
-    
-    // Looping semua quote yang ada di sistem
-    for (const [key, text] of Object.entries(allQuotes)) {
-        const item = document.createElement('div');
-        item.className = 'quote-item';
-        if (unlockedQuotes.includes(key)) {
-            item.innerHTML = `<strong>Terbuka:</strong> "${text}"`;
-        } else {
-            item.innerHTML = `🔒 <em>(Mainkan rute lain untuk membuka)</em>`;
-        }
-        list.appendChild(item);
-    }
-}
-
-function backToMenu() {
-    document.getElementById('game-screen').classList.add('hidden');
-    document.getElementById('gallery-screen').classList.add('hidden');
-    document.getElementById('main-menu').classList.remove('hidden');
+    const toast = document.getElementById('toast-notif');
+    toast.classList.remove('hidden');
+    setTimeout(() => toast.classList.add('show'), 100);
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.classList.add('hidden'), 500);
+    }, 4000);
 }
