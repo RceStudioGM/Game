@@ -114,7 +114,6 @@ h1 { font-size: 48px; letter-spacing: 2px; color: #fff; text-shadow: 2px 2px 5px
 #toast-notif.show { right: 20px; }
 #toast-notif h4 { margin: 0 0 5px 0; color: #f1c40f; font-size: 16px; }
 #toast-notif p { margin: 0; font-size: 13px; }
-/* Styling Kotak Input Nama MC */
 #name-input-screen {
     align-items: center; justify-content: center;
     background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=960&q=80') center/cover;
