@@ -1,10 +1,175 @@
-/* (Tetap pertahankan CSS sebelumnya, lalu tambahkan kode di bawah ini di bagian paling bawah file style.css kamu) */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 
-/* --- TOAST NOTIFIKASI --- */
+body {
+    background-color: #1a1a1a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+#game-container {
+    width: 900px; /* Diperlebar dikit biar pas buat 2 karakter */
+    height: 600px;
+    background-color: #2c3e50;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0,0,0,0.8);
+    color: white;
+}
+
+.screen {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.hidden { display: none !important; }
+
+/* --- LOBBY & GALLERY --- */
+#main-menu, #gallery-screen {
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #2c3e50, #3498db);
+    text-align: center;
+    z-index: 20;
+}
+
+h1 { font-size: 40px; margin-bottom: 10px; }
+h2 { margin-bottom: 20px; }
+
+.menu-buttons button, .back-btn {
+    display: block;
+    width: 280px;
+    padding: 15px;
+    margin: 10px auto;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #ecf0f1;
+    color: #2c3e50;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.menu-buttons button:hover, .back-btn:hover { background-color: #f1c40f; }
+
+#quotes-list {
+    width: 80%;
+    max-height: 400px;
+    overflow-y: auto;
+    text-align: left;
+    background: rgba(0,0,0,0.5);
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.quote-item {
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #7f8c8d;
+    font-style: italic;
+}
+
+/* --- GAME SCREEN (VN STYLE) --- */
+#background-image {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    position: absolute;
+    z-index: 1;
+}
+
+/* Penempatan 2 Karakter */
+.character {
+    position: absolute;
+    bottom: 20%; /* Berdiri di atas kotak dialog */
+    height: 70%; /* Ukuran karakter */
+    max-height: 450px;
+    z-index: 5;
+    transition: opacity 0.3s;
+}
+
+#char-left { left: 10%; }
+#char-right { right: 10%; transform: scaleX(-1); /* Dibalik biar saling tatap */ }
+
+/* Kotak Dialog Baru */
+#dialogue-container {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 20px;
+    z-index: 10;
+}
+
+#speaker-name-box {
+    background: rgba(20, 20, 20, 0.95);
+    border-left: 5px solid #f1c40f;
+    display: inline-block;
+    padding: 8px 25px;
+    border-radius: 5px 5px 0 0;
+    margin-bottom: -2px; /* Biar nempel ke kotak dialog utama */
+    position: relative;
+    z-index: 11;
+}
+
+#speaker-name {
+    color: #f1c40f;
+    margin: 0;
+    font-size: 22px;
+}
+
+#dialogue-box {
+    background: rgba(20, 20, 20, 0.85);
+    border: 2px solid #7f8c8d;
+    border-radius: 0 10px 10px 10px;
+    padding: 20px;
+    min-height: 160px; /* Biar ukurannya stabil */
+}
+
+#dialogue-text {
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+#choices-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.choice-btn {
+    padding: 10px;
+    background: rgba(52, 73, 94, 0.9);
+    color: white;
+    border: 1px solid #ecf0f1;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    text-align: center;
+    transition: 0.2s;
+}
+
+.choice-btn:hover { background: #f1c40f; color: black; font-weight: bold; }
+
+/* --- TOAST NOTIFIKASI (Tetap Sama) --- */
 #toast-notif {
     position: fixed;
     top: 20px;
-    right: -300px; /* Sembunyi di luar layar kanan */
+    right: -300px; 
     background: rgba(44, 62, 80, 0.95);
     color: white;
     padding: 15px 20px;
@@ -17,33 +182,6 @@
     z-index: 100;
     transition: right 0.5s ease-in-out;
 }
-
-#toast-notif.show {
-    right: 20px; /* Muncul ke dalam layar */
-}
-
-#toast-notif .icon {
-    font-size: 24px;
-}
-
-#toast-notif h4 {
-    margin: 0 0 5px 0;
-    color: #f1c40f;
-    font-size: 16px;
-}
-
-#toast-notif p {
-    margin: 0;
-    font-size: 12px;
-}
-
-/* --- GAMBAR KARAKTER --- */
-#character-image {
-    position: absolute;
-    bottom: 120px; /* Berdiri di atas kotak dialog */
-    left: 50%;
-    transform: translateX(-50%);
-    height: 400px;
-    z-index: 5;
-    transition: opacity 0.3s;
-}
+#toast-notif.show { right: 20px; }
+#toast-notif h4 { margin: 0 0 5px 0; color: #f1c40f; font-size: 16px; }
+#toast-notif p { margin: 0; font-size: 12px; }
