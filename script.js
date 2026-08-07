@@ -82,7 +82,7 @@ const storyData = {
     prolog_1: {
         speaker: "Narator",
         text: "Sore itu, koridor SMA Nusantara sudah sepi. {player} masih duduk sendirian di kelas, menunda pulang.",
-        bg: asset.background.sekolahUmum.kelas, charLeft: "", charRight: "",
+        bg: asset.background.kelas, charLeft: "", charRight: "",
         choices: [{ text: "Lanjut...", nextScene: "prolog_2" }]
     },
     prolog_2: {
