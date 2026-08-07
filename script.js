@@ -171,16 +171,17 @@ const storyData = {
     }
 };
 
-// --- FUNGSI GAME ---
 function startGame(gender) {
     playerGender = gender;
     
     if (gender === 'cowok') {
         playerName = 'Adit';
+        imgPlayer = ASSETS.charPlayerCowok; // Set gambar cowok
         namaKetos = 'Rania';   
         namaAnakSeni = 'Danisa'; 
     } else {
         playerName = 'Adinda';
+        imgPlayer = ASSETS.charPlayerCewek; // Set gambar cewek
         namaKetos = 'Raka';    
         namaAnakSeni = 'Devan';  
     }
@@ -195,6 +196,19 @@ function loadScene(sceneKey) {
     if (sceneKey === 'menu') {
         backToMenu();
         return;
+        function loadScene(sceneKey) {
+    if (sceneKey === 'menu') {
+        backToMenu();
+        return;
+    }
+
+    const scene = storyData[sceneKey];
+    
+    // Update bagian ini: Tambahin replace buat {player}
+    let processedText = scene.text.replace(/{ketos}/g, namaKetos).replace(/{seni}/g, namaAnakSeni).replace(/{player}/g, playerName);
+    let processedSpeaker = scene.speaker.replace(/{ketos}/g, namaKetos).replace(/{seni}/g, namaAnakSeni).replace(/{player}/g, playerName);
+    
+    // ... (sisa kodenya tetep sama ke bawah) ...
     }
 
     const scene = storyData[sceneKey];
