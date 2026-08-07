@@ -185,3 +185,5 @@ h2 { margin-bottom: 20px; }
 #toast-notif.show { right: 20px; }
 #toast-notif h4 { margin: 0 0 5px 0; color: #f1c40f; font-size: 16px; }
 #toast-notif p { margin: 0; font-size: 12px; }
+/* Tambahkan ini di baris paling bawah style.css kamu */
+.hide-name-box { display: none !important; }
