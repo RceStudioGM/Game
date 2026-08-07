@@ -1,7 +1,6 @@
 /* ============================================================
    PERSIMPANGAN HATI — script.js
-   Semua state disimpan di memori (localStorage dibungkus try/catch
-   supaya tetap aman dijalankan di preview mana pun).
+   DIUBAH: Menggunakan aset gambar crop nyata, bukan Dicebear.
    ============================================================ */
 
 let playerName = 'Adi';
@@ -13,140 +12,60 @@ try {
 }
 
 /* ------------------------------------------------------------
-   1. HELPER PEMBUAT AVATAR (Dicebear avataaars)
-   Setiap karakter punya "identitas dasar" (rambut/baju/aksesoris)
-   yang tetap sama, lalu ekspresi diubah lewat parameter
-   mouth / eyebrows / eyes supaya wajah cocok dengan momen cerita.
-   ------------------------------------------------------------ */
-function buildAvatar(seed, base, expr) {
-    const params = new URLSearchParams({ seed, ...base, ...expr });
-    return `https://api.dicebear.com/7.x/avataaars/svg?${params.toString()}`;
-}
-
-function placeholderBg(label, bgColor) {
-    return `https://placehold.co/960x600/${bgColor}/f1c40f?font=roboto&text=${encodeURIComponent(label)}`;
-}
-
-/* ------------------------------------------------------------
-   2. ASSETS — dikelompokkan per kategori
+   1. ASSETS — DIKELOMPOKKAN PER KATEGORI (Path Folder Nyata)
    ------------------------------------------------------------ */
 const ASSETS = {
 
-    // --- BACKGROUND, dikelompokkan per lokasi/tempat di cerita ---
+    // --- BACKGROUND ---
     BACKGROUNDS: {
         sekolahUmum: {
-            koridor:     placeholderBg('Koridor Sekolah', '2c3e50'),
-            kelas:       placeholderBg('Ruang Kelas', '2c3e50'),
-            ruangGuruBK: placeholderBg('Ruang Guru / BK', '2c3e50'),
+            koridor:     'assets/backgrounds/koridor.jpg',
+            kelas:       'assets/backgrounds/ruang_kelas.jpg',
+            ruangGuruBK: 'assets/backgrounds/ruang_bk.jpg',
         },
         osis: {
-            sekretariat: placeholderBg('Sekretariat OSIS', '1b2838'),
+            sekretariat: 'assets/backgrounds/sekretariat_osis.jpg',
         },
         seni: {
-            ruangSeni:   placeholderBg('Ruang Seni', '4a235a'),
-            sanggarLuar: placeholderBg('Sanggar Lukis', '4a235a'),
+            ruangSeni:   'assets/backgrounds/ruang_seni.jpg',
+            sanggarLuar: 'assets/backgrounds/sanggar_luar.jpg',
         },
         luarSekolah: {
-            taman:       placeholderBg('Taman Sekolah', '145a32'),
-            pasarMalam:  placeholderBg('Pasar Malam', '145a32'),
+            taman:       'assets/backgrounds/taman.jpg',
+            pasarMalam:  'assets/backgrounds/pasar_malam.jpg',
         },
         spesial: {
-            atapMalam:    placeholderBg('Atap Sekolah - Malam Kembang Api', '0d0d0d'),
-            aulaFestival: placeholderBg('Aula Festival Sekolah', '0d0d0d'),
+            atapMalam:    'assets/backgrounds/atap_malam.jpg',
+            aulaFestival: 'assets/backgrounds/aula_festival.jpg',
         }
     },
 
-    // --- KARAKTER, tiap karakter = identitas dasar + kumpulan ekspresi ---
-    CHARACTERS: {
-
-        // MC bisa cowok/cewek, disiapkan dua identitas dasar
-        mc: {
-            cowok: {
-                base: { top: 'shortHairShortFlat', clothing: 'hoodie', skinColor: 'light' },
-                normal:  { mouth: 'default', eyebrows: 'default', eyes: 'default' },
-                senang:  { mouth: 'smile',   eyebrows: 'raisedExcited', eyes: 'happy' },
-                gugup:   { mouth: 'twinkle', eyebrows: 'raisedExcitedNatural', eyes: 'surprised' },
-                cemas:   { mouth: 'concerned', eyebrows: 'sadConcerned', eyes: 'default' },
-                marah:   { mouth: 'grimace', eyebrows: 'angry', eyes: 'default' },
-                terharu: { mouth: 'smile',   eyebrows: 'sadConcerned', eyes: 'cry' },
-            },
-            cewek: {
-                base: { top: 'longHairStraight2', clothing: 'hoodie', skinColor: 'light' },
-                normal:  { mouth: 'default', eyebrows: 'default', eyes: 'default' },
-                senang:  { mouth: 'smile',   eyebrows: 'raisedExcited', eyes: 'happy' },
-                gugup:   { mouth: 'twinkle', eyebrows: 'raisedExcitedNatural', eyes: 'surprised' },
-                cemas:   { mouth: 'concerned', eyebrows: 'sadConcerned', eyes: 'default' },
-                marah:   { mouth: 'grimace', eyebrows: 'angry', eyes: 'default' },
-                terharu: { mouth: 'smile',   eyebrows: 'sadConcerned', eyes: 'cry' },
-            }
-        },
-
-        // Alexandra — Ketua OSIS: tegas & kaku, tapi ada momen lelah/gugup/marah/senyum langka
-        alexandra: {
-            base: { top: 'straightAndStrand', clothing: 'blazerAndShirt', accessories: 'prescription02', hairColor: 'black' },
-            tegas:    { mouth: 'serious',  eyebrows: 'angryNatural', eyes: 'default' },   // default sehari-hari
-            lelah:    { mouth: 'sad',      eyebrows: 'sadConcernedNatural', eyes: 'squint' },
-            gugup:    { mouth: 'twinkle',  eyebrows: 'raisedExcitedNatural', eyes: 'default' }, // tersipu, jarang muncul
-            marah:    { mouth: 'grimace',  eyebrows: 'angry', eyes: 'default' },
-            tersenyum:{ mouth: 'smile',    eyebrows: 'default', eyes: 'happy' },          // ending good route
-        },
-
-        // Kirana — jenius seni: ceria & bebas, tapi ada momen insecure & terharu
-        kirana: {
-            base: { top: 'curly', clothing: 'graphicShirt', hairColor: 'blue' },
-            ceria:   { mouth: 'smile',   eyebrows: 'raisedExcited', eyes: 'happy' },      // default sehari-hari
-            cemas:   { mouth: 'sad',     eyebrows: 'sadConcerned', eyes: 'default' },
-            terharu: { mouth: 'twinkle', eyebrows: 'default', eyes: 'cry' },
-            tertawa: { mouth: 'smile',   eyebrows: 'raisedExcited', eyes: 'squint' },
-        },
-
-        // --- NPC pendukung ---
-        bima: {
-            base: { top: 'shortHairFrizzle', clothing: 'shirtCrewNeck', hairColor: 'brownDark' },
-            jahil: { mouth: 'twinkle', eyebrows: 'upDown', eyes: 'wink' },
-        },
-        rangga: {
-            base: { top: 'shortHairShortWaved', clothing: 'blazerAndShirt', hairColor: 'black' },
-            curiga: { mouth: 'serious', eyebrows: 'angryNatural', eyes: 'side' },
-            lega:   { mouth: 'smile',   eyebrows: 'default', eyes: 'default' },
-        },
-        buSari: {
-            base: { top: 'bob', clothing: 'blazerAndSweater', accessories: 'round', hairColor: 'brown' },
-            normal: { mouth: 'smile', eyebrows: 'default', eyes: 'default' },
-        },
-        dewi: {
-            base: { top: 'longHairStraight', clothing: 'shirtVNeck', hairColor: 'black' },
-            maluMalu: { mouth: 'twinkle', eyebrows: 'default', eyes: 'side' },
-        },
-        farah: {
-            base: { top: 'longHairBun', clothing: 'collarAndSweater', hairColor: 'brownDark' },
-            ramah: { mouth: 'smile', eyebrows: 'default', eyes: 'happy' },
-        },
-        bangYusuf: {
-            base: { top: 'shortHairShortCurly', facialHair: 'beardLight', clothing: 'hoodie', hairColor: 'black' },
-            kalem: { mouth: 'serious', eyebrows: 'defaultNatural', eyes: 'default' },
-        },
-        pakHendra: {
-            base: { top: 'shortHairShortFlat', facialHair: 'moustacheFancy', clothing: 'blazerAndShirt', hairColor: 'silverGray' },
-            tegas:  { mouth: 'serious', eyebrows: 'angryNatural', eyes: 'default' },
-            lembut: { mouth: 'smile',   eyebrows: 'default', eyes: 'default' },
-        },
+    // --- KARAKTER (Mapping Nama Folder Aset) ---
+    CHARACTER_PATHS: {
+        alexandra: 'alexandra_wijaya',
+        kirana:    'kirana_maheswari',
+        mc:        'mc_protagonis',
+        bima:      'bima_satrio',
+        rangga:    'rangga_aditya',
+        buSari:    'bu_sari',
+        pakHendra: 'pak_hendra',
+        farah:     'farah_novita',
+        // Karakter yang tidak ada asetnya (dewi, bangYusuf) akan di-handle di fungsi img()
     }
 };
 
-/* Helper singkat supaya pemanggilan di storyData tetap ringkas,
-   contoh: img('alexandra','tegas') / img('mc','cowok','senang') */
-function img(name, exprOrGender, exprIfMc) {
-    const c = ASSETS.CHARACTERS[name];
-    if (name === 'mc') {
-        const genderData = c[exprOrGender];         // 'cowok' | 'cewek'
-        return buildAvatar(name + '-' + exprOrGender, genderData.base, genderData[exprIfMc]);
-    }
-    return buildAvatar(name, c.base, c[exprOrGender]);
+/* Helper singkat untuk memanggil gambar ekspresi.
+   Contoh: img('alexandra', 'tegas') -> alexandra_wijaya/tegas.jpg */
+function img(charName, exprKey) {
+    const folder = ASSETS.CHARACTER_PATHS[charName];
+    // Jika karakter tidak ditemukan mappingnya, beri fallback kosong
+    if (!folder) return ''; 
+    // Asumsikan format penamaan file adalah: nama_folder/ekspresi.jpg
+    return `assets/characters/${folder}/${exprKey}.jpg`;
 }
 
 /* ------------------------------------------------------------
-   3. KOLEKSI QUOTES
+   2. KOLEKSI QUOTES
    ------------------------------------------------------------ */
 const allQuotes = {
     quote_alexandra: "Logika memang penting, tapi keberanianmu menemaniku di saat sulit adalah rumus yang tak terduga.",
@@ -157,8 +76,7 @@ const allQuotes = {
 };
 
 /* ------------------------------------------------------------
-   4. ALUR CERITA
-   Nama karakter memakai {player}, {alexandra}, {kirana}
+   3. ALUR CERITA (Nama Karakter Diubah ke Pemanggilan img() Baru)
    ------------------------------------------------------------ */
 const storyData = {
     prolog_1: {
@@ -176,13 +94,13 @@ const storyData = {
     prolog_3: {
         speaker: "Pak Hendra",
         text: "Ada dua tempat yang butuh orang: sekretariat OSIS-nya {alexandra}, dan ruang seni tempat {kirana} bikin mural. Pilih salah satu, atau coba dua-duanya kalau kamu yakin sanggup.",
-        bg: ASSETS.BACKGROUNDS.sekolahUmum.ruangGuruBK, charLeft: img('pakHendra', 'lembut'), charRight: "",
+        bg: ASSETS.BACKGROUNDS.sekolahUmum.ruangGuruBK, charLeft: img('pakHendra', 'ramah'), charRight: "",
         choices: [{ text: "Menuju koridor sekolah...", nextScene: "bima_sindir" }]
     },
     bima_sindir: {
         speaker: "Bima",
         text: "Woy! Denger-denger kamu ditarik OSIS sama anak seni sekaligus? Kamu ini pemeran utama drama apaan sih, Di.",
-        bg: ASSETS.BACKGROUNDS.sekolahUmum.koridor, charLeft: img('bima', 'jahil'), charRight: "",
+        bg: ASSETS.BACKGROUNDS.sekolahUmum.koridor, charLeft: img('bima', 'ejekan'), charRight: "",
         choices: [{ text: "Terserah, yang penting nilai aman.", nextScene: "konflik_awal" }]
     },
 
@@ -228,7 +146,7 @@ const storyData = {
     ending_ambis: {
         speaker: "Alexandra",
         text: "Festival sukses berkat kerja kerasmu juga. ...Malam ini bintangnya indah, ya. Terima kasih sudah bertahan bersamaku.",
-        bg: ASSETS.BACKGROUNDS.spesial.atapMalam, charLeft: img('alexandra', 'tersenyum'), charRight: "",
+        bg: ASSETS.BACKGROUNDS.spesial.atapMalam, charLeft: img('alexandra', 'bahagia'), charRight: "",
         unlockQuote: "quote_alexandra",
         choices: [{ text: "Kembali ke Menu Utama", nextScene: "menu" }]
     },
@@ -243,7 +161,7 @@ const storyData = {
     rute_b1_busari: {
         speaker: "Bu Sari",
         text: "Wah, tumben Kirana nggak ngusir orang di hari pertama. Tolong dibantu terus ya, dia susah kerja bareng orang lain biasanya.",
-        bg: ASSETS.BACKGROUNDS.seni.ruangSeni, charLeft: img('buSari', 'normal'), charRight: img('kirana', 'ceria'),
+        bg: ASSETS.BACKGROUNDS.seni.ruangSeni, charLeft: img('buSari', 'tersenyum'), charRight: img('kirana', 'ceria'),
         choices: [{ text: "Lanjut membantu sampai sore...", nextScene: "rute_b2" }]
     },
     rute_b2: {
@@ -258,7 +176,7 @@ const storyData = {
     ending_santuy: {
         speaker: "Kirana",
         text: "Itu... kalimat paling nggak romantis tapi paling bikin aku pengen nangis yang pernah aku denger. Makasih ya.",
-        bg: ASSETS.BACKGROUNDS.spesial.aulaFestival, charLeft: "", charRight: img('kirana', 'terharu'),
+        bg: ASSETS.BACKGROUNDS.spesial.aulaFestival, charLeft: "", charRight: img('kirana', 'melankolis'),
         unlockQuote: "quote_kirana",
         choices: [{ text: "Kembali ke Menu Utama", nextScene: "menu" }]
     },
@@ -274,7 +192,7 @@ const storyData = {
 };
 
 /* ------------------------------------------------------------
-   5. NAVIGASI ANTAR LAYAR
+   4. NAVIGASI ANTAR LAYAR
    ------------------------------------------------------------ */
 function hideAllScreens() {
     ['main-menu', 'name-input-screen', 'game-screen', 'sub-menu-screen'].forEach(id => {
@@ -290,6 +208,7 @@ function showNameInput() {
 function startGameWithCustomName() {
     const input = document.getElementById('player-name-input');
     playerName = (input.value || '').trim() || 'Adi';
+    window.playerName = playerName; // Fix bug global variabel
     hideAllScreens();
     document.getElementById('game-screen').classList.remove('hidden');
     loadScene('prolog_1');
@@ -325,7 +244,7 @@ function showGallery() {
 }
 
 /* ------------------------------------------------------------
-   6. ENGINE UTAMA
+   5. ENGINE UTAMA
    ------------------------------------------------------------ */
 function loadScene(sceneKey) {
     if (sceneKey === 'menu') {
