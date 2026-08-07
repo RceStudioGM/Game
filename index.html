@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notif Sepulang Sekolah</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="game-container">
+        <div id="main-menu" class="screen">
+            <h1>Notif Sepulang Sekolah</h1>
+            <p>Melodi di Atas Atap</p>
+            <div class="menu-buttons">
+                <button onclick="startGame('cowok')">Main sebagai Cowok (Adit)</button>
+                <button onclick="startGame('cewek')">Main sebagai Cewek (Adinda)</button>
+                <button onclick="showGallery()">Koleksi Quotes 🔒</button>
+            </div>
+        </div>
+
+        <div id="game-screen" class="screen hidden">
+            <div id="background-image"></div>
+            <div id="character-image"></div>
+            
+            <div id="dialogue-box">
+                <h3 id="speaker-name">Nama Karakter</h3>
+                <p id="dialogue-text">Teks cerita muncul di sini...</p>
+                <div id="choices-container">
+                    </div>
+            </div>
+        </div>
+
+        <div id="gallery-screen" class="screen hidden">
+            <h2>Koleksi Quotes</h2>
+            <div id="quotes-list">
+                </div>
+            <button onclick="backToMenu()" class="back-btn">Kembali ke Menu</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
