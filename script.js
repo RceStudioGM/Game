@@ -12,31 +12,31 @@ try {
 }
 
 /* ------------------------------------------------------------
-   1. ASSETS — DIKELOMPOKKAN PER KATEGORI (Path Folder Nyata)
+   1. asset — DIKELOMPOKKAN PER KATEGORI (Path Folder Nyata)
    ------------------------------------------------------------ */
-const ASSETS = {
+const asset = {
 
     // --- BACKGROUND ---
     BACKGROUNDS: {
         sekolahUmum: {
-            koridor:     'assets/backgrounds/koridor.jpg',
-            kelas:       'assets/backgrounds/ruang_kelas.jpg',
-            ruangGuruBK: 'assets/backgrounds/ruang_bk.jpg',
+            koridor:     'asset/backgrounds/koridor.png',
+            kelas:       'asset/backgrounds/ruang_kelas.png',
+            ruangGuruBK: 'asset/backgrounds/ruang_bk.png',
         },
         osis: {
-            sekretariat: 'assets/backgrounds/sekretariat_osis.jpg',
+            sekretariat: 'asset/backgrounds/sekretariat_osis.png',
         },
         seni: {
-            ruangSeni:   'assets/backgrounds/ruang_seni.jpg',
-            sanggarLuar: 'assets/backgrounds/sanggar_luar.jpg',
+            ruangSeni:   'asset/backgrounds/ruang_seni.png',
+            sanggarLuar: 'asset/backgrounds/sanggar_luar.png',
         },
         luarSekolah: {
-            taman:       'assets/backgrounds/taman.jpg',
-            pasarMalam:  'assets/backgrounds/pasar_malam.jpg',
+            taman:       'asset/backgrounds/taman.png',
+            pasarMalam:  'asset/backgrounds/pasar_malam.png',
         },
         spesial: {
-            atapMalam:    'assets/backgrounds/atap_malam.jpg',
-            aulaFestival: 'assets/backgrounds/aula_festival.jpg',
+            atapMalam:    'asset/backgrounds/atap_malam.png',
+            aulaFestival: 'asset/backgrounds/aula_festival.png',
         }
     },
 
@@ -55,13 +55,13 @@ const ASSETS = {
 };
 
 /* Helper singkat untuk memanggil gambar ekspresi.
-   Contoh: img('alexandra', 'tegas') -> alexandra_wijaya/tegas.jpg */
+   Contoh: img('alexandra', 'tegas') -> alexandra_wijaya/tegas.png */
 function img(charName, exprKey) {
-    const folder = ASSETS.CHARACTER_PATHS[charName];
+    const folder = asset.CHARACTER_PATHS[charName];
     // Jika karakter tidak ditemukan mappingnya, beri fallback kosong
     if (!folder) return ''; 
-    // Asumsikan format penamaan file adalah: nama_folder/ekspresi.jpg
-    return `assets/characters/${folder}/${exprKey}.jpg`;
+    // Asumsikan format penamaan file adalah: nama_folder/ekspresi.png
+    return `asset/characters/${folder}/${exprKey}.png`;
 }
 
 /* ------------------------------------------------------------
@@ -82,32 +82,32 @@ const storyData = {
     prolog_1: {
         speaker: "Narator",
         text: "Sore itu, koridor SMA Nusantara sudah sepi. {player} masih duduk sendirian di kelas, menunda pulang.",
-        bg: ASSETS.BACKGROUNDS.sekolahUmum.kelas, charLeft: "", charRight: "",
+        bg: asset.BACKGROUNDS.sekolahUmum.kelas, charLeft: "", charRight: "",
         choices: [{ text: "Lanjut...", nextScene: "prolog_2" }]
     },
     prolog_2: {
         speaker: "Pak Hendra",
         text: "Adi. Bapak lihat nilai ulanganmu turun. Daripada bengong di kelas kosong, mending kamu ikut bantu persiapan Festival Sekolah.",
-        bg: ASSETS.BACKGROUNDS.sekolahUmum.ruangGuruBK, charLeft: img('pakHendra', 'tegas'), charRight: "",
+        bg: asset.BACKGROUNDS.sekolahUmum.ruangGuruBK, charLeft: img('pakHendra', 'tegas'), charRight: "",
         choices: [{ text: "Baik, Pak. Saya bantu siapa?", nextScene: "prolog_3" }]
     },
     prolog_3: {
         speaker: "Pak Hendra",
         text: "Ada dua tempat yang butuh orang: sekretariat OSIS-nya {alexandra}, dan ruang seni tempat {kirana} bikin mural. Pilih salah satu, atau coba dua-duanya kalau kamu yakin sanggup.",
-        bg: ASSETS.BACKGROUNDS.sekolahUmum.ruangGuruBK, charLeft: img('pakHendra', 'ramah'), charRight: "",
+        bg: asset.BACKGROUNDS.sekolahUmum.ruangGuruBK, charLeft: img('pakHendra', 'ramah'), charRight: "",
         choices: [{ text: "Menuju koridor sekolah...", nextScene: "bima_sindir" }]
     },
     bima_sindir: {
         speaker: "Bima",
         text: "Woy! Denger-denger kamu ditarik OSIS sama anak seni sekaligus? Kamu ini pemeran utama drama apaan sih, Di.",
-        bg: ASSETS.BACKGROUNDS.sekolahUmum.koridor, charLeft: img('bima', 'ejekan'), charRight: "",
+        bg: asset.BACKGROUNDS.sekolahUmum.koridor, charLeft: img('bima', 'ejekan'), charRight: "",
         choices: [{ text: "Terserah, yang penting nilai aman.", nextScene: "konflik_awal" }]
     },
 
     konflik_awal: {
         speaker: "Narator",
         text: "Di persimpangan koridor, {alexandra} berjalan cepat sambil membawa map, sementara dari arah lain {kirana} melambai riang dari pintu ruang seni.",
-        bg: ASSETS.BACKGROUNDS.sekolahUmum.koridor,
+        bg: asset.BACKGROUNDS.sekolahUmum.koridor,
         charLeft: img('alexandra', 'tegas'), charRight: img('kirana', 'ceria'),
         choices: [
             { text: "Bantu {alexandra} di sekretariat OSIS (Rute Alexandra)", nextScene: "rute_a1" },
@@ -119,19 +119,19 @@ const storyData = {
     rute_a1: {
         speaker: "Alexandra",
         text: "Kamu yang dikirim Pak Hendra? Bagus. Ikut aku ke sekretariat, banyak proposal yang harus dicek sebelum sore ini.",
-        bg: ASSETS.BACKGROUNDS.osis.sekretariat, charLeft: img('alexandra', 'tegas'), charRight: "",
+        bg: asset.BACKGROUNDS.osis.sekretariat, charLeft: img('alexandra', 'tegas'), charRight: "",
         choices: [{ text: "Ikut ke sekretariat...", nextScene: "rute_a1_rangga" }]
     },
     rute_a1_rangga: {
         speaker: "Rangga",
         text: "Kamu yang mau bantu-bantu di sini? Aku Rangga, wakil ketua. ...Jangan macam-macam sama Alexandra, ya.",
-        bg: ASSETS.BACKGROUNDS.osis.sekretariat, charLeft: img('alexandra', 'tegas'), charRight: img('rangga', 'curiga'),
+        bg: asset.BACKGROUNDS.osis.sekretariat, charLeft: img('alexandra', 'tegas'), charRight: img('rangga', 'curiga'),
         choices: [{ text: "Lanjut kerja sampai malam...", nextScene: "rute_a2" }]
     },
     rute_a2: {
         speaker: "Narator",
         text: "Beberapa jam berlalu. {alexandra} mulai kelihatan lelah, matanya berat menahan kantuk di depan tumpukan proposal.",
-        bg: ASSETS.BACKGROUNDS.osis.sekretariat, charLeft: img('alexandra', 'lelah'), charRight: "",
+        bg: asset.BACKGROUNDS.osis.sekretariat, charLeft: img('alexandra', 'lelah'), charRight: "",
         choices: [
             { text: "Selimuti dia dengan jaket, biarkan istirahat sebentar", nextScene: "rute_a3_baik" },
             { text: "Bangunkan paksa, kerjaan belum selesai", nextScene: "ending_bad" },
@@ -140,13 +140,13 @@ const storyData = {
     rute_a3_baik: {
         speaker: "Alexandra",
         text: "...Kenapa kamu masih di sini? ...Nggak perlu nungguin aku bangun kayak gini.",
-        bg: ASSETS.BACKGROUNDS.osis.sekretariat, charLeft: img('alexandra', 'gugup'), charRight: "",
+        bg: asset.BACKGROUNDS.osis.sekretariat, charLeft: img('alexandra', 'gugup'), charRight: "",
         choices: [{ text: "Nungguin kamu bangun. Kamu kerja keras banget.", nextScene: "ending_ambis" }]
     },
     ending_ambis: {
         speaker: "Alexandra",
         text: "Festival sukses berkat kerja kerasmu juga. ...Malam ini bintangnya indah, ya. Terima kasih sudah bertahan bersamaku.",
-        bg: ASSETS.BACKGROUNDS.spesial.atapMalam, charLeft: img('alexandra', 'bahagia'), charRight: "",
+        bg: asset.BACKGROUNDS.spesial.atapMalam, charLeft: img('alexandra', 'bahagia'), charRight: "",
         unlockQuote: "quote_alexandra",
         choices: [{ text: "Kembali ke Menu Utama", nextScene: "menu" }]
     },
@@ -155,19 +155,19 @@ const storyData = {
     rute_b1: {
         speaker: "Kirana",
         text: "Asyik, ada bala bantuan! Sini, tanganmu masih bersih kan? Pegangin kanvas ini dulu!",
-        bg: ASSETS.BACKGROUNDS.seni.ruangSeni, charLeft: "", charRight: img('kirana', 'ceria'),
+        bg: asset.BACKGROUNDS.seni.ruangSeni, charLeft: "", charRight: img('kirana', 'ceria'),
         choices: [{ text: "Bantu pegang kanvas...", nextScene: "rute_b1_busari" }]
     },
     rute_b1_busari: {
         speaker: "Bu Sari",
         text: "Wah, tumben Kirana nggak ngusir orang di hari pertama. Tolong dibantu terus ya, dia susah kerja bareng orang lain biasanya.",
-        bg: ASSETS.BACKGROUNDS.seni.ruangSeni, charLeft: img('buSari', 'tersenyum'), charRight: img('kirana', 'ceria'),
+        bg: asset.BACKGROUNDS.seni.ruangSeni, charLeft: img('buSari', 'tersenyum'), charRight: img('kirana', 'ceria'),
         choices: [{ text: "Lanjut membantu sampai sore...", nextScene: "rute_b2" }]
     },
     rute_b2: {
         speaker: "Kirana",
         text: "...Kadang aku takut, semua orang cuma suka 'Kirana yang jago gambar', bukan aku yang beneran.",
-        bg: ASSETS.BACKGROUNDS.seni.ruangSeni, charLeft: "", charRight: img('kirana', 'cemas'),
+        bg: asset.BACKGROUNDS.seni.ruangSeni, charLeft: "", charRight: img('kirana', 'cemas'),
         choices: [
             { text: "Aku suka kamu bukan karena kamu jago gambar.", nextScene: "ending_santuy" },
             { text: "(diam, tidak tahu harus bilang apa)", nextScene: "ending_bad" },
@@ -176,7 +176,7 @@ const storyData = {
     ending_santuy: {
         speaker: "Kirana",
         text: "Itu... kalimat paling nggak romantis tapi paling bikin aku pengen nangis yang pernah aku denger. Makasih ya.",
-        bg: ASSETS.BACKGROUNDS.spesial.aulaFestival, charLeft: "", charRight: img('kirana', 'melankolis'),
+        bg: asset.BACKGROUNDS.spesial.aulaFestival, charLeft: "", charRight: img('kirana', 'melankolis'),
         unlockQuote: "quote_kirana",
         choices: [{ text: "Kembali ke Menu Utama", nextScene: "menu" }]
     },
@@ -185,7 +185,7 @@ const storyData = {
     ending_bad: {
         speaker: "Pak Hendra",
         text: "Adi... Bapak nggak bisa maksa kamu jujur sama perasaanmu sendiri. Tapi coba pikirkan lagi baik-baik, ya.",
-        bg: ASSETS.BACKGROUNDS.sekolahUmum.ruangGuruBK, charLeft: img('pakHendra', 'tegas'), charRight: "",
+        bg: asset.BACKGROUNDS.sekolahUmum.ruangGuruBK, charLeft: img('pakHendra', 'tegas'), charRight: "",
         unlockQuote: "quote_guru",
         choices: [{ text: "Kembali ke Menu Utama", nextScene: "menu" }]
     },
