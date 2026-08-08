@@ -87,7 +87,7 @@ const storyData = {
     },
     prolog_2: {
         speaker: "Pak Hendra",
-        text: `${window.playerName} Bapak lihat nilai ulanganmu turun. Daripada bengong di kelas kosong, mending kamu ikut bantu persiapan Festival Sekolah.`,
+        text: `${window.playerName.value} Bapak lihat nilai ulanganmu turun. Daripada bengong di kelas kosong, mending kamu ikut bantu persiapan Festival Sekolah.`,
         bg: assets.BACKGROUNDS.sekolahUmum.ruangGuruBK, charLeft: img('pakHendra', 'tegas'), charRight: "",
         choices: [{ text: "Baik, Pak. Saya bantu siapa?", nextScene: "prolog_3" }]
     },
@@ -99,7 +99,7 @@ const storyData = {
     },
     bima_sindir: {
         speaker: "Bima",
-        text: `Woy! Denger-denger kamu ditarik OSIS sama anak seni sekaligus? Kamu ini pemeran utama drama apaan sih, ${window.playerName}.`,
+        text: `Woy! Denger-denger kamu ditarik OSIS sama anak seni sekaligus? Kamu ini pemeran utama drama apaan sih, ${window.playerName.value}.`,
         bg: assets.BACKGROUNDS.sekolahUmum.koridor, charLeft: img('bima', 'usil'), charRight: "",
         choices: [{ text: "Terserah, yang penting nilai aman.", nextScene: "konflik_awal" }]
     },
