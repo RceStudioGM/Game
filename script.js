@@ -94,8 +94,8 @@ const storyData = {
     prolog_3: {
         speaker: "Pak Hendra",
         text: "Ada dua tempat yang butuh orang: sekretariat OSIS-nya {alexandra}, dan ruang seni tempat {kirana} bikin mural. Pilih salah satu, atau coba dua-duanya kalau kamu yakin sanggup.",
-        bg: assets.BACKGROUNDS.sekolahUmum.ruangGuruBK, charLeft: img('pakHendra', 'ramah'), charRight: "",
-        choices: [{ text: "Menuju koridor sekolah...", nextScene: "bima_sindir" }]
+        bg: assets.BACKGROUNDS.sekolahUmum.ruangGuruBK, charLeft: img('pakHendra', 'netral'), charRight: "",
+        choices: [{ text: "Menuju koridor sekolah...", nextScene: img('bima', 'usil') }]
     },
     bima_sindir: {
         speaker: "Bima",
