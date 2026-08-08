@@ -110,8 +110,8 @@ const storyData = {
         bg: assets.BACKGROUNDS.sekolahUmum.koridor,
         charLeft: img('alexandra', 'tegas'), charRight: img('kirana', 'ceria'),
         choices: [
-            { text: "Bantu {alexandra} di sekretariat OSIS (Rute Alexandra)", nextScene: "rute_a1" },
-            { text: "Bantu {kirana} bikin mural (Rute Kirana)", nextScene: "rute_b1" },
+            { text: "Menuju ke sekretariat OSIS ", nextScene: "rute_a1" },
+            { text: "Menuju Ruang Seni Membantu membuat sebuah mural ", nextScene: "rute_b1" },
         ]
     },
 
