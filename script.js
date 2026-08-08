@@ -87,21 +87,23 @@ const storyData = {
     },
     prolog_2: {
         speaker: "Pak Hendra",
-        text: `${window.playerName.value} Bapak lihat nilai ulanganmu turun. Daripada bengong di kelas kosong, mending kamu ikut bantu persiapan Festival Sekolah.`,
+        // [PERBAIKAN BUG]: Hapus .value dan gunakan {player}
+        text: "{player}, Bapak lihat nilai ulanganmu turun. Daripada melamun tak jelas di kelas kosong, mending kamu ikut bantu persiapan Festival Sekolah.",
         bg: assets.BACKGROUNDS.sekolahUmum.ruangGuruBK, charLeft: img('pakHendra', 'tegas'), charRight: "",
         choices: [{ text: "Baik, Pak. Saya bantu siapa?", nextScene: "prolog_3" }]
     },
     prolog_3: {
         speaker: "Pak Hendra",
-        text: "Ada dua tempat yang butuh orang: sekretariat OSIS-nya {alexandra}, dan ruang seni tempat {kirana} bikin mural. Pilih salah satu, atau coba dua-duanya kalau kamu yakin sanggup.",
+        text: "Ada dua pilihan yang bisa kamu pilih,2 tempat ini membutuhkan bantuan yaitu di Ruang sekretariat OSIS untuk membantu Alexandra, dan ruang seni untuk membantu Kirana dengan Mural nya.Kamu bisa memilih salah satu, atau kalo kamu bisa dan mahruk kamu bisa ambil 2 2nya.",
         bg: assets.BACKGROUNDS.sekolahUmum.ruangGuruBK, charLeft: img('pakHendra', 'netral'), charRight: "",
         choices: [{ text: "Menuju koridor sekolah...", nextScene: "bima_sindir" }]
     },
     bima_sindir: {
         speaker: "Bima",
-        text: `Woy! Denger-denger kamu ditarik OSIS sama anak seni sekaligus? Kamu ini pemeran utama drama apaan sih, ${window.playerName.value}.`,
+        // [PERBAIKAN BUG]: Hapus .value dan gunakan {player}
+        text: "Wanjayy denger denger ada yang disuruh bantuin osis ama anak seni nihh, Ya sihh kan ada wanita dingin nan cantik si ketos alexandra di osis lalu di seni ada anak ceria itu si Kirana, lu mau deketin semuan nya nihh mau punya ahrem ya luu {player}.",
         bg: assets.BACKGROUNDS.sekolahUmum.koridor, charLeft: img('bima', 'usil'), charRight: "",
-        choices: [{ text: "Terserah, yang penting nilai aman.", nextScene: "konflik_awal" }]
+        choices: [{ text: "Apalah kalo ngomong jan ngaco, aku begini ya terpaksa biar nilai aman.", nextScene: "konflik_awal" }]
     },
 
     konflik_awal: {
