@@ -95,12 +95,12 @@ const storyData = {
         speaker: "Pak Hendra",
         text: "Ada dua tempat yang butuh orang: sekretariat OSIS-nya {alexandra}, dan ruang seni tempat {kirana} bikin mural. Pilih salah satu, atau coba dua-duanya kalau kamu yakin sanggup.",
         bg: assets.BACKGROUNDS.sekolahUmum.ruangGuruBK, charLeft: img('pakHendra', 'netral'), charRight: "",
-        choices: [{ text: "Menuju koridor sekolah...", nextScene: img('bima', 'usil') }]
+        choices: [{ text: "Menuju koridor sekolah...", nextScene: "bima_sindir" }]
     },
     bima_sindir: {
         speaker: "Bima",
         text: "Woy! Denger-denger kamu ditarik OSIS sama anak seni sekaligus? Kamu ini pemeran utama drama apaan sih, Di.",
-        bg: assets.BACKGROUNDS.sekolahUmum.koridor, charLeft: img('bima', 'ejekan'), charRight: "",
+        bg: assets.BACKGROUNDS.sekolahUmum.koridor, charLeft: img('bima', 'usil'), charRight: "",
         choices: [{ text: "Terserah, yang penting nilai aman.", nextScene: "konflik_awal" }]
     },
 
