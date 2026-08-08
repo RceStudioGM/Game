@@ -186,7 +186,7 @@ const storyData = {
     /* ================= ENDING NETRAL/BAD ================= */
     ending_bad: {
         speaker: "Pak Hendra",
-        text: "Adi... Bapak nggak bisa maksa kamu jujur sama perasaanmu sendiri. Tapi coba pikirkan lagi baik-baik, ya.",
+        text: "{player}... Bapak nggak bisa maksa kamu jujur sama perasaanmu sendiri. Tapi coba pikirkan lagi baik-baik, ya.",
         bg: assets.BACKGROUNDS.sekolahUmum.ruangGuruBK, charLeft: img('pakHendra', 'tegas'), charRight: "",
         unlockQuote: "quote_guru",
         choices: [{ text: "Kembali ke Menu Utama", nextScene: "menu" }]
