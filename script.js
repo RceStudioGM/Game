@@ -82,7 +82,7 @@ const storyData = {
     prolog_1: {
         speaker: "Narator",
         text: "Sore itu, koridor SMA Nusantara sudah sepi. {player} masih duduk sendirian di kelas, menunda pulang.",
-        bg: assets.BACKGROUNDS.sekolahUmum.kelas, charLeft: img('mc', '1786151237 (1)'),
+        bg: assets.BACKGROUNDS.sekolahUmum.kelas, charLeft: img('mc', 'netral'),
         choices: [{ text: "Lanjut...", nextScene: "prolog_2" }]
     },
     prolog_2: {
