@@ -102,7 +102,7 @@ const storyData = {
         speaker: "Bima",
         // [PERBAIKAN BUG]: Hapus .value dan gunakan {player}
         text: "Wanjayy denger denger ada yang disuruh bantuin osis ama anak seni nihh, Ya sihh kan ada wanita dingin nan cantik si ketos alexandra di osis lalu di seni ada anak ceria itu si Kirana, lu mau deketin semuan nya nihh mau punya ahrem ya luu {player}.",
-        bg: assets.BACKGROUNDS.sekolahUmum.koridor, charLeft: img('bima', 'usil'), charRight: "",
+        bg: assets.BACKGROUNDS.sekolahUmum.koridor, charLeft: img('bima', 'jahil'), charRight: "",
         choices: [{ text: "Apalah kalo ngomong jan ngaco, aku begini ya terpaksa biar nilai aman.", nextScene: "konflik_awal" }]
     },
 
