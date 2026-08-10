@@ -28,7 +28,6 @@ const assets = {
         }
     },
 
-    // --- KARAKTER PATH ---
     CHARACTER_PATHS: {
         alexandra: 'alexandra_wijaya',
         kirana:    'kirana_maheswari',
@@ -52,7 +51,6 @@ const allQuotes = {
     quote_guru: "Kedisiplinan itu pahit di awal, tapi penyesalan datang jauh lebih pahit kalau kamu nggak jujur sama diri sendiri.",
     quote_epilog: "Persimpangan yang belum usai, tapi tak lagi perlu disesali.",
 };
-// ... (kode aset BACKGROUNDS dan CHARACTER_PATHS tetap sama) ...
 
 // --- DATA PROFIL KARAKTER ---
 const characterProfiles = {
@@ -61,7 +59,7 @@ const characterProfiles = {
         name: 'MC (Adi Pratama)',
         role: 'Protagonis',
         desc: 'Murid kelas 2 SMA biasa. Nilai pas-pasan, hobi baca komik dan tidur di kelas. Baik hati, agak canggung, tapi selalu berusaha jujur pada dirinya sendiri.',
-        unlockKey: null // Dibuka otomatis
+        unlockKey: null
     },
     alexandra: {
         id: 'alexandra',
@@ -96,14 +94,14 @@ const characterProfiles = {
         name: 'Bima Satrio',
         role: 'Sahabat MC',
         desc: 'Humoris, cerewet, dan sumber gosip sekolah. Meski kadang nyebelin, dia adalah sahabat paling setia yang selalu siap jadi tempat curhat MC.',
-        unlockKey: null // Dibuka otomatis
+        unlockKey: null
     },
     pakHendra: {
         id: 'pakHendra',
         name: 'Pak Hendra',
         role: 'Wali Kelas (Guru Matematika)',
         desc: 'Tegas soal akademik, tetapi sangat perhatian. Pengalaman mengajar 28 tahun membuatnya tidak mudah dibohongi, dan nasihatnya selalu bijak.',
-        unlockKey: null // Dibuka otomatis
+        unlockKey: null
     },
     buSari: {
         id: 'buSari',

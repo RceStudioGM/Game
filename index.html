@@ -17,21 +17,22 @@
     </div>
 
     <div id="game-container">
+        <!-- MAIN MENU -->
         <div id="main-menu" class="screen">
             <div class="menu-title-box">
                 <h1>PERSIMPANGAN HATI</h1>
                 <p>Visual Novel Romansa Sekolah</p>
             </div>
-            <!-- Di dalam div id="main-menu", bagian menu-buttons -->
             <div class="menu-buttons">
-                <button id="btn-continue" onclick="continueGame()">▶ Lanjutkan</button> <!-- TAMBAHAN BARU -->
+                <button id="btn-continue" onclick="continueGame()">▶ Lanjutkan</button>
                 <button onclick="showNameInput()">▶ Mulai Game Baru</button>
-                <button onclick="showProfiles()">📖 Profil Karakter</button> <!-- Menu profil tadi -->
+                <button onclick="showProfiles()">📖 Profil Karakter</button>
                 <button onclick="showGallery()">📖 Koleksi Quotes</button>
                 <button onclick="showSettings()">⚙️ Pengaturan</button>
             </div>
         </div>
 
+        <!-- NAMA PEMAIN -->
         <div id="name-input-screen" class="screen hidden">
             <div class="menu-title-box">
                 <h2>SIAPA NAMA KAMU?</h2>
@@ -44,53 +45,44 @@
             </div>
         </div>
 
+        <!-- LAYAR GAME -->
         <div id="game-screen" class="screen hidden">
-            <div id="game-screen" class="screen hidden">
-    <!-- Tambahkan tombol simpan di sini -->
             <div class="game-ui-top">
                 <button id="btn-save-game" onclick="saveGame()">💾 Simpan</button>
             </div>
-        
             <div id="background-image"></div>
-            <!-- ... sisanya (karakter dan dialog) tetap sama ... -->
-        </div>    
-            
-            
             <img id="char-left" class="character hidden" src="" alt="Karakter Kiri">
             <img id="char-right" class="character hidden" src="" alt="Karakter Kanan">
-            
             <div id="dialogue-container">
                 <div id="speaker-name-box">
                     <h3 id="speaker-name">Nama Karakter</h3>
                 </div>
                 <div id="dialogue-box">
                     <p id="dialogue-text">Teks cerita muncul di sini...</p>
-                    <div id="choices-container">
-                        </div>
+                    <div id="choices-container"></div>
                 </div>
             </div>
         </div>
 
+        <!-- SUB MENU (QUOTES / SETTINGS) -->
         <div id="sub-menu-screen" class="screen hidden">
             <h2 id="sub-menu-title">Judul Menu</h2>
             <div id="sub-menu-content"></div>
             <button onclick="backToMenu()" class="back-btn">Kembali ke Menu</button>
         </div>
-                <!-- ===== LAYAR PROFIL KARAKTER ===== -->
-            <div id="profile-screen" class="screen hidden">
-                <h2 id="profile-title">📖 Profil Karakter</h2>
-                <div id="profile-container" class="profile-grid">
-                    <!-- Kartu karakter akan di-generate oleh JS di sini -->
-                </div>
-                <button onclick="backToMenu()" class="back-btn">Kembali ke Menu</button>
-            </div>
+
+        <!-- PROFIL KARAKTER -->
+        <div id="profile-screen" class="screen hidden">
+            <h2 id="profile-title">📖 Profil Karakter</h2>
+            <div id="profile-container" class="profile-grid"></div>
+            <button onclick="backToMenu()" class="back-btn">Kembali ke Menu</button>
+        </div>
     </div>
 
-    <!-- Ganti bagian ini -->
-    <!-- <script src="./fungsi/script.js"></script> -->
-<script src="./fungsi/config.js"></script>
-<script src="./fungsi/engine.js"></script>
-<script src="./fungsi/story.js"></script>
-<script src="./fungsi/main.js"></script>
+    <!-- SCRIPT URUTAN BENAR -->
+    <script src="config.js"></script>
+    <script src="engine.js"></script>
+    <script src="story.js"></script>
+    <script src="main.js"></script>
 </body>
 </html>

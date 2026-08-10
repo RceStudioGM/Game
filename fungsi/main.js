@@ -2,12 +2,10 @@
    main.js — State Global & Inisialisasi Game
    ============================================================ */
 
-// Variabel Global
 let playerName = 'Adi';
 let unlockedQuotes = [];
 let gameFlags = { routeA: false, routeB: false, secretRoute: false };
 
-// Load data dari LocalStorage saat game dimulai
 try {
     unlockedQuotes = JSON.parse(localStorage.getItem('vn_quotes')) || [];
     gameFlags = JSON.parse(localStorage.getItem('vn_flags')) || { routeA: false, routeB: false, secretRoute: false };
@@ -20,7 +18,7 @@ function saveFlags() {
     try { localStorage.setItem('vn_flags', JSON.stringify(gameFlags)); } catch (e) {}
 }
 
-// --- FUNGSI SAVE & LOAD ---
+// --- SAVE & LOAD ---
 function saveGame() {
     const saveData = {
         playerName: playerName,
@@ -47,14 +45,12 @@ function saveGame() {
 function loadGame() {
     try {
         const rawData = localStorage.getItem('vn_save_data');
-        if (!rawData) return false; // Tidak ada data simpan
-
+        if (!rawData) return false;
         const saveData = JSON.parse(rawData);
         playerName = saveData.playerName || 'Adi';
         window.playerName = playerName;
         gameFlags = saveData.gameFlags || { routeA: false, routeB: false, secretRoute: false };
         unlockedQuotes = saveData.unlockedQuotes || [];
-
         try { localStorage.setItem('vn_quotes', JSON.stringify(unlockedQuotes)); } catch (e) {}
         saveFlags();
 
@@ -73,7 +69,7 @@ function loadGame() {
     }
 }
 
-// --- FUNGSI CEK KETERSEDIAAN SAVE (AKTIF / NONAKTIF) ---
+// --- CEK TOMBOL CONTINUE ---
 function checkContinueAvailability() {
     const btn = document.getElementById('btn-continue');
     if (!btn) return;
@@ -98,7 +94,7 @@ function continueGame() {
     }
 }
 
-// --- NAVIGASI DASAR ---
+// --- NAVIGASI ---
 function showNameInput() {
     hideAllScreens();
     document.getElementById('name-input-screen').classList.remove('hidden');
@@ -113,16 +109,5 @@ function startGameWithCustomName() {
     loadScene('common_hari1_1');
 }
 
-/* 
-   PERBAIKAN PENTING: 
-   Fungsi backToMenu sekarang langsung mengecek status tombol Lanjutkan
-   agar jika pemain menyimpan lalu kembali ke menu, tombol otomatis menyala.
-*/
-function backToMenu() {
-    hideAllScreens();
-    document.getElementById('main-menu').classList.remove('hidden');
-    checkContinueAvailability(); // <-- Tambahan kunci di sini
-}
-
-// Jalankan pengecekan tombol continue saat halaman pertama kali dimuat
+// Jalankan saat halaman dimuat
 document.addEventListener('DOMContentLoaded', checkContinueAvailability);
