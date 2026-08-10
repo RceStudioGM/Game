@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Favorite Corridor</title>
+    <title>Persimpangan Hati</title>
     <!-- Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Romantis & Elegan -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Nunito:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <!-- Tailwind custom config untuk warna aksen -->
+    <!-- Tailwind custom config -->
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        'vn-gold': '#f1c40f',
+                        'vn-gold': '#facc15',
                         'vn-dark': '#1a1a2e',
                     },
                     fontFamily: {
@@ -41,41 +41,32 @@
     </div>
 
     <!-- Game Container -->
-    <div id="game-container" class="relative w-[960px] h-[600px] overflow-hidden shadow-2xl rounded-2xl bg-black/80">
+    <div id="game-container" class="relative w-[960px] h-[600px] overflow-hidden shadow-2xl rounded-2xl bg-black">
         
-        <!-- ===== MAIN MENU (Lobby Baru) ===== -->
-        <div id="main-menu" class="screen flex flex-col items-center justify-center w-full h-full bg-cover bg-center bg-no-repeat" style="background-image: url('assets/lobby/bg.png');">
-            <!-- Overlay gelap -->
-            <div class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
-            
-            <div class="relative z-10 flex flex-col items-center animate-fade-in-up">
-                <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl px-12 py-10 shadow-2xl text-center max-w-lg w-full">
-                    <h1 class="font-display text-6xl font-bold text-white drop-shadow-lg tracking-wide">My Favorite Corridor</h1>
-                    <p class="font-body text-vn-gold tracking-widest mt-2 text-sm uppercase">Visual Novel Romansa Sekolah</p>
-                    
-                    <div class="mt-8 space-y-3">
-                        <button id="btn-continue" onclick="continueGame()" class="w-full py-3 px-6 bg-gradient-to-r from-vn-gold to-amber-500 text-black font-bold rounded-xl shadow-lg transition-all hover:scale-105 hover:shadow-vn-gold/30 disabled:opacity-50 disabled:cursor-not-allowed disabled:scale-100 flex items-center justify-center gap-2">
-                            ▶ Lanjutkan
-                        </button>
-                        <button onclick="showNameInput()" class="w-full py-3 px-6 bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/30 text-white font-semibold rounded-xl transition-all hover:scale-105 flex items-center justify-center gap-2">
-                            ▶ Mulai Game Baru
-                        </button>
-                        <button onclick="showProfiles()" class="w-full py-3 px-6 bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/30 text-white font-semibold rounded-xl transition-all hover:scale-105 flex items-center justify-center gap-2">
-                            📖 Profil Karakter
-                        </button>
-                        <button onclick="showGallery()" class="w-full py-3 px-6 bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/30 text-white font-semibold rounded-xl transition-all hover:scale-105 flex items-center justify-center gap-2">
-                            📖 Koleksi Quotes
-                        </button>
-                        <button onclick="showSettings()" class="w-full py-3 px-6 bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/30 text-white font-semibold rounded-xl transition-all hover:scale-105 flex items-center justify-center gap-2">
-                            ⚙️ Pengaturan
-                        </button>
-                    </div>
-                </div>
+        <!-- ===== MAIN MENU (Lobby Baru di Posisi Garis Merah) ===== -->
+        <div id="main-menu" class="screen flex items-center justify-end pr-16 w-full h-full bg-cover bg-center bg-no-repeat" style="background-image: url('assets/lobby/bg.jpg');">
+            <!-- Menu Container Vertikal di Sisi Kanan -->
+            <div class="flex flex-col gap-4 w-[280px] z-10">
+                <button id="btn-continue" onclick="continueGame()" class="w-full py-4 px-6 bg-vn-gold hover:bg-[#eab308] text-black font-bold text-lg rounded-xl shadow-lg transition-all hover:scale-105 text-center">
+                    ▶ Lanjutkan
+                </button>
+                <button onclick="showNameInput()" class="w-full py-4 px-6 bg-black/40 hover:bg-black/60 backdrop-blur-[1px] border border-white/20 text-white font-semibold text-lg rounded-xl shadow-lg transition-all hover:scale-105 text-center">
+                    ▶ Mulai Game Baru
+                </button>
+                <button onclick="showProfiles()" class="w-full py-4 px-6 bg-black/40 hover:bg-black/60 backdrop-blur-[1px] border border-white/20 text-white font-semibold text-lg rounded-xl shadow-lg transition-all hover:scale-105 text-center">
+                    📖 Profil Karakter
+                </button>
+                <button onclick="showGallery()" class="w-full py-4 px-6 bg-black/40 hover:bg-black/60 backdrop-blur-[1px] border border-white/20 text-white font-semibold text-lg rounded-xl shadow-lg transition-all hover:scale-105 text-center">
+                    📖 Koleksi Quotes
+                </button>
+                <button onclick="showSettings()" class="w-full py-4 px-6 bg-black/40 hover:bg-black/60 backdrop-blur-[1px] border border-white/20 text-white font-semibold text-lg rounded-xl shadow-lg transition-all hover:scale-105 text-center">
+                    ⚙️ Pengaturan
+                </button>
             </div>
         </div>
 
         <!-- ===== NAME INPUT ===== -->
-        <div id="name-input-screen" class="screen hidden flex items-center justify-center w-full h-full bg-black/70 backdrop-blur-sm z-20">
+        <div id="name-input-screen" class="screen hidden flex items-center justify-center w-full h-full bg-black/70 backdrop-blur-md z-20">
             <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl px-10 py-12 text-center max-w-md">
                 <h2 class="font-display text-3xl text-white">SIAPA NAMA KAMU?</h2>
                 <p class="font-body text-gray-300 mt-1 text-sm">Masukkan nama panggilan karakter utama</p>
@@ -89,11 +80,9 @@
 
         <!-- ===== GAME SCREEN ===== -->
         <div id="game-screen" class="screen hidden relative w-full h-full">
-            <!-- Tombol Pause -->
             <button id="btn-pause" onclick="openPauseMenu()" class="absolute top-4 left-4 z-20 bg-black/50 hover:bg-black/70 text-white px-4 py-2 rounded-full backdrop-blur-sm border border-white/20 transition-all">
                 ⏸️
             </button>
-            <!-- Tombol Simpan (optional, tetap ada) -->
             <div class="absolute top-4 right-4 z-20 flex gap-2">
                 <button id="btn-save-game" onclick="saveGame()" class="bg-black/50 hover:bg-black/70 text-white px-4 py-2 rounded-full backdrop-blur-sm border border-white/20 transition-all">💾 Simpan</button>
             </div>
@@ -113,7 +102,7 @@
             </div>
         </div>
 
-        <!-- ===== SUB MENU (Gallery / Settings lama) ===== -->
+        <!-- ===== SUB MENU ===== -->
         <div id="sub-menu-screen" class="screen hidden flex flex-col items-center justify-center w-full h-full bg-black/80 backdrop-blur-md z-30">
             <h2 id="sub-menu-title" class="font-display text-4xl text-vn-gold mb-6">Judul Menu</h2>
             <div id="sub-menu-content" class="w-[80%] max-h-[400px] overflow-y-auto bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10"></div>
@@ -127,7 +116,7 @@
             <button onclick="backToMenu()" class="mt-8 px-8 py-3 bg-white/20 hover:bg-white/30 text-white rounded-xl transition-all">Kembali ke Menu</button>
         </div>
 
-        <!-- ===== PAUSE MENU (Modal) ===== -->
+        <!-- ===== PAUSE MENU ===== -->
         <div id="pause-overlay" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-md flex items-center justify-center">
             <div id="pause-modal" class="bg-[#1e2a3a] border border-white/20 rounded-2xl p-8 max-w-md w-full shadow-2xl transform scale-95 transition-all duration-300">
                 <h2 class="font-display text-3xl text-white text-center mb-6">⏸️ Jeda</h2>
@@ -140,31 +129,20 @@
             </div>
         </div>
 
-        <!-- ===== SETTINGS MODAL (dipanggil dari pause atau menu utama) ===== -->
+        <!-- ===== SETTINGS MODAL ===== -->
         <div id="settings-overlay" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-md flex items-center justify-center">
             <div id="settings-modal" class="bg-[#1e2a3a] border border-white/20 rounded-2xl p-8 max-w-md w-full shadow-2xl">
                 <h2 class="font-display text-3xl text-white text-center mb-6">⚙️ Pengaturan</h2>
                 <div class="space-y-5">
-                    <!-- Volume BGM -->
                     <div>
                         <label class="text-white block mb-1">🎵 Musik Latar (BGM)</label>
                         <input type="range" id="bgm-volume" min="0" max="100" value="70" class="w-full accent-vn-gold cursor-pointer" oninput="updateVolume('bgm', this.value)">
                         <span id="bgm-volume-label" class="text-sm text-gray-400">70%</span>
                     </div>
-                    <!-- Volume SFX -->
                     <div>
                         <label class="text-white block mb-1">🔊 Efek Suara (SFX)</label>
                         <input type="range" id="sfx-volume" min="0" max="100" value="80" class="w-full accent-vn-gold cursor-pointer" oninput="updateVolume('sfx', this.value)">
                         <span id="sfx-volume-label" class="text-sm text-gray-400">80%</span>
-                    </div>
-                    <!-- Resolusi -->
-                    <div>
-                        <label class="text-white block mb-1">📺 Resolusi</label>
-                        <select id="resolution-select" class="w-full bg-white/10 text-white border border-white/20 rounded-xl p-2 focus:outline-none focus:ring-2 focus:ring-vn-gold" onchange="changeResolution(this.value)">
-                            <option value="960x600">960 x 600</option>
-                            <option value="1280x800">1280 x 800</option>
-                            <option value="1920x1080">1920 x 1080</option>
-                        </select>
                     </div>
                     <button onclick="closeSettingsModal()" class="w-full py-3 bg-vn-gold text-black font-bold rounded-xl hover:scale-105 transition-all mt-2">Kembali</button>
                 </div>
@@ -184,10 +162,10 @@
         </div>
     </div>
 
-    <!-- Scripts (Urutan: main -> story -> main -> engine) -->
-    <script src="./fungsi/main.js"></script>
-    <script src="./fungsi/engine.js"></script>
-    <script src="./fungsi/config.js"></script>
-    <script src="./fungsi/story.js"></script>
+    <!-- Scripts -->
+    <script src="config.js"></script>
+    <script src="story.js"></script>
+    <script src="main.js"></script>
+    <script src="engine.js"></script>
 </body>
 </html>
