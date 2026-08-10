@@ -1,31 +1,113 @@
 /* ============================================================
-   engine.js — Mesin Game Utama
+   engine.js — Mesin Game Utama + Sistem Pause & Settings
    ============================================================ */
 
 let currentScene = 'prolog_1';
 
-/* ------------------------------------------------------------
-   FIX: Anti-skip guard.
-   Sebelumnya, klik di kotak dialog / tombol pilihan langsung
-   memanggil loadScene() tanpa jeda. Kalau pemain double-click
-   atau klik beruntun (apalagi di scene ber-pilihan-1 yang
-   seluruh kotak dialognya jadi area klik "Lanjut"), klik kedua
-   keburu "dimakan" oleh scene berikutnya yang baru saja dirender
-   -> ceritanya kelewat 2 langkah sekaligus dalam sekejap.
+/* --- Sound & Volume State --- */
+window.bgmVolume = parseInt(localStorage.getItem('vn_bgm_volume')) || 70;
+window.sfxVolume = parseInt(localStorage.getItem('vn_sfx_volume')) || 80;
+window.resolution = localStorage.getItem('vn_resolution') || '960x600';
 
-   goToScene() menambahkan jeda singkat (300ms) sebelum sebuah
-   klik lanjutan diizinkan berpindah scene lagi.
-   ------------------------------------------------------------ */
-let lastAdvanceTime = 0;
-const ADVANCE_COOLDOWN_MS = 1000;
+// Inisialisasi audio placeholder (BGM & SFX disediakan user)
+let bgmAudio = null; // user akan assign file audio
+let sfxPool = [];    // array audio untuk efek klik
 
-function goToScene(nextScene) {
-    const now = Date.now();
-    if (now - lastAdvanceTime < ADVANCE_COOLDOWN_MS) return; // abaikan klik yang terlalu cepat menyusul
-    lastAdvanceTime = now;
-    loadScene(nextScene);
+function initAudio() {
+    // Bisa dipanggil saat game start, user tinggal set bgmAudio.src
+    bgmAudio = new Audio('assets/sound/bgm.mp3');
+    bgmAudio.loop = true;
+    bgmAudio.volume = window.bgmVolume / 100;
 }
 
+function playSFX() {
+    // Klik sound effect
+    const sfx = new Audio('assets/sound/click.mp3');
+    sfx.volume = window.sfxVolume / 100;
+    sfx.play().catch(() => {});
+}
+
+/* --- Update Volume & Resolusi --- */
+function updateVolume(type, val) {
+    if (type === 'bgm') {
+        window.bgmVolume = parseInt(val);
+        localStorage.setItem('vn_bgm_volume', val);
+        document.getElementById('bgm-volume-label').innerText = val + '%';
+        if (bgmAudio) bgmAudio.volume = val / 100;
+    } else if (type === 'sfx') {
+        window.sfxVolume = parseInt(val);
+        localStorage.setItem('vn_sfx_volume', val);
+        document.getElementById('sfx-volume-label').innerText = val + '%';
+    }
+}
+
+function changeResolution(res) {
+    window.resolution = res;
+    localStorage.setItem('vn_resolution', res);
+    const container = document.getElementById('game-container');
+    const [w, h] = res.split('x').map(Number);
+    container.style.width = w + 'px';
+    container.style.height = h + 'px';
+}
+
+/* --- Pause Menu --- */
+function openPauseMenu() {
+    document.getElementById('pause-overlay').classList.remove('hidden');
+    document.getElementById('pause-modal').classList.remove('scale-95');
+    document.getElementById('pause-modal').classList.add('scale-100');
+}
+
+function closePauseMenu() {
+    document.getElementById('pause-overlay').classList.add('hidden');
+    document.getElementById('pause-modal').classList.remove('scale-100');
+    document.getElementById('pause-modal').classList.add('scale-95');
+}
+
+/* --- Settings Modal (dari pause atau menu utama) --- */
+function openSettingsFromPause() {
+    closePauseMenu();
+    showSettingsModal();
+}
+
+function showSettingsModal() {
+    // Sync slider values
+    document.getElementById('bgm-volume').value = window.bgmVolume;
+    document.getElementById('bgm-volume-label').innerText = window.bgmVolume + '%';
+    document.getElementById('sfx-volume').value = window.sfxVolume;
+    document.getElementById('sfx-volume-label').innerText = window.sfxVolume + '%';
+    document.getElementById('resolution-select').value = window.resolution;
+    
+    document.getElementById('settings-overlay').classList.remove('hidden');
+}
+
+function closeSettingsModal() {
+    document.getElementById('settings-overlay').classList.add('hidden');
+    // Jika settings dipanggil dari pause, kembali ke pause
+    if (!document.getElementById('pause-overlay').classList.contains('hidden')) {
+        openPauseMenu();
+    }
+}
+
+/* --- Konfirmasi Keluar --- */
+function confirmQuit() {
+    closePauseMenu();
+    document.getElementById('confirm-overlay').classList.remove('hidden');
+}
+
+function closeConfirm() {
+    document.getElementById('confirm-overlay').classList.add('hidden');
+}
+
+function quitGame() {
+    // Tutup semua modal dan kembali ke menu utama
+    document.getElementById('confirm-overlay').classList.add('hidden');
+    hideAllScreens();
+    document.getElementById('main-menu').classList.remove('hidden');
+    if (bgmAudio) bgmAudio.pause();
+    checkContinueAvailability();
+}
+
+/* --- Original Engine Functions (dengan tambahan SFX di tombol) --- */
 function img(charName, exprKey) {
     const folder = assets.CHARACTER_PATHS[charName];
     if (!folder) return ''; 
@@ -60,17 +142,16 @@ function backToMenu() {
     hideAllScreens();
     document.getElementById('main-menu').classList.remove('hidden');
     checkContinueAvailability();
+    if (bgmAudio) bgmAudio.pause();
 }
 
 function saveFlags() {
     try { localStorage.setItem('vn_flags', JSON.stringify(window.gameFlags)); } catch (e) {}
 }
 
+// Settings lama tetap ada untuk kompatibilitas
 function showSettings() {
-    hideAllScreens();
-    document.getElementById('sub-menu-screen').classList.remove('hidden');
-    document.getElementById('sub-menu-title').innerText = 'Pengaturan';
-    document.getElementById('sub-menu-content').innerHTML = '<p style="opacity:.8">Pengaturan suara & teks belum tersedia.</p>';
+    showSettingsModal();
 }
 
 function showGallery() {
@@ -136,6 +217,16 @@ function saveQuote(quoteId) {
     }, 4000);
 }
 
+let lastAdvanceTime = 0;
+const ADVANCE_COOLDOWN_MS = 1000;
+
+function goToScene(nextScene) {
+    const now = Date.now();
+    if (now - lastAdvanceTime < ADVANCE_COOLDOWN_MS) return;
+    lastAdvanceTime = now;
+    loadScene(nextScene);
+}
+
 function loadScene(sceneKey) {
     if (sceneKey === 'menu') { backToMenu(); return; }
     currentScene = sceneKey;
@@ -180,7 +271,7 @@ function loadScene(sceneKey) {
     document.getElementById('background-image').style.backgroundImage = `url('${scene.bg}')`;
 
     const charL = document.getElementById('char-left');
-    charL.onerror = () => charL.classList.add('hidden'); // jaga-jaga kalau file ekspresi belum ada/nama beda
+    charL.onerror = () => charL.classList.add('hidden');
     if (scene.charLeft) { charL.src = scene.charLeft; charL.classList.remove('hidden'); } else { charL.classList.add('hidden'); }
     const charR = document.getElementById('char-right');
     charR.onerror = () => charR.classList.add('hidden');
@@ -196,10 +287,10 @@ function loadScene(sceneKey) {
         const btn = document.createElement('button');
         btn.className = 'choice-btn hidden';
         btn.innerText = replaceTags(scene.choices[0].text);
-        btn.onclick = () => goToScene(nextKey);
+        btn.onclick = () => { playSFX(); goToScene(nextKey); };
         choicesContainer.appendChild(btn);
         document.getElementById('dialogue-box').onclick = () => {
-            if (!document.getElementById('game-screen').classList.contains('hidden')) goToScene(nextKey);
+            if (!document.getElementById('game-screen').classList.contains('hidden')) { playSFX(); goToScene(nextKey); }
         };
         document.getElementById('dialogue-text').style.cursor = 'pointer';
         document.getElementById('dialogue-text').title = 'Klik untuk melanjutkan...';
@@ -211,7 +302,7 @@ function loadScene(sceneKey) {
             const btn = document.createElement('button');
             btn.className = 'choice-btn';
             btn.innerText = replaceTags(choice.text);
-            btn.onclick = () => goToScene(choice.nextScene);
+            btn.onclick = () => { playSFX(); goToScene(choice.nextScene); };
             choicesContainer.appendChild(btn);
         });
     }
@@ -243,5 +334,13 @@ function continueGame() {
         hideAllScreens();
         document.getElementById('game-screen').classList.remove('hidden');
         loadScene(saveData.currentScene || 'prolog_1');
+        // Play BGM if defined
+        if (bgmAudio) bgmAudio.play().catch(() => {});
     } catch (e) { console.error("Gagal memuat game:", e); alert("Gagal memuat data simpan."); }
 }
+
+// Load resolution on start
+window.addEventListener('load', () => {
+    changeResolution(window.resolution);
+    initAudio();
+});
