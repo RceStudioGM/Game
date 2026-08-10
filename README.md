@@ -8,7 +8,7 @@
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 ![Platform](https://img.shields.io/badge/Platform-Web_Browser-brightgreen?style=for-the-badge)
 
-**"Di antara riuhnya koridor sekolah dan kilau senja, takdir hatimu dimulai..."**
+**"Diantara Disiplin dan Kebebasan, Aku menemukan Arti Pulang"**
 
 *Sebuah game Visual Novel interaktif bergenre Romance & Slice of Life berbasis Web, dibangun khusus tanpa engine pihak ketiga!*
 
