@@ -26,7 +26,7 @@ body {
 
 .hidden { display: none !important; }
 
-/* GAME SCREEN */
+/* GAME SCREEN (Sesuai dengan desain lama) */
 #background-image {
     width: 100%; height: 100%;
     background-size: cover; background-position: center;
@@ -72,7 +72,7 @@ body {
 }
 .choice-btn:hover { background: #f1c40f; color: black; font-weight: bold; border-color: #f1c40f; }
 
-/* Profil Card (masih dipakai) */
+/* Profil Card */
 .profile-card {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 12px; padding: 20px;
@@ -99,12 +99,3 @@ body {
     z-index: 100; transition: right 0.5s ease-in-out;
 }
 #toast-notif.show { right: 20px; }
-
-/* Utility untuk animasi */
-@keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-.animate-fade-in-up {
-    animation: fadeInUp 0.8s ease-out both;
-}
