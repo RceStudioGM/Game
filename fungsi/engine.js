@@ -1,5 +1,5 @@
 /* ============================================================
-   engine.js — Sistem Engine Visual Novel
+   engine.js — Sistem Engine Visual Novel (VERSI UTUH)
    ============================================================ */
 
 // Variabel posisi scene saat ini (untuk save/load)
@@ -119,7 +119,7 @@ function saveQuote(quoteId) {
     }, 4000);
 }
 
-// --- ENGINE UTAMA LOAD SCENE ---
+// --- ENGINE UTAMA LOAD SCENE (JANGAN ADA KOMENTAR TERPUTUS) ---
 function loadScene(sceneKey) {
     if (sceneKey === 'menu') { backToMenu(); return; }
 
@@ -142,7 +142,7 @@ function loadScene(sceneKey) {
         scene.choices = baseChoices;
     }
 
-    // HANDLER UNLOCK FLAG
+    // HANDLER UNLOCK FLAG (SAAT MENYELESAIKAN GAME)
     if (['rute_a6_ending1', 'rute_a6_ending2', 'rute_a6_ending_sahabat'].includes(sceneKey)) {
         if (!gameFlags.routeA) { gameFlags.routeA = true; saveFlags(); }
     }
