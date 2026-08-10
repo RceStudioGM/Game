@@ -202,3 +202,34 @@ h1 { font-size: 48px; letter-spacing: 2px; color: #fff; text-shadow: 2px 2px 5px
     color: #bdc3c7;
     margin-top: 8px;
 }
+/* --- GAME UI TOP (Tombol Save) --- */
+.game-ui-top {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    z-index: 20;
+    display: flex;
+    gap: 10px;
+}
+#btn-save-game {
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    border: 1px solid #555;
+    padding: 8px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.2s;
+}
+#btn-save-game:hover {
+    background: #f1c40f;
+    color: #000;
+    border-color: #f1c40f;
+}
+
+/* Tombol Lanjutkan jika tidak ada save */
+#btn-continue:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: scale(1) !important;
+}
