@@ -4,6 +4,28 @@
 
 let currentScene = 'prolog_1';
 
+/* ------------------------------------------------------------
+   FIX: Anti-skip guard.
+   Sebelumnya, klik di kotak dialog / tombol pilihan langsung
+   memanggil loadScene() tanpa jeda. Kalau pemain double-click
+   atau klik beruntun (apalagi di scene ber-pilihan-1 yang
+   seluruh kotak dialognya jadi area klik "Lanjut"), klik kedua
+   keburu "dimakan" oleh scene berikutnya yang baru saja dirender
+   -> ceritanya kelewat 2 langkah sekaligus dalam sekejap.
+
+   goToScene() menambahkan jeda singkat (300ms) sebelum sebuah
+   klik lanjutan diizinkan berpindah scene lagi.
+   ------------------------------------------------------------ */
+let lastAdvanceTime = 0;
+const ADVANCE_COOLDOWN_MS = 300;
+
+function goToScene(nextScene) {
+    const now = Date.now();
+    if (now - lastAdvanceTime < ADVANCE_COOLDOWN_MS) return; // abaikan klik yang terlalu cepat menyusul
+    lastAdvanceTime = now;
+    loadScene(nextScene);
+}
+
 function img(charName, exprKey) {
     const folder = assets.CHARACTER_PATHS[charName];
     if (!folder) return ''; 
@@ -158,8 +180,10 @@ function loadScene(sceneKey) {
     document.getElementById('background-image').style.backgroundImage = `url('${scene.bg}')`;
 
     const charL = document.getElementById('char-left');
+    charL.onerror = () => charL.classList.add('hidden'); // jaga-jaga kalau file ekspresi belum ada/nama beda
     if (scene.charLeft) { charL.src = scene.charLeft; charL.classList.remove('hidden'); } else { charL.classList.add('hidden'); }
     const charR = document.getElementById('char-right');
+    charR.onerror = () => charR.classList.add('hidden');
     if (scene.charRight) { charR.src = scene.charRight; charR.classList.remove('hidden'); } else { charR.classList.add('hidden'); }
 
     if (scene.unlockQuote) saveQuote(scene.unlockQuote);
@@ -168,12 +192,15 @@ function loadScene(sceneKey) {
     choicesContainer.innerHTML = '';
 
     if (scene.choices.length === 1) {
+        const nextKey = scene.choices[0].nextScene;
         const btn = document.createElement('button');
         btn.className = 'choice-btn hidden';
         btn.innerText = replaceTags(scene.choices[0].text);
-        btn.onclick = () => loadScene(scene.choices[0].nextScene);
+        btn.onclick = () => goToScene(nextKey);
         choicesContainer.appendChild(btn);
-        document.getElementById('dialogue-box').onclick = () => { if (!document.getElementById('game-screen').classList.contains('hidden')) btn.click(); };
+        document.getElementById('dialogue-box').onclick = () => {
+            if (!document.getElementById('game-screen').classList.contains('hidden')) goToScene(nextKey);
+        };
         document.getElementById('dialogue-text').style.cursor = 'pointer';
         document.getElementById('dialogue-text').title = 'Klik untuk melanjutkan...';
     } else {
@@ -184,7 +211,7 @@ function loadScene(sceneKey) {
             const btn = document.createElement('button');
             btn.className = 'choice-btn';
             btn.innerText = replaceTags(choice.text);
-            btn.onclick = () => loadScene(choice.nextScene);
+            btn.onclick = () => goToScene(choice.nextScene);
             choicesContainer.appendChild(btn);
         });
     }
