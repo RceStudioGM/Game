@@ -1,42 +1,87 @@
 # 🌸 My Favorite Corridor (Visual Novel)
 
-**My Favorite Corridor** adalah sebuah game Visual Novel interaktif bergenre *romance* dan *slice of life* yang mengambil latar di sekolah menengah. Game ini mengajak pemain untuk menentukan jalan ceritanya sendiri, memilih rute romansa, dan menemukan versi terbaik dari diri mereka melalui interaksi dengan karakter-karakter utama.
+<div align="center">
 
-## 🚀 Fitur Terbaru (Massive Update!)
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![Platform](https://img.shields.io/badge/Platform-Web_Browser-brightgreen?style=for-the-badge)
 
-Pembaruan besar-besaran telah dilakukan untuk meningkatkan pengalaman bermain. Berikut adalah fitur-fitur utama di versi terbaru:
+**"Di antara riuhnya koridor sekolah dan kilau senja, takdir hatimu dimulai..."**
 
-* **💾 Sistem Save & Load Cerdas:** Progress permainan (Nama Pemain, Bendera Rute, *Quotes* yang terbuka) kini tersimpan secara otomatis maupun manual menggunakan fitur *Local Storage*. Mainkan kapan saja tanpa takut kehilangan *progress*!
-* **🎧 Sistem Audio Dinamis:** Kontrol penuh untuk BGM (Background Music) dan SFX (Sound Effects). Pemain dapat menyesuaikan volume melalui menu *Settings*.
-* **🖥️ Resolusi Layar Adaptif:** Tersedia opsi untuk mengubah resolusi layar (dari 960x600 hingga Full HD 1920x1080) agar nyaman dimainkan di berbagai perangkat.
-* **✨ UI/UX Modern & Elegan:** Desain antarmuka baru menggunakan **Tailwind CSS**. Dilengkapi dengan animasi transisi yang mulus, *Toast Notification* saat menyimpan game, dan Modal Konfirmasi Keluar.
-* **📖 Multiple Endings & Branching Storylines:** Cerita bercabang yang dipengaruhi oleh pilihan pemain, termasuk *True Ending*, Rute Romantis untuk masing-masing *heroine*, dan Rute Rahasia!
-* **🔓 Unlockable Content:** Kumpulkan *Quotes* epilog dan buka profil lengkap karakter (*Profile Cards*) seiring dengan progres cerita.
+*Sebuah game Visual Novel interaktif bergenre Romance & Slice of Life berbasis Web, dibangun khusus tanpa engine pihak ketiga!*
 
-## 🎭 Karakter Utama
+</div>
 
-* **MC (Pemain):** Karakter utama yang perannya kamu mainkan. Tentukan namamu sendiri di awal permainan!
-* **Alexandra Wijaya:** Ketua OSIS yang tegas, disiplin, dan perfeksionis. Punya sisi lain yang hanya ia tunjukkan pada orang yang ia percaya.
-* **Kirana Maheswari:** Gadis jenius seni yang ceria, bebas, dan artistik. Di balik senyumnya, ia menyimpan kekhawatiran mendalam akan bakatnya.
+---
 
-### Karakter Pendukung (NPC)
-* **Bima Satrio:** Sahabat setia MC yang cerewet dan humoris.
-* **Rangga Aditya:** Wakil Ketua OSIS yang protektif.
-* **Farah Novita:** Sekretaris OSIS yang ramah dan empatik.
-* **Pak Hendra & Bu Sari:** Guru-guru yang siap membimbing (atau menghukum) murid-murid.
+## 📖 Sinopsis Cerita
 
-## 🛠️ Tech Stack & Engine
+Terlambat di hari pertama sekolah adalah hal yang biasa bagi **{Player}**. Namun, berlari terburu-buru menyusuri koridor sambil membawa roti lalu menabrak Ketua OSIS yang paling disegani di sekolah? Itu awal dari sebuah kisah yang tak terduga!
 
-Game ini dibangun secara *custom* dari nol (*from scratch*) tanpa menggunakan *game engine* pihak ketiga seperti Ren'Py, murni menggunakan teknologi web modern:
-* **HTML5** untuk struktur semantik.
-* **CSS3 & Tailwind CSS** untuk *styling*, animasi, dan *layouting* responsif.
-* **Vanilla JavaScript (ES6)** sebagai otak utama (*engine*) untuk logika cerita (`story.js`), manajemen state (`main.js`), pengelola aset (`config.js`), dan mekanik game (`engine.js`).
-* **Google Fonts:** *Playfair Display* & *Nunito* untuk tipografi yang romantis namun mudah dibaca.
+Di tengah dinamika kehidupan SMA, kamu akan terombang-ambing di antara dua dunia yang bertolak belakang:
+- **Alexandra**, Ketua OSIS perfeksionis yang tegas namun menyimpan kepedulian tersembunyi.
+- **Kirana**, gadis jenius seni yang ceria, bebas, tetapi diam-diam meragukan bakatnya sendiri.
 
-## 🕹️ Cara Bermain (Instalasi)
+Setiap pilihan kata dan keputusan yang kamu ambil akan menentukan rute cintamu, mengungkapkan rahasia mereka, dan membawamu menuju takdir akhir!
 
-Karena game ini berbasis web, kamu tidak perlu menginstal aplikasi tambahan apa pun!
-1. Unduh atau *clone repository* ini ke perangkatmu.
-2. Ekstrak folder jika berbentuk `.zip`.
-3. Buka file `index.html` menggunakan *browser* favoritmu (Chrome, Firefox, Edge, Safari).
-4. Masukkan namamu dan mulailah petualanganmu di koridor sekolah!
+---
+
+## 🎭 Karakter Game
+
+| Karakter | Peran & Deskripsi |
+| :--- | :--- |
+| 🎒 **MC (Protagonis)** | **Karakter Utama (Pemain)**<br>Siswa SMA biasa yang namamu tentukan sendiri. Keputusanmu menentukan jalan ceritanya! |
+| 👑 **Alexandra Wijaya** | **Heroine Utama (Ketua OSIS)**<br>Perfeksionis, disiplin, dan tegas. Di balik sikap dinginnya, ia memikul beban berat dan mencari seseorang yang benar-benar bisa memahaminya. |
+| 🎨 **Kirana Maheswari** | **Heroine Utama (Jenius Seni)**<br>Ceria, ekspresif, dan penuh warna. Namun di balik kuas lukisnya, ia takut kehilangan bakat dan perhatian orang-orang tersayang. |
+| 👥 **Bima Satrio** | **Sahabat MC (NPC)**<br>Cerewet, humoris, dan selalu tahu kabar gosip sekolah terbaru. Tempat curhat setia MC. |
+| 🛡️ **Rangga Aditya** | **Wakil Ketua OSIS (NPC)**<br>Protektif dan bertanggung jawab. Sangat menjaga reputasi OSIS dan keselamatan Alexandra. |
+| 📝 **Farah Novita** | **Sekretaris OSIS (NPC)**<br>Ramah, empatik, dan merupakan sahabat dekat Alexandra yang memahami perasaannya. |
+
+---
+
+## ✨ Fitur-Fitur Keunggulan (Key Features)
+
+* 🔀 **Branching Storyline & Multiple Endings:**
+  Pilihanmu berdampak nyata! Temukan **Alexandra True Ending**, **Kirana True Ending**, **Constellation Ending**, hingga **Secret Route**.
+* 💾 **Smart Save & Load System:**
+  Dilengkapi penyimpanan progres otomatis dan manual berbasis *LocalStorage*. Kamu bisa melanjutkan cerita kapan saja tanpa takut kehilangan data.
+* 🎧 **Audio Controller & Immersion:**
+  Pengaturan independen untuk volume BGM (Background Music) dan SFX (Sound Effects) untuk suasana bermain yang imersif.
+* 🖥️ **Resolusi Layar Adaptif:**
+  Dukungan ubah resolusi dinamis mulai dari **960x600**, **1280x720 (HD)**, hingga **1920x1080 (Full HD)**.
+* 🎨 **UI/UX Modern & Animasi Mulus:**
+  Tampilan antarmuka stylish dibangun menggunakan **Tailwind CSS**, lengkap dengan *Toast Notifications*, *Confirmation Modals*, dan efek transisi cerita yang memanjakan mata.
+* 🔓 **Gallery & Profile Unlocks:**
+  Buka kartu profil karakter (*Profile Cards*) dan koleksi *Quotes Epilog* langka seiring jalannya permainan.
+* 🌐 **100% Web Native (Zero Install):**
+  Tidak perlu mengunduh installer atau emulator. Cukup buka di web browser apa saja!
+
+---
+
+## 🛠️ Spesifikasi & Tech Stack
+
+Game ini dibangun secara *custom web-based engine* dari nol tanpa menggunakan engine seperti Ren'Py:
+
+- **Frontend Framework / Styling:** HTML5, CSS3, [Tailwind CSS](https://tailwindcss.com/)
+- **Core Engine & Logic:** Vanilla JavaScript (ES6+)
+- **Data Persistence:** Web Storage API (LocalStorage)
+- **Typography:** Google Fonts (*Playfair Display* & *Nunito*)
+
+---
+
+## 🕹️ Cara Bermain
+
+1. **Clone / Download** repository ini ke komputer atau HP milikmu.
+2. Ekstrak file zip jika diunduh dalam bentuk arsip.
+3. Buka file `index.html` menggunakan browser utama pilihanmu (Google Chrome, Firefox, Microsoft Edge, Safari).
+4. Masukkan nama karaktermu di menu awal dan mulailah petualangan cintamu di koridor sekolah!
+
+---
+
+<div align="center">
+
+*Dibuat dengan ❤️ untuk para pecinta Visual Novel & Romance Stories.*
+
+</div>
