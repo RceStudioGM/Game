@@ -22,10 +22,13 @@
                 <h1>PERSIMPANGAN HATI</h1>
                 <p>Visual Novel Romansa Sekolah</p>
             </div>
+            <!-- Di dalam div id="main-menu", bagian menu-buttons -->
             <div class="menu-buttons">
-                <button onclick="showNameInput()">▶ Mulai Game (Play)</button>
+                <button id="btn-continue" onclick="continueGame()">▶ Lanjutkan</button> <!-- TAMBAHAN BARU -->
+                <button onclick="showNameInput()">▶ Mulai Game Baru</button>
+                <button onclick="showProfiles()">📖 Profil Karakter</button> <!-- Menu profil tadi -->
+                <button onclick="showGallery()">📖 Koleksi Quotes</button>
                 <button onclick="showSettings()">⚙️ Pengaturan</button>
-                <button onclick="showGallery()">📖 Koleksi Quotes 🔒</button>
             </div>
         </div>
 
@@ -42,7 +45,16 @@
         </div>
 
         <div id="game-screen" class="screen hidden">
+            <div id="game-screen" class="screen hidden">
+    <!-- Tambahkan tombol simpan di sini -->
+            <div class="game-ui-top">
+                <button id="btn-save-game" onclick="saveGame()">💾 Simpan</button>
+            </div>
+        
             <div id="background-image"></div>
+            <!-- ... sisanya (karakter dan dialog) tetap sama ... -->
+        </div>    
+            
             
             <img id="char-left" class="character hidden" src="" alt="Karakter Kiri">
             <img id="char-right" class="character hidden" src="" alt="Karakter Kanan">
