@@ -3,23 +3,26 @@
    ============================================================ */
 
 // Variabel Global
+// ... (kode sebelumnya) ...
+
 let playerName = 'Adi';
 let unlockedQuotes = [];
-let gameFlags = { routeA: false, routeB: false };
+let gameFlags = { routeA: false, routeB: false, secretRoute: false };
 
-// Load data dari LocalStorage saat game dimulai
+// Load data dari LocalStorage
 try {
     unlockedQuotes = JSON.parse(localStorage.getItem('vn_quotes')) || [];
-    gameFlags = JSON.parse(localStorage.getItem('vn_flags')) || { routeA: false, routeB: false };
+    gameFlags = JSON.parse(localStorage.getItem('vn_flags')) || { routeA: false, routeB: false, secretRoute: false };
 } catch (e) {
     unlockedQuotes = [];
-    gameFlags = { routeA: false, routeB: false };
+    gameFlags = { routeA: false, routeB: false, secretRoute: false };
 }
 
-// Simpan Flags New Game+
 function saveFlags() {
     try { localStorage.setItem('vn_flags', JSON.stringify(gameFlags)); } catch (e) {}
 }
+
+// ... (kode showNameInput dan startGameWithCustomName tetap sama) ...
 
 // Fungsi Membuka Layar Input Nama
 function showNameInput() {
