@@ -17,7 +17,7 @@ let currentScene = 'prolog_1';
    klik lanjutan diizinkan berpindah scene lagi.
    ------------------------------------------------------------ */
 let lastAdvanceTime = 0;
-const ADVANCE_COOLDOWN_MS = 300;
+const ADVANCE_COOLDOWN_MS = 1000;
 
 function goToScene(nextScene) {
     const now = Date.now();
