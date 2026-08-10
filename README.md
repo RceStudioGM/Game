@@ -1,54 +1,42 @@
-# 🌸 My Favorite Corridor — Web Visual Novel
+# 🌸 My Favorite Corridor (Visual Novel)
 
-![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
-![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
-![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
-![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-222222?style=for-the-badge&logo=github&logoColor=white)
+**My Favorite Corridor** adalah sebuah game Visual Novel interaktif bergenre *romance* dan *slice of life* yang mengambil latar di sekolah menengah. Game ini mengajak pemain untuk menentukan jalan ceritanya sendiri, memilih rute romansa, dan menemukan versi terbaik dari diri mereka melalui interaksi dengan karakter-karakter utama.
 
-**Persimpangan Hati** adalah sebuah website *Interactive Visual Novel* berbasis *Frontend* (HTML, CSS, dan JavaScript) yang menceritakan dilema kehidupan SMA antara kedisiplinan, kebebasan berekspresi, dan perasaan.
+## 🚀 Fitur Terbaru (Massive Update!)
 
----
+Pembaruan besar-besaran telah dilakukan untuk meningkatkan pengalaman bermain. Berikut adalah fitur-fitur utama di versi terbaru:
 
-## 📖 Sinopsis Cerita
+* **💾 Sistem Save & Load Cerdas:** Progress permainan (Nama Pemain, Bendera Rute, *Quotes* yang terbuka) kini tersimpan secara otomatis maupun manual menggunakan fitur *Local Storage*. Mainkan kapan saja tanpa takut kehilangan *progress*!
+* **🎧 Sistem Audio Dinamis:** Kontrol penuh untuk BGM (Background Music) dan SFX (Sound Effects). Pemain dapat menyesuaikan volume melalui menu *Settings*.
+* **🖥️ Resolusi Layar Adaptif:** Tersedia opsi untuk mengubah resolusi layar (dari 960x600 hingga Full HD 1920x1080) agar nyaman dimainkan di berbagai perangkat.
+* **✨ UI/UX Modern & Elegan:** Desain antarmuka baru menggunakan **Tailwind CSS**. Dilengkapi dengan animasi transisi yang mulus, *Toast Notification* saat menyimpan game, dan Modal Konfirmasi Keluar.
+* **📖 Multiple Endings & Branching Storylines:** Cerita bercabang yang dipengaruhi oleh pilihan pemain, termasuk *True Ending*, Rute Romantis untuk masing-masing *heroine*, dan Rute Rahasia!
+* **🔓 Unlockable Content:** Kumpulkan *Quotes* epilog dan buka profil lengkap karakter (*Profile Cards*) seiring dengan progres cerita.
 
-Kamu berperan sebagai siswa SMA biasa yang terlambat di hari yang tidak biasa. Dalam satu pagi, kamu menabrak **Alexandra Wijaya** (Ketua OSIS yang tegas dan kaku) serta membantu **Kirana Maheswari** (Jenius seni yang bebas dan ceria). 
+## 🎭 Karakter Utama
 
-Dihadapkan pada pilihan untuk membantu persiapan Festival Sekolah, setiap keputusan yang kamu ambil akan menentukan rute hubungan, nasib kepanitiaan, hingga *ending* cerita.
+* **MC (Pemain):** Karakter utama yang perannya kamu mainkan. Tentukan namamu sendiri di awal permainan!
+* **Alexandra Wijaya:** Ketua OSIS yang tegas, disiplin, dan perfeksionis. Punya sisi lain yang hanya ia tunjukkan pada orang yang ia percaya.
+* **Kirana Maheswari:** Gadis jenius seni yang ceria, bebas, dan artistik. Di balik senyumnya, ia menyimpan kekhawatiran mendalam akan bakatnya.
 
----
+### Karakter Pendukung (NPC)
+* **Bima Satrio:** Sahabat setia MC yang cerewet dan humoris.
+* **Rangga Aditya:** Wakil Ketua OSIS yang protektif.
+* **Farah Novita:** Sekretaris OSIS yang ramah dan empatik.
+* **Pak Hendra & Bu Sari:** Guru-guru yang siap membimbing (atau menghukum) murid-murid.
 
-## ✨ Fitur Utama
+## 🛠️ Tech Stack & Engine
 
-- 🎭 **Custom Name Input:** Pemain dapat memasukkan nama panggilan mereka sendiri di awal permainan untuk pengalaman yang lebih personal.
-- 🔀 **Multi-Branching Story:** Cerita bercabang dengan 3 Rute Utama (Rute OSIS, Rute Seni, dan Rute Dilema) serta 8 Ending Berbeda.
-- 🖼️ **Dynamic Character & Emotion System:** Tampilan sprite karakter yang dinamis dan menyesuaikan dengan emosi dialog (senang, marah, kaget, ragu).
-- 💬 **Classic VN Dialogue Box:** Antarmuka dialog ala Visual Novel klasik lengkap dengan *Name Tag* yang hilang otomatis saat Narator berbicara.
-- 🔔 **In-Game Toast Notification:** Notifikasi khusus di dalam web saat pemain berhasil membuka *Quote* baru.
-- 📖 **Unlockable Quotes Gallery:** Fitur galeri untuk mengumpulkan *quotes* inspiratif dari setiap *ending* yang dicapai.
-- 💾 **Local Storage Save:** Progres koleksi *quotes* tersimpan otomatis di *browser* pemain.
+Game ini dibangun secara *custom* dari nol (*from scratch*) tanpa menggunakan *game engine* pihak ketiga seperti Ren'Py, murni menggunakan teknologi web modern:
+* **HTML5** untuk struktur semantik.
+* **CSS3 & Tailwind CSS** untuk *styling*, animasi, dan *layouting* responsif.
+* **Vanilla JavaScript (ES6)** sebagai otak utama (*engine*) untuk logika cerita (`story.js`), manajemen state (`main.js`), pengelola aset (`config.js`), dan mekanik game (`engine.js`).
+* **Google Fonts:** *Playfair Display* & *Nunito* untuk tipografi yang romantis namun mudah dibaca.
 
----
+## 🕹️ Cara Bermain (Instalasi)
 
-## 🎭 Karakter Utama & Pendukung
-
-| Karakter | Peran / Deskripsi |
-| :--- | :--- |
-| **MC (Pemain)** | Siswa kelas 2 SMA biasa yang terseret dalam persiapan Festival Sekolah. Nama dapat diubah. |
-| **Alexandra Wijaya** | Ketua OSIS yang tegas, disiplin, dan perfeksionis. |
-| **Kirana Maheswari** | Jenius seni sekolah yang ceria, bebas, dan penuh ide liar. |
-| **Bima Satrio** | Sahabat MC yang humoris dan selalu menjadi sumber gosip. |
-| **Rangga Aditya** | Wakil Ketua OSIS yang protektif terhadap Alexandra. |
-| **Pak Hendra** | Guru senior / wali kelas yang memberikan nasihat hidup penting bagi MC. |
-| **Bu Sari & Farah** | Guru seni dan Sekretaris OSIS. |
-| **Dewi & Bang Yusuf** | Karakter pendukung yang menambah dinamika konflik di setiap rute. |
-
----
-
-## 🛠️ Struktur File Proyek
-
-```text
-persimpangan-hati/
-├── index.html          # Kerangka utama web & struktur UI Visual Novel
-├── style.css           # Styling visual, tata letak dialog, & animasi
-├── script.js           # Engine game, logika percabangan, & sistem penyimpanan
-└── README.md           # Dokumentasi proyek
+Karena game ini berbasis web, kamu tidak perlu menginstal aplikasi tambahan apa pun!
+1. Unduh atau *clone repository* ini ke perangkatmu.
+2. Ekstrak folder jika berbentuk `.zip`.
+3. Buka file `index.html` menggunakan *browser* favoritmu (Chrome, Firefox, Edge, Safari).
+4. Masukkan namamu dan mulailah petualanganmu di koridor sekolah!
