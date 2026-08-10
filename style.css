@@ -10,7 +10,7 @@ body {
 }
 
 #game-container {
-    width: 960px; height: 600px; /* Ukuran standar VN */
+    width: 960px; height: 600px;
     background-color: #1a1a1a;
     position: relative; overflow: hidden;
     box-shadow: 0 0 30px rgba(0,0,0,0.9); color: white;
@@ -62,7 +62,6 @@ h1 { font-size: 48px; letter-spacing: 2px; color: #fff; text-shadow: 2px 2px 5px
 #char-left { left: 5%; margin-bottom: -100px; }
 #char-right { right: 5%; transform: scaleX(-1); }
 
-/* Kotak Dialog Lebih Premium */
 #dialogue-container {
     position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%);
     width: 95%; z-index: 10; display: flex; flex-direction: column;
@@ -114,19 +113,20 @@ h1 { font-size: 48px; letter-spacing: 2px; color: #fff; text-shadow: 2px 2px 5px
 #toast-notif.show { right: 20px; }
 #toast-notif h4 { margin: 0 0 5px 0; color: #f1c40f; font-size: 16px; }
 #toast-notif p { margin: 0; font-size: 13px; }
+
+/* --- NAME INPUT --- */
 #name-input-screen {
     align-items: center; justify-content: center;
     background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=960&q=80') center/cover;
     z-index: 20;
 }
-
 #player-name-input {
     width: 300px; padding: 14px; font-size: 18px; text-align: center;
     background: rgba(255, 255, 255, 0.9); color: #2c3e50; border: 2px solid #3498db;
     border-radius: 8px; margin-bottom: 15px; outline: none; font-weight: bold;
 }
-
 #player-name-input:focus { border-color: #f1c40f; box-shadow: 0 0 10px rgba(241, 196, 15, 0.5); }
+
 /* --- PROFIL KARAKTER --- */
 #profile-screen {
     padding: 30px 40px;
@@ -135,101 +135,32 @@ h1 { font-size: 48px; letter-spacing: 2px; color: #fff; text-shadow: 2px 2px 5px
     overflow-y: auto;
 }
 #profile-title {
-    text-align: center;
-    font-size: 32px;
-    color: #f1c40f;
-    margin-bottom: 20px;
+    text-align: center; font-size: 32px; color: #f1c40f; margin-bottom: 20px;
 }
 .profile-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-    width: 100%;
-    max-width: 1000px;
-    margin: 0 auto 30px auto;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;
+    width: 100%; max-width: 1000px; margin: 0 auto 30px auto;
 }
 .profile-card {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 12px;
-    padding: 20px;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    border: 1px solid #34495e;
-    transition: 0.3s;
+    background: rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 20px;
+    display: flex; align-items: center; gap: 15px; border: 1px solid #34495e; transition: 0.3s;
 }
-.profile-card:hover { 
-    background: rgba(255, 255, 255, 0.1); 
-    transform: translateY(-3px);
-    border-color: #f1c40f;
-}
-.profile-img {
-    width: 80px;
-    height: 80px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #2c3e50;
-    border-radius: 50%;
-    overflow: hidden;
-}
-.profile-img img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-.profile-img.locked {
-    background: #444;
-    font-size: 32px;
-}
-.profile-info {
-    flex: 1;
-}
-.profile-info h3 {
-    margin: 0 0 5px 0;
-    color: #fff;
-}
-.profile-role {
-    font-size: 12px;
-    color: #f1c40f;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-.profile-desc {
-    font-size: 13px;
-    line-height: 1.5;
-    color: #bdc3c7;
-    margin-top: 8px;
-}
-/* --- GAME UI TOP (Tombol Save) --- */
+.profile-card:hover { background: rgba(255, 255, 255, 0.1); transform: translateY(-3px); border-color: #f1c40f; }
+.profile-img { width: 80px; height: 80px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: #2c3e50; border-radius: 50%; overflow: hidden; }
+.profile-img img { width: 100%; height: 100%; object-fit: cover; }
+.profile-img.locked { background: #444; font-size: 32px; }
+.profile-info { flex: 1; }
+.profile-info h3 { margin: 0 0 5px 0; color: #fff; }
+.profile-role { font-size: 12px; color: #f1c40f; text-transform: uppercase; letter-spacing: 1px; }
+.profile-desc { font-size: 13px; line-height: 1.5; color: #bdc3c7; margin-top: 8px; }
+
+/* --- GAME UI TOP --- */
 .game-ui-top {
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    z-index: 20;
-    display: flex;
-    gap: 10px;
+    position: absolute; top: 15px; right: 20px; z-index: 20; display: flex; gap: 10px;
 }
 #btn-save-game {
-    background: rgba(0,0,0,0.6);
-    color: #fff;
-    border: 1px solid #555;
-    padding: 8px 15px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: 0.2s;
+    background: rgba(0,0,0,0.6); color: #fff; border: 1px solid #555;
+    padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 14px; transition: 0.2s;
 }
-#btn-save-game:hover {
-    background: #f1c40f;
-    color: #000;
-    border-color: #f1c40f;
-}
-
-/* Tombol Lanjutkan jika tidak ada save */
-#btn-continue:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-    transform: scale(1) !important;
-}
+#btn-save-game:hover { background: #f1c40f; color: #000; border-color: #f1c40f; }
+#btn-continue:disabled { opacity: 0.4; cursor: not-allowed; transform: scale(1) !important; }

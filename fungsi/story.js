@@ -3,8 +3,6 @@
    ============================================================ */
 
 const storyData = {
-
-    // ================= PROLOG & HARI 1 (TABRAKAN) =================
     prolog_1: {
         speaker: "Narator",
         text: "{player} terlambat lagi. Berlari menyusuri koridor sekolah yang bermandi cahaya pagi sambil menggigit roti, dia menabrak setumpuk kertas yang sedang dibawa seseorang.",
@@ -39,7 +37,6 @@ const storyData = {
         choices: [{ text: "Bantu Kirana menyeret kanvas", nextScene: "common_hari2" }]
     },
 
-    // ================= HARI 2 (SINDIRAN BIMA & PAK HENDRA) =================
     common_hari2: {
         speaker: "Bima",
         text: "Wanjayy, denger-denger ada yang disuruh bantuin OSIS sama anak seni nih. Lu mau punya harem ya lu, {player}?",
@@ -74,7 +71,6 @@ const storyData = {
         choices: [{ text: "Lanjut ke Hari 3...", nextScene: "common_hari3" }]
     },
 
-    // ================= HARI 3 (EKSPLORASI OPSIONAL) =================
     common_hari3: {
         speaker: "Narator",
         text: "Sehari sebelum memutuskan, kamu punya waktu luang siang ini. Mau mengintip dunia mana dulu?",
@@ -98,7 +94,6 @@ const storyData = {
         choices: [{ text: "Kembali", nextScene: "common_hari3" }]
     },
 
-    // ================= HARI 4 & 5 (PERSIMPANGAN) =================
     common_hari4: {
         speaker: "Bima",
         text: "Eh, Dewi kayaknya naksir kamu deh. Cewek IPS pindahan itu, kan? Kamu sih masih sibuk mikirin pilihan besar besok.",
@@ -109,10 +104,9 @@ const storyData = {
         speaker: "Narator",
         text: "Hari ini hari keputusan. Pilihan mana yang akan kamu ambil?",
         bg: assets.BACKGROUNDS.sekolahUmum.koridor, charLeft: "", charRight: "",
-        choices: [] // Akan diisi oleh sistem engine (New Game+)
+        choices: [] // Diisi engine
     },
 
-    // ================= RUTE ALEXANDRA =================
     rute_a2a: {
         speaker: "Farah",
         text: "Kamu pasti yang dimaksud Alexandra ya? Jangan takut, dia emang gitu ke semua orang di awal.",
@@ -251,7 +245,6 @@ const storyData = {
         choices: [{ text: "Kembali ke Menu Utama", nextScene: "menu" }]
     },
 
-    // ================= RUTE KIRANA =================
     rute_b2b: {
         speaker: "Kirana",
         text: "{player}! Menurutmu mural ini harusnya pakai warna apa buat langitnya?",
@@ -369,7 +362,6 @@ const storyData = {
         choices: [{ text: "Kembali ke Menu Utama", nextScene: "menu" }]
     },
 
-    // ================= RUTE C (DILEMA) =================
     rute_c2c: {
         speaker: "Bima",
         text: "Kamu bukan pemeran utama drama, Di. Cepat atau lambat mereka bakal sadar.",
@@ -436,7 +428,6 @@ const storyData = {
         choices: [{ text: "Kembali ke Menu Utama", nextScene: "menu" }]
     },
 
-    // ================= RUTE RAHASIA (NEW GAME+) =================
     rute_r1: {
         speaker: "Alexandra",
         text: "OSIS dan ruang seni punya cara kerja beda. Nggak akan efisien.",
