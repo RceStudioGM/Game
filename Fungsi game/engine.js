@@ -81,14 +81,29 @@ function showProfiles() {
 }
 
 // --- ENGINE UTAMA GAME ---
-function saveQuote(quoteId) { /* kode lama */ }
+/* ============================================================
+   engine.js — Sistem Engine Visual Novel
+   ============================================================ */
+
+// Variabel Global untuk melacak posisi scene saat ini
+let currentScene = 'common_hari1_1'; // Scene pertama
+
+function img(charName, exprKey) { /* ... sama seperti sebelumnya ... */ }
+
+// ... (kode fungsi hideAllScreens, backToMenu, dll tetap sama) ...
 
 function loadScene(sceneKey) {
     if (sceneKey === 'menu') { backToMenu(); return; }
     
+    // SIMPAN POSISI SCENE SAAT INI SEBELUM MEMUAT SCENE BARU
+    currentScene = sceneKey; 
+
     let scene = storyData[sceneKey];
     if (!scene) { console.error('Scene tidak ditemukan:', sceneKey); return; }
 
+    // ... (kode selanjutnya logic New Game+, pilihan, dan render UI tetap sama) ...
+    // (Tidak ada perubahan logika di bawah ini, hanya tambahan currentScene di atas)
+}
     // 1. HANDLER PERSIMPANGAN (NEW GAME+)
     if (sceneKey === 'bab1_pilihan') {
         let baseChoices = [
