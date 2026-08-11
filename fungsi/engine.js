@@ -659,38 +659,37 @@ window.addEventListener('load', () => {
 // ... (Kode engine.js di atas tetap sama, tambahkan kode ini di bagian paling bawah) ...
 
 /* ============================================================
-   TRIGGER ANIMASI AWAL (GARIS EMAS & SAKURA)
+   engine.js — Tambahan Animasi Awal & Nav Keyboard (Kiri/Kanan)
+   ============================================================ */
+
+// ... (Kode engine.js sebelumnya tetap sama di atas) ...
+
+/* ============================================================
+   ADD-ON: ANIMASI SAKURA SAAT LOBBY DIBUKA
    ============================================================ */
 function triggerLobbyAnimations() {
-    const goldWrapper = document.getElementById('golden-line-wrapper');
     const sakuraContainer = document.getElementById('sakura-container');
 
-    if (!goldWrapper || !sakuraContainer) return;
+    if (!sakuraContainer) return;
 
     // Reset state
-    goldWrapper.classList.remove('animation-done');
     sakuraContainer.style.opacity = '0';
     sakuraContainer.innerHTML = '';
 
-    // Jalankan animasi garis, lalu tambahkan ekor angka 9
+    // Tunda sebentar agar loading terlihat smooth, lalu ciptakan kelopak sakura
     setTimeout(() => {
-        goldWrapper.classList.add('animation-done');
-        
-        // Munculkan sakura
-        setTimeout(() => {
-            const petalCount = 10;
-            for(let i = 0; i < petalCount; i++) {
-                const petal = document.createElement('div');
-                petal.className = 'petal';
-                sakuraContainer.appendChild(petal);
-            }
-            sakuraContainer.style.opacity = '1';
-        }, 500);
-    }, 2200); // 2.2 detik menyesuaikan durasi animasi garis
+        // Tambahkan kelopak sakura
+        for(let i = 0; i < 10; i++) {
+            const petal = document.createElement('div');
+            petal.className = 'petal';
+            sakuraContainer.appendChild(petal);
+        }
+        sakuraContainer.style.opacity = '1';
+    }, 500); 
 }
 
 /* ============================================================
-   NAVIGASI KEYBOARD LOBBY (PANAH KIRI/KANAN TANPA KOTAK)
+   NAVIGASI KEYBOARD LOBBY (PANAH KIRI/KANAN)
    ============================================================ */
 let _lobbyNavHandler = null;
 
@@ -744,23 +743,23 @@ function attachLobbyKeyboardNav() {
 }
 
 /* ============================================================
-   OVERRIDE backToMenu & WINDOW.LOAD
+   OVERRIDE: backToMenu dan window.load trigger untuk lobby
    ============================================================ */
 const _originalBackToMenu = backToMenu;
 backToMenu = function() {
-    _originalBackToMenu();
+    _originalBackToMenu(); 
     attachLobbyKeyboardNav();
-    triggerLobbyAnimations();
+    triggerLobbyAnimations(); // Jalankan lagi saat kembali ke menu
 }
 
 window.addEventListener('load', () => {
-    // Fungsi init yang sudah ada (migrateOldSaveIfNeeded, dll)
+    // Panggil fungsi init yang sudah ada
     if (typeof migrateOldSaveIfNeeded === 'function') migrateOldSaveIfNeeded();
     if (typeof changeResolution === 'function') changeResolution(window.resolution);
     if (typeof initAudio === 'function') initAudio();
     if (typeof checkContinueAvailability === 'function') checkContinueAvailability();
     
-    // Trigger jika yang dibuka pertama kali adalah lobby
+    // Jalankan animasi & navigasi lobby saat page pertama kali dimuat
     if (!document.getElementById('main-menu').classList.contains('hidden')) {
         attachLobbyKeyboardNav();
         triggerLobbyAnimations();
