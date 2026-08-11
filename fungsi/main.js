@@ -4,6 +4,7 @@
 
 window.playerName = 'Adi';
 window.unlockedQuotes = [];
+// Tambahkan routeM di sini
 window.gameFlags = { routeA: false, routeB: false, routeM: false, secretRoute: false };
 
 try {
