@@ -302,8 +302,8 @@ function triggerLobbyAnimations() {
     gsap.set(sakuraContainer, { opacity: 1 });
 
     // Nama file PNG yang ada di folder utama
-    const gambar1 = 'sakura1.png';
-    const gambar2 = 'sakura2.png';
+    const gambar1 = './assets/sakura1.png';
+    const gambar2 = './assets/sakura2.png';
 
     gsapTimeline = gsap.timeline();
     gsapTimeline.add(() => {
