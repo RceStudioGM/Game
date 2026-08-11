@@ -1,13 +1,12 @@
 /* ============================================================
-   engine.js — Mesin Game + GSAP strokeDashoffset untuk Garis Angka 9
+   engine.js — Mesin Game + GSAP MotionPath + Sparkle Texture
    ============================================================ */
 
 let currentScene = 'prolog_1';
 let bgmAudio = null;
 let gsapTimeline = null;
-let gsapLineAnim = null; // khusus untuk garis
 
-/* --- Audio & Settings --- */
+/* --- Audio --- */
 window.bgmVolume = parseInt(localStorage.getItem('vn_bgm_volume')) || 70;
 window.sfxVolume = parseInt(localStorage.getItem('vn_sfx_volume')) || 80;
 window.resolution = localStorage.getItem('vn_resolution') || '960x600';
@@ -282,36 +281,94 @@ function loadScene(sceneKey) {
 }
 
 /* ============================================================
-   ANIMASI LOBBY: GARIS ANGKA 9 & SAKURA
+   ANIMASI LOBBY (PREMIUM): GARIS PREMIUM + PARTIKEL SPARKLE
    ============================================================ */
 function triggerLobbyAnimations() {
-    // Hentikan animasi sebelumnya
     if (gsapTimeline) { gsapTimeline.kill(); gsapTimeline = null; }
-    if (gsapLineAnim) { gsapLineAnim.kill(); gsapLineAnim = null; }
 
-    const path = document.getElementById('line-path');
+    const lineGlow = document.getElementById('line-glow');
+    const lineCore = document.getElementById('line-core');
+    const sparkle1 = document.getElementById('sparkle-1');
+    const sparkle2 = document.getElementById('sparkle-2');
     const sakuraContainer = document.getElementById('sakura-container');
-    if (!path || !sakuraContainer) return;
+    if (!lineGlow || !lineCore || !sparkle1 || !sparkle2 || !sakuraContainer) return;
 
-    // Reset path
-    const totalLength = path.getTotalLength();
-    gsap.set(path, { strokeDasharray: totalLength, strokeDashoffset: totalLength });
-
-    // Reset sakura
+    // Reset state
+    gsap.set([lineGlow, lineCore], { strokeDasharray: "0 2000", opacity: 0 });
+    gsap.set([sparkle1, sparkle2], { opacity: 0 });
     sakuraContainer.innerHTML = '';
     gsap.set(sakuraContainer, { opacity: 1 });
+
+    const pathLength = lineGlow.getTotalLength();
 
     // Timeline
     gsapTimeline = gsap.timeline({ delay: 0.2 });
 
-    // 1. Garis membentang mengikuti path angka 9 (2.5 detik)
-    gsapTimeline.to(path, {
+    // 1. Garis Glow muncul (Lapisan luar, tebal, redup)
+    gsapTimeline.to(lineGlow, {
+        strokeDasharray: pathLength,
         strokeDashoffset: 0,
+        opacity: 0.4,
         duration: 2.5,
         ease: "power4.inOut"
     }, 0);
 
-    // 2. Setelah garis selesai, sakura berjatuhan
+    // 2. Garis Inti muncul (Lapisan dalam, tipis, cerah, delay sedikit untuk efek 3D)
+    gsapTimeline.to(lineCore, {
+        strokeDasharray: pathLength,
+        strokeDashoffset: 0,
+        opacity: 1,
+        duration: 2.3,
+        ease: "power3.inOut"
+    }, 0.2);
+
+    // 3. Sparkle 1 mulai bergerak di jalur path secara abadi
+    gsapTimeline.to(sparkle1, {
+        opacity: 1,
+        duration: 0.5,
+        ease: "power1.out"
+    }, 2.6);
+    gsapTimeline.to(sparkle1, {
+        motionPath: {
+            path: lineGlow,
+            align: lineGlow,
+            alignOrigin: [0.5, 0.5],
+            autoRotate: true,
+            start: 0,
+            end: 1
+        },
+        duration: 3.5,
+        ease: "none",
+        repeat: -1,
+        onRepeat: () => {
+            gsap.to(sparkle1, { opacity: 0.5, duration: 0.1, yoyo: true, repeat: 1 }); // efek berkedip
+        }
+    }, 2.8);
+
+    // 4. Sparkle 2 bergerak (offset sedikit lebih lambat)
+    gsapTimeline.to(sparkle2, {
+        opacity: 1,
+        duration: 0.5,
+        ease: "power1.out"
+    }, 3);
+    gsapTimeline.to(sparkle2, {
+        motionPath: {
+            path: lineGlow,
+            align: lineGlow,
+            alignOrigin: [0.5, 0.5],
+            autoRotate: true,
+            start: 0,
+            end: 1
+        },
+        duration: 4.2,
+        ease: "none",
+        repeat: -1,
+        onRepeat: () => {
+            gsap.to(sparkle2, { opacity: 0.6, duration: 0.1, yoyo: true, repeat: 1 });
+        }
+    }, 3.2);
+
+    // 5. Sakura berjatuhan (setelah garis animasi selesai)
     gsapTimeline.add(() => {
         const count = 20;
         for (let i = 0; i < count; i++) {
@@ -336,18 +393,7 @@ function triggerLobbyAnimations() {
                 yoyo: false
             });
         }
-    }, 2.6); // mulai setelah garis selesai
-
-    // Opsional: efek pulse halus pada garis yang sudah terbentuk
-    gsapTimeline.add(() => {
-        gsap.to(path, {
-            strokeOpacity: 0.7,
-            duration: 2,
-            yoyo: true,
-            repeat: -1,
-            ease: "sine.inOut"
-        });
-    }, 2.8);
+    }, 3.6);
 }
 
 /* ============================================================
