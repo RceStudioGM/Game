@@ -4,14 +4,14 @@
 
 window.playerName = 'Adi';
 window.unlockedQuotes = [];
-window.gameFlags = { routeA: false, routeB: false, secretRoute: false };
+window.gameFlags = { routeA: false, routeB: false, routeM: false, secretRoute: false };
 
 try {
     window.unlockedQuotes = JSON.parse(localStorage.getItem('vn_quotes')) || [];
-    window.gameFlags = JSON.parse(localStorage.getItem('vn_flags')) || { routeA: false, routeB: false, secretRoute: false };
+    window.gameFlags = JSON.parse(localStorage.getItem('vn_flags')) || { routeA: false, routeB: false, routeM: false, secretRoute: false };
 } catch (e) {
     window.unlockedQuotes = [];
-    window.gameFlags = { routeA: false, routeB: false, secretRoute: false };
+    window.gameFlags = { routeA: false, routeB: false, routeM: false, secretRoute: false };
 }
 
 function showNameInput() {
@@ -24,7 +24,7 @@ function startGameWithCustomName() {
     window.playerName = (input.value || '').trim() || 'Adi';
     hideAllScreens();
     document.getElementById('game-screen').classList.remove('hidden');
-    loadScene('prolog_1'); // scene awal sudah benar
+    loadScene('prolog_1');
 }
 
 document.addEventListener('DOMContentLoaded', () => {

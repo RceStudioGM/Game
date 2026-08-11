@@ -1,12 +1,11 @@
 /* ============================================================
-   engine.js — Mesin Game + GSAP + 2 Sakura Overlap + Video Garis
+   engine.js — Sistem Engine Visual Novel Ultimate
    ============================================================ */
 
 let currentScene = 'prolog_1';
 let bgmAudio = null;
 let gsapTimeline = null;
 
-/* --- Audio --- */
 window.bgmVolume = parseInt(localStorage.getItem('vn_bgm_volume')) || 70;
 window.sfxVolume = parseInt(localStorage.getItem('vn_sfx_volume')) || 80;
 window.resolution = localStorage.getItem('vn_resolution') || '960x600';
@@ -22,7 +21,6 @@ function playSFX() {
     sfx.play().catch(() => {});
 }
 
-/* --- Settings & Resolution --- */
 function updateVolume(type, val) {
     if (type === 'bgm') {
         window.bgmVolume = parseInt(val);
@@ -43,7 +41,6 @@ function changeResolution(res) {
     container.style.width = w + 'px'; container.style.height = h + 'px';
 }
 
-/* --- Pause & Settings Modal --- */
 function openPauseMenu() {
     document.getElementById('pause-overlay').classList.remove('hidden');
     document.getElementById('pause-modal').classList.remove('scale-95');
@@ -70,7 +67,6 @@ function closeSettingsModal() {
     }
 }
 
-/* --- Confirm Generic --- */
 let _pendingConfirmAction = null;
 function showConfirm(title, message, onConfirm) {
     document.getElementById('confirm-title').innerText = title;
@@ -93,7 +89,6 @@ function quitGame() {
     checkContinueAvailability();
 }
 
-/* --- Engine Core --- */
 function img(charName, exprKey) {
     const folder = assets.CHARACTER_PATHS[charName];
     if (!folder) return ''; 
@@ -105,7 +100,6 @@ function hideAllScreens() {
         if (el) el.classList.add('hidden');
     });
 }
-
 function checkContinueAvailability() {
     const btn = document.getElementById('btn-continue');
     if (!btn) return;
@@ -113,7 +107,6 @@ function checkContinueAvailability() {
     if (hasAnySave) { btn.disabled = false; btn.innerText = "▶ LANJUTKAN"; btn.style.opacity = "1"; btn.style.cursor = "pointer"; } 
     else { btn.disabled = true; btn.innerText = "🔒 (BELUM ADA SAVE)"; btn.style.opacity = "0.5"; btn.style.cursor = "not-allowed"; }
 }
-
 function backToMenu() {
     hideAllScreens();
     document.getElementById('main-menu').classList.remove('hidden');
@@ -122,11 +115,9 @@ function backToMenu() {
     attachLobbyKeyboardNav();
     triggerLobbyAnimations();
 }
-
 function saveFlags() { try { localStorage.setItem('vn_flags', JSON.stringify(window.gameFlags)); } catch (e) {} }
 
 function showSettings() { showSettingsModal(); }
-
 function showGallery() {
     hideAllScreens();
     document.getElementById('sub-menu-screen').classList.remove('hidden');
@@ -140,7 +131,6 @@ function showGallery() {
         box.appendChild(item);
     }
 }
-
 function showProfiles() {
     hideAllScreens();
     document.getElementById('profile-screen').classList.remove('hidden');
@@ -153,6 +143,7 @@ function showProfiles() {
         if (!profile.unlockKey) isUnlocked = true;
         else if (profile.unlockKey === 'routeA' && window.gameFlags.routeA) isUnlocked = true;
         else if (profile.unlockKey === 'routeB' && window.gameFlags.routeB) isUnlocked = true;
+        else if (profile.unlockKey === 'routeM' && window.gameFlags.routeM) isUnlocked = true;
         else if (profile.unlockKey === 'secretRoute' && window.gameFlags.secretRoute) isUnlocked = true;
         if (isUnlocked) {
             card.innerHTML = `<div class="profile-img"><img src="${img(profile.id, 'netral')}" alt="${profile.name}" onerror="this.style.display='none'"></div><div class="profile-info"><h3>${profile.name}</h3><span class="profile-role">${profile.role}</span><p class="profile-desc">${profile.desc}</p></div>`;
@@ -160,13 +151,13 @@ function showProfiles() {
             let lockText = "🔒 Terkunci";
             if (profile.unlockKey === 'routeA') lockText = "🔒 Selesaikan Rute Alexandra";
             else if (profile.unlockKey === 'routeB') lockText = "🔒 Selesaikan Rute Kirana";
-            else if (profile.unlockKey === 'secretRoute') lockText = "🔒 Selesaikan Rute Rahasia";
+            else if (profile.unlockKey === 'routeM') lockText = "🔒 Selesaikan Rute Mira";
+            else if (profile.unlockKey === 'secretRoute') lockText = "🔒 Selesaikan Semua Rute Heroine";
             card.innerHTML = `<div class="profile-img locked"><span class="lock-icon">🔒</span></div><div class="profile-info"><h3 style="color:#7f8c8d;">???</h3><span class="profile-role">${lockText}</span></div>`;
         }
         container.appendChild(card);
     }
 }
-
 function saveQuote(quoteId) {
     if (window.unlockedQuotes.includes(quoteId)) return;
     window.unlockedQuotes.push(quoteId);
@@ -185,16 +176,12 @@ function goToScene(nextScene) {
     loadScene(nextScene);
 }
 
-/* ============================================================
-   LOAD SCENE (DENGAN SISTEM SPASI UNTUK PILIHAN & LANJUT)
-   ============================================================ */
 function loadScene(sceneKey) {
     if (sceneKey === 'menu') { backToMenu(); return; }
     currentScene = sceneKey;
     const scene = storyData[sceneKey];
     if (!scene) { console.error('Scene tidak ditemukan:', sceneKey); return; }
 
-    // Hapus semua event listener keyboard dari scene sebelumnya
     if (window._vn_advance_handler) { document.removeEventListener('keydown', window._vn_advance_handler); window._vn_advance_handler = null; }
     if (window._vn_choice_handler) { document.removeEventListener('keydown', window._vn_choice_handler); window._vn_choice_handler = null; }
 
@@ -202,24 +189,29 @@ function loadScene(sceneKey) {
         let baseChoices = [
             { text: "Bantu di Sekretariat OSIS bersama Alexandra", nextScene: "rute_a2a" },
             { text: "Bantu mural di Ruang Seni bersama Kirana", nextScene: "rute_b2b" },
-            { text: "Coba jalani keduanya sekaligus, meski berat", nextScene: "rute_c2c" }
+            { text: "Coba jalani keduanya sekaligus, meski berat", nextScene: "rute_c2c" },
+            { text: "Tawarkan diri jadi pemandu murid pindahan (Rute Mira)", nextScene: "rute_m1" }
         ];
-        if (window.gameFlags.routeA && window.gameFlags.routeB) {
+        if (window.gameFlags.routeA && window.gameFlags.routeB && window.gameFlags.routeM) {
             baseChoices.push({ text: "✨ Usulkan kolaborasi OSIS x Ruang Seni (Rute Rahasia)", nextScene: "rute_r1" });
         }
         scene.choices = baseChoices;
     }
+
     if (['rute_a6_ending1', 'rute_a6_ending2', 'rute_a6_ending_sahabat'].includes(sceneKey)) {
         if (!window.gameFlags.routeA) { window.gameFlags.routeA = true; saveFlags(); }
     }
     if (['rute_b7_ending1', 'rute_b7_ending2', 'rute_b7_ending_sahabat'].includes(sceneKey)) {
         if (!window.gameFlags.routeB) { window.gameFlags.routeB = true; saveFlags(); }
     }
+    if (['rute_m13_ending1', 'rute_m13_ending2', 'rute_m13_ending3', 'rute_m13_ending_sahabat'].includes(sceneKey)) {
+        if (!window.gameFlags.routeM) { window.gameFlags.routeM = true; saveFlags(); }
+    }
     if (['rute_r_ending_1', 'rute_r_ending_2_a', 'rute_r_ending_2_b'].includes(sceneKey)) {
         if (!window.gameFlags.secretRoute) { window.gameFlags.secretRoute = true; saveFlags(); }
     }
 
-    const replaceTags = (str) => str.replace(/{alexandra}/g, 'Alexandra').replace(/{kirana}/g, 'Kirana').replace(/{player}/g, window.playerName);
+    const replaceTags = (str) => str.replace(/{alexandra}/g, 'Alexandra').replace(/{kirana}/g, 'Kirana').replace(/{mira}/g, 'Mira').replace(/{player}/g, window.playerName);
     const processedText = replaceTags(scene.text);
     const processedSpeaker = replaceTags(scene.speaker);
     const speakerBox = document.getElementById('speaker-name-box');
@@ -238,7 +230,6 @@ function loadScene(sceneKey) {
     choicesContainer.innerHTML = '';
 
     if (scene.choices.length === 1) {
-        // ===== MODE 1 PILIHAN (LANJUT) =====
         const nextKey = scene.choices[0].nextScene;
         const btn = document.createElement('button');
         btn.className = 'choice-btn hidden';
@@ -248,8 +239,6 @@ function loadScene(sceneKey) {
         document.getElementById('dialogue-box').onclick = () => { if (!document.getElementById('game-screen').classList.contains('hidden')) { playSFX(); goToScene(nextKey); } };
         document.getElementById('dialogue-text').style.cursor = 'pointer';
         document.getElementById('dialogue-text').title = 'Klik atau tekan Spasi untuk melanjutkan...';
-
-        // Tambahkan dukungan Keyboard (Spasi/Enter) untuk Lanjut
         const advanceHandler = (e) => {
             if (document.getElementById('game-screen').classList.contains('hidden')) return;
             if (e.key === ' ' || e.key === 'Space' || e.key === 'Enter') {
@@ -260,9 +249,7 @@ function loadScene(sceneKey) {
         };
         document.addEventListener('keydown', advanceHandler);
         window._vn_advance_handler = advanceHandler;
-
     } else {
-        // ===== MODE BANYAK PILIHAN (NAVIGASI ARROW & SPASI) =====
         document.getElementById('dialogue-text').style.cursor = 'default';
         document.getElementById('dialogue-text').title = '';
         document.getElementById('dialogue-box').onclick = null;
@@ -281,7 +268,6 @@ function loadScene(sceneKey) {
             choiceBtns[currentChoiceIndex].classList.add('text-vn-gold');
             choiceBtns[currentChoiceIndex].focus();
         }
-
         const choiceHandler = (e) => {
             if (document.getElementById('game-screen').classList.contains('hidden')) return;
             choiceBtns.forEach(b => b.classList.remove('text-vn-gold'));
@@ -304,25 +290,16 @@ function loadScene(sceneKey) {
     }
 }
 
-/* ============================================================
-   ANIMASI SAKURA: 2 GAMBAR BERJALAN BERSAMAAN (OVERLAP)
-   ============================================================ */
 function triggerLobbyAnimations() {
     if (gsapTimeline) { gsapTimeline.kill(); gsapTimeline = null; }
-
     const sakuraContainer = document.getElementById('sakura-container');
     if (!sakuraContainer) return;
-
     sakuraContainer.innerHTML = '';
     gsap.set(sakuraContainer, { opacity: 1 });
-
     const gambar1 = 'sakura1.png';
     const gambar2 = 'sakura2.png';
-
     gsapTimeline = gsap.timeline();
-
     gsapTimeline.add(() => {
-        // GELOMBANG 1
         const count1 = 15;
         for (let i = 0; i < count1; i++) {
             const petal = document.createElement('div');
@@ -334,21 +311,8 @@ function triggerLobbyAnimations() {
             petal.style.height = size + 'px';
             petal.style.transform = `rotate(${Math.random() * 360}deg)`;
             sakuraContainer.appendChild(petal);
-
-            gsap.to(petal, {
-                duration: 8 + Math.random() * 6,
-                y: "+=600",
-                rotation: 720 + Math.random() * 720,
-                x: (Math.random() - 0.5) * 300,
-                opacity: 0,
-                ease: "power1.in",
-                delay: i * 0.1,
-                repeat: -1,
-                yoyo: false
-            });
+            gsap.to(petal, { duration: 8 + Math.random() * 6, y: "+=600", rotation: 720 + Math.random() * 720, x: (Math.random() - 0.5) * 300, opacity: 0, ease: "power1.in", delay: i * 0.1, repeat: -1, yoyo: false });
         }
-
-        // GELOMBANG 2 (Overlap)
         const count2 = 15;
         for (let i = 0; i < count2; i++) {
             const petal = document.createElement('div');
@@ -360,73 +324,40 @@ function triggerLobbyAnimations() {
             petal.style.height = size + 'px';
             petal.style.transform = `rotate(${Math.random() * 360}deg)`;
             sakuraContainer.appendChild(petal);
-
-            gsap.to(petal, {
-                duration: 9 + Math.random() * 6,
-                y: "+=600",
-                rotation: 720 + Math.random() * 720,
-                x: (Math.random() - 0.5) * 300,
-                opacity: 0,
-                ease: "power1.in",
-                delay: (i * 0.1) + 0.5,
-                repeat: -1,
-                yoyo: false
-            });
+            gsap.to(petal, { duration: 9 + Math.random() * 6, y: "+=600", rotation: 720 + Math.random() * 720, x: (Math.random() - 0.5) * 300, opacity: 0, ease: "power1.in", delay: (i * 0.1) + 0.5, repeat: -1, yoyo: false });
         }
     }, 0.5);
 }
 
-/* ============================================================
-   NAVIGASI ARROW LOBBY
-   ============================================================ */
 let _lobbyNavHandler = null;
-
 function attachLobbyKeyboardNav() {
     if (_lobbyNavHandler) { document.removeEventListener('keydown', _lobbyNavHandler); _lobbyNavHandler = null; }
-
     const menuBtns = Array.from(document.querySelectorAll('#lobby-menu-bar .menu-btn'));
     if (menuBtns.length === 0) return;
-
     menuBtns.forEach(btn => btn.classList.remove('text-vn-gold'));
     let currentFocusIndex = 0;
     menuBtns[currentFocusIndex].classList.add('text-vn-gold');
     menuBtns[currentFocusIndex].focus();
-
     const handler = (e) => {
         if (document.getElementById('main-menu').classList.contains('hidden')) return;
         menuBtns.forEach(btn => btn.classList.remove('text-vn-gold'));
-
-        if (e.key === 'ArrowRight') {
-            e.preventDefault();
-            currentFocusIndex = (currentFocusIndex + 1) % menuBtns.length;
-        } else if (e.key === 'ArrowLeft') {
-            e.preventDefault();
-            currentFocusIndex = (currentFocusIndex - 1 + menuBtns.length) % menuBtns.length;
-        } else if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            const activeBtn = menuBtns[currentFocusIndex];
-            if (activeBtn) activeBtn.click();
-            return;
-        } else { return; }
-
+        if (e.key === 'ArrowRight') { e.preventDefault(); currentFocusIndex = (currentFocusIndex + 1) % menuBtns.length; }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); currentFocusIndex = (currentFocusIndex - 1 + menuBtns.length) % menuBtns.length; }
+        else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); const activeBtn = menuBtns[currentFocusIndex]; if (activeBtn) activeBtn.click(); return; }
+        else { return; }
         menuBtns[currentFocusIndex].classList.add('text-vn-gold');
         menuBtns[currentFocusIndex].focus();
     };
-
     document.addEventListener('keydown', handler);
     _lobbyNavHandler = handler;
 }
 
-/* ============================================================
-   SISTEM SAVE/LOAD SLOT
-   ============================================================ */
 const SAVE_SLOT_COUNT = 9;
 let saveLoadMode = 'save';
 function slotKey(n) { return `vn_save_slot_${n}`; }
 function getSlotData(n) { try { const raw = localStorage.getItem(slotKey(n)); return raw ? JSON.parse(raw) : null; } catch (e) { return null; } }
 function getAllSlots() { const slots = []; for (let n = 1; n <= SAVE_SLOT_COUNT; n++) slots.push({ n, data: getSlotData(n) }); return slots; }
 function formatSaveDate(iso) { try { const d = new Date(iso); return `${d.toLocaleDateString('id-ID')}, ${d.toLocaleTimeString('id-ID')}`; } catch (e) { return ''; } }
-
 function openSaveLoad(mode) {
     saveLoadMode = mode;
     document.getElementById('saveload-title').innerText = mode === 'save' ? '💾 Simpan Permainan' : '📂 Muat Permainan';
@@ -435,7 +366,6 @@ function openSaveLoad(mode) {
     document.getElementById('saveload-overlay').classList.remove('hidden');
 }
 function closeSaveLoad() { document.getElementById('saveload-overlay').classList.add('hidden'); }
-
 function renderSaveSlots() {
     const grid = document.getElementById('saveload-grid');
     grid.innerHTML = '';
@@ -445,51 +375,34 @@ function renderSaveSlots() {
         const clickable = saveLoadMode === 'save' || !isEmpty;
         card.className = `relative rounded-xl border p-4 transition-all text-left ${isEmpty ? 'border-dashed border-white/20 bg-white/[0.02]' : 'border-white/20 bg-white/5 hover:border-vn-gold hover:bg-white/10'} ${clickable ? 'cursor-pointer' : 'opacity-40 cursor-not-allowed'}`;
         if (clickable) card.onclick = () => handleSlotClick(n);
-        if (isEmpty) {
-            card.innerHTML = `<div class="text-vn-gold font-bold text-sm mb-2">Slot ${n}</div><div class="text-gray-500 text-sm py-4 text-center">${saveLoadMode === 'save' ? '+ Simpan di sini' : 'Kosong'}</div>`;
-        } else {
+        if (isEmpty) { card.innerHTML = `<div class="text-vn-gold font-bold text-sm mb-2">Slot ${n}</div><div class="text-gray-500 text-sm py-4 text-center">${saveLoadMode === 'save' ? '+ Simpan di sini' : 'Kosong'}</div>`; }
+        else {
             const preview = (data.dialoguePreview || '').slice(0, 70) + (data.dialoguePreview && data.dialoguePreview.length > 70 ? '…' : '');
             card.innerHTML = `<button class="slot-delete-btn absolute top-2 right-2 text-gray-500 hover:text-red-400 text-sm w-6 h-6 flex items-center justify-center rounded-full hover:bg-white/10" title="Hapus slot ini">✕</button><div class="text-vn-gold font-bold text-sm mb-1">Slot ${n}</div><div class="text-white font-semibold text-sm truncate">${data.playerName || 'Adi'}</div><div class="text-gray-400 text-xs mt-1">${formatSaveDate(data.savedAt)}</div><div class="text-gray-300 text-xs italic mt-2 leading-snug">"${preview || '...'}"</div>`;
-            card.querySelector('.slot-delete-btn').onclick = (e) => {
-                e.stopPropagation();
-                showConfirm('Hapus Slot?', `Slot ${n} akan dihapus permanen.`, () => { localStorage.removeItem(slotKey(n)); renderSaveSlots(); checkContinueAvailability(); });
-            };
+            card.querySelector('.slot-delete-btn').onclick = (e) => { e.stopPropagation(); showConfirm('Hapus Slot?', `Slot ${n} akan dihapus permanen.`, () => { localStorage.removeItem(slotKey(n)); renderSaveSlots(); checkContinueAvailability(); }); };
         }
         grid.appendChild(card);
     });
 }
-
 function handleSlotClick(n) {
-    if (saveLoadMode === 'save') {
-        const existing = getSlotData(n);
-        if (existing) showConfirm('Timpa Slot?', `Slot ${n} sudah terisi. Timpa?`, () => doSaveToSlot(n));
-        else doSaveToSlot(n);
-    } else {
-        showConfirm('Muat Slot Ini?', `Progress saat ini akan hilang. Muat Slot ${n}?`, () => doLoadFromSlot(n));
-    }
+    if (saveLoadMode === 'save') { const existing = getSlotData(n); if (existing) showConfirm('Timpa Slot?', `Slot ${n} sudah terisi. Timpa?`, () => doSaveToSlot(n)); else doSaveToSlot(n); }
+    else { showConfirm('Muat Slot Ini?', `Progress saat ini akan hilang. Muat Slot ${n}?`, () => doLoadFromSlot(n)); }
 }
-
 function doSaveToSlot(n) {
     const dialogueEl = document.getElementById('dialogue-text');
     const data = { playerName: window.playerName, currentScene: currentScene, gameFlags: window.gameFlags, unlockedQuotes: window.unlockedQuotes, dialoguePreview: dialogueEl ? dialogueEl.innerText : '', savedAt: new Date().toISOString() };
     try { localStorage.setItem(slotKey(n), JSON.stringify(data)); renderSaveSlots(); checkContinueAvailability(); showToast('✅ Tersimpan!', `Progress berhasil disimpan di Slot ${n}.`); } catch (e) { console.error('Gagal menyimpan game:', e); }
 }
-
 function doLoadFromSlot(n) {
     const data = getSlotData(n); if (!data) return;
     try {
-        window.playerName = data.playerName || 'Adi'; window.gameFlags = data.gameFlags || { routeA: false, routeB: false, secretRoute: false }; window.unlockedQuotes = data.unlockedQuotes || [];
+        window.playerName = data.playerName || 'Adi'; window.gameFlags = data.gameFlags || { routeA: false, routeB: false, routeM: false, secretRoute: false }; window.unlockedQuotes = data.unlockedQuotes || [];
         try { localStorage.setItem('vn_quotes', JSON.stringify(window.unlockedQuotes)); } catch (e) {} saveFlags(); closeSaveLoad(); closePauseMenu(); hideAllScreens(); document.getElementById('game-screen').classList.remove('hidden'); loadScene(data.currentScene || 'prolog_1'); if (bgmAudio) bgmAudio.play().catch(() => {});
     } catch (e) { console.error('Gagal memuat game:', e); }
 }
-
 function showToast(title, message) { const toast = document.getElementById('toast-notif'); toast.classList.remove('hidden'); const h4 = toast.querySelector('h4'); const p = toast.querySelector('p'); if (h4) h4.innerText = title; if (p) p.innerText = message; setTimeout(() => toast.classList.add('show'), 100); setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.classList.add('hidden'), 500); }, 3000); }
+function migrateOldSaveIfNeeded() { try { const legacy = localStorage.getItem('vn_save_data'); if (!legacy) return; if (!getSlotData(1)) { const parsed = JSON.parse(legacy); const data = { playerName: parsed.playerName || 'Adi', currentScene: parsed.currentScene || 'prolog_1', gameFlags: parsed.gameFlags || { routeA: false, routeB: false, routeM: false, secretRoute: false }, unlockedQuotes: parsed.unlockedQuotes || [], dialoguePreview: '(migrated)', savedAt: new Date().toISOString() }; localStorage.setItem(slotKey(1), JSON.stringify(data)); } localStorage.removeItem('vn_save_data'); } catch (e) {} }
 
-function migrateOldSaveIfNeeded() { try { const legacy = localStorage.getItem('vn_save_data'); if (!legacy) return; if (!getSlotData(1)) { const parsed = JSON.parse(legacy); const data = { playerName: parsed.playerName || 'Adi', currentScene: parsed.currentScene || 'prolog_1', gameFlags: parsed.gameFlags || { routeA: false, routeB: false, secretRoute: false }, unlockedQuotes: parsed.unlockedQuotes || [], dialoguePreview: '(migrated)', savedAt: new Date().toISOString() }; localStorage.setItem(slotKey(1), JSON.stringify(data)); } localStorage.removeItem('vn_save_data'); } catch (e) {} }
-
-/* ============================================================
-   INISIALISASI SAAT LOAD
-   ============================================================ */
 window.addEventListener('load', () => {
     migrateOldSaveIfNeeded();
     changeResolution(window.resolution);

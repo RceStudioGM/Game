@@ -1,5 +1,5 @@
 /* ============================================================
-   story.js — Data Alur Cerita Visual Novel (LENGKAP)
+   story.js — Data Alur Cerita Visual Novel (EDISI ULTIMATE LENGKAP)
    ============================================================ */
 
 const storyData = {
@@ -36,7 +36,6 @@ const storyData = {
         bg: assets.BACKGROUNDS.seni.ruangSeni, charLeft: "", charRight: img('kirana', 'ceria'),
         choices: [{ text: "Bantu Kirana menyeret kanvas", nextScene: "common_hari2" }]
     },
-
     common_hari2: {
         speaker: "Bima",
         text: "Wanjayy, denger-denger ada yang disuruh bantuin OSIS sama anak seni nih. Lu mau punya harem ya lu, {player}?",
@@ -70,7 +69,6 @@ const storyData = {
         bg: assets.BACKGROUNDS.sekolahUmum.ruangGuruBK, charLeft: img('pakHendra', 'ramah'), charRight: "",
         choices: [{ text: "Lanjut ke Hari 3...", nextScene: "common_hari3" }]
     },
-
     common_hari3: {
         speaker: "Narator",
         text: "Sehari sebelum memutuskan, kamu punya waktu luang siang ini. Mau mengintip dunia mana dulu?",
@@ -93,7 +91,6 @@ const storyData = {
         bg: assets.BACKGROUNDS.seni.ruangSeni, charLeft: "", charRight: img('kirana', 'ceria'),
         choices: [{ text: "Kembali", nextScene: "common_hari3" }]
     },
-
     common_hari4: {
         speaker: "Bima",
         text: "Eh, Dewi kayaknya naksir kamu deh. Cewek IPS pindahan itu, kan? Kamu sih masih sibuk mikirin pilihan besar besok.",
@@ -104,9 +101,8 @@ const storyData = {
         speaker: "Narator",
         text: "Hari ini hari keputusan. Pilihan mana yang akan kamu ambil?",
         bg: assets.BACKGROUNDS.sekolahUmum.koridor, charLeft: "", charRight: "",
-        choices: [] // Diisi engine
+        choices: []
     },
-
     rute_a2a: {
         speaker: "Farah",
         text: "Kamu pasti yang dimaksud Alexandra ya? Jangan takut, dia emang gitu ke semua orang di awal.",
@@ -244,7 +240,6 @@ const storyData = {
         bg: assets.BACKGROUNDS.sekolahUmum.koridor, charLeft: img('alexandra', 'netral'), charRight: "",
         choices: [{ text: "Kembali ke Menu Utama", nextScene: "menu" }]
     },
-
     rute_b2b: {
         speaker: "Kirana",
         text: "{player}! Menurutmu mural ini harusnya pakai warna apa buat langitnya?",
@@ -361,7 +356,6 @@ const storyData = {
         bg: assets.BACKGROUNDS.sekolahUmum.koridor, charLeft: "", charRight: img('kirana', 'tersenyum'),
         choices: [{ text: "Kembali ke Menu Utama", nextScene: "menu" }]
     },
-
     rute_c2c: {
         speaker: "Bima",
         text: "Kamu bukan pemeran utama drama, Di. Cepat atau lambat mereka bakal sadar.",
@@ -427,7 +421,202 @@ const storyData = {
         unlockQuote: "quote_normal",
         choices: [{ text: "Kembali ke Menu Utama", nextScene: "menu" }]
     },
-
+    rute_m1: {
+        speaker: "Pak Hendra",
+        text: "Ada murid pindahan, namanya {mira}. Karena kamu salah satu yang paling gampang akrab sama siapa aja, Bapak titip dia sebentar buat ditemenin adaptasi minggu ini.",
+        bg: assets.BACKGROUNDS.sekolahUmum.ruangGuruBK, charLeft: img('pakHendra', 'ramah'), charRight: "",
+        choices: [{ text: "Menuju perpustakaan...", nextScene: "rute_m1_find" }]
+    },
+    rute_m1_find: {
+        speaker: "Narator",
+        text: "{player} menemukan {mira} duduk sendirian di pojok perpustakaan, membaca buku tebal tanpa menghiraukan sekitarnya.",
+        bg: assets.BACKGROUNDS.sekolahUmum.perpustakaan, charLeft: img('mira', 'netral'), charRight: "",
+        choices: [
+            { text: "Tetap duduk di dekatnya tanpa memaksa ngobrol", nextScene: "rute_m2_sabar" },
+            { text: "Coba pancing obrolan dengan bertanya soal buku", nextScene: "rute_m2_penasaran" }
+        ]
+    },
+    rute_m2_sabar: {
+        speaker: "Narator",
+        text: "{player} tetap duduk di kursi seberangnya, tidak memaksa bicara. Setelah hampir dua puluh menit hening, {mira} akhirnya melirik. '...Kamu beneran nggak akan pergi, ya?'",
+        bg: assets.BACKGROUNDS.sekolahUmum.perpustakaan, charLeft: img('mira', 'netral'), charRight: img('mc', 'netral'),
+        choices: [{ text: "Lanjut...", nextScene: "rute_m2_bima" }]
+    },
+    rute_m2_penasaran: {
+        speaker: "Mira",
+        text: "Buku apa itu? Kelihatannya tebal banget. ...Bukan urusanmu. (Narator: Mira menutup bukunya cepat.)",
+        bg: assets.BACKGROUNDS.sekolahUmum.perpustakaan, charLeft: img('mira', 'waspada'), charRight: "",
+        choices: [{ text: "Lanjut...", nextScene: "rute_m2_bima" }]
+    },
+    rute_m2_bima: {
+        speaker: "Bima",
+        text: "WOI. Katanya kamu ditugasin nemenin anak baru yang katanya dingin banget itu? Gosip bilang dia pindahan dari luar kota! Ada yang bilang dia punya masa lalu misterius!",
+        bg: assets.BACKGROUNDS.sekolahUmum.koridor, charLeft: img('bima', 'jahil'), charRight: "",
+        choices: [
+            { text: "Abaikan gosip Bima, coba kenal Mira dari observasi sendiri", nextScene: "rute_m3" },
+            { text: "Diam-diam penasaran, cari tahu di grup chat sekolah", nextScene: "rute_m2_gosip" }
+        ]
+    },
+    rute_m2_gosip: {
+        speaker: "Narator",
+        text: "Adi ikut penasaran dan bertanya ke sana kemari. Rumor soal Mira jadi berlebihan. Saat Mira mendengar rumor itu di kelas, wajahnya mengeras. 'Ternyata di sekolah manapun sama aja.'",
+        bg: assets.BACKGROUNDS.sekolahUmum.kelas, charLeft: img('mira', 'sedih'), charRight: "",
+        choices: [{ text: "Lanjut ke Loteng", nextScene: "rute_m3" }]
+    },
+    rute_m3: {
+        speaker: "Narator",
+        text: "Suatu sore, {player} kembali ke perpustakaan dan tidak sengaja melihat {mira} menghilang di balik pintu kecil berdebu di sudut belakang rak.",
+        bg: assets.BACKGROUNDS.sekolahUmum.perpustakaan, charLeft: "", charRight: "",
+        choices: [{ text: "Mengikuti ke loteng...", nextScene: "rute_m3_loteng" }]
+    },
+    rute_m3_loteng: {
+        speaker: "Mira",
+        text: "...Gimana kamu bisa nemuin ini? (Narator: Suaranya nyaris panik.) Ini tempatku. Tolong jangan bilang siapa-siapa.",
+        bg: assets.BACKGROUNDS.rahasia.lotengArsip, charLeft: img('mira', 'waspada'), charRight: "",
+        choices: [
+            { text: "Janji merahasiakannya, tawarkan pergi (Hormat)", nextScene: "rute_m4_hormat" },
+            { text: "Tanya kenapa tempat ini penting buatnya", nextScene: "rute_m4_ingin_tahu" }
+        ]
+    },
+    rute_m4_hormat: {
+        speaker: "Mira",
+        text: "...Tunggu. Kamu boleh... duduk sebentar. Kalau kamu diem aja. (Narator: Adi duduk di seberangnya dalam diam yang tidak canggung.)",
+        bg: assets.BACKGROUNDS.rahasia.lotengArsip, charLeft: img('mira', 'netral'), charRight: "",
+        choices: [{ text: "Lanjut...", nextScene: "rute_m5_dewi" }]
+    },
+    rute_m4_ingin_tahu: {
+        speaker: "Mira",
+        text: "Ini tempat satu-satunya yang kerasa milikku. Aku udah pindah sekolah empat kali dalam tiga tahun. Aku belajar buat nggak terlalu deket sama tempat atau orang, karena aku juga bakal ninggalinnya lagi.",
+        bg: assets.BACKGROUNDS.rahasia.lotengArsip, charLeft: img('mira', 'sedih'), charRight: "",
+        choices: [{ text: "Lanjut...", nextScene: "rute_m5_dewi" }]
+    },
+    rute_m5_dewi: {
+        speaker: "Dewi",
+        text: "Aku seneng lihat {mira} mulai lebih terbuka. Awalnya aku pikir dia jutek, ternyata dia cuma capek harus kenalan ulang terus-terusan.",
+        bg: assets.BACKGROUNDS.sekolahUmum.kelas, charLeft: img('dewi', 'ramah'), charRight: "",
+        choices: [
+            { text: "Senang Mira punya teman lain, beri dia ruang", nextScene: "rute_m6" },
+            { text: "Sedikit posesif, khawatir kehilangan momen berdua", nextScene: "rute_m5_cemburu" }
+        ]
+    },
+    rute_m5_cemburu: {
+        speaker: "Mira",
+        text: "Kamu kenapa jadi aneh ke Dewi? Dia temenku juga sekarang. Jangan jadi posesif. Aku udah cukup sering kehilangan orang.",
+        bg: assets.BACKGROUNDS.rahasia.lotengArsip, charLeft: img('mira', 'marah'), charRight: "",
+        choices: [{ text: "Lanjut...", nextScene: "rute_m6" }]
+    },
+    rute_m6: {
+        speaker: "Narator",
+        text: "Suatu malam, saat mengobrol di loteng arsip, ponsel {mira} bergetar terus-menerus. Dia melihat layarnya sekilas, lalu buru-buru memasukkannya kembali ke saku.",
+        bg: assets.BACKGROUNDS.rahasia.lotengArsip, charLeft: img('mira', 'netral'), charRight: "",
+        choices: [
+            { text: "Tidak menanyakan lebih jauh, percaya dia akan cerita", nextScene: "rute_m7_percaya" },
+            { text: "Penasaran dan mencoba bertanya lebih lanjut", nextScene: "rute_m7_tanya" }
+        ]
+    },
+    rute_m7_percaya: {
+        speaker: "Mira",
+        text: "Alvin itu... sahabat paling deket aku dari SD sampe sebelum aku pindah terakhir kali. Kamu nggak protes sama sekali soal ini. Kenapa? ...Karena itu bukan hakku buat protes.",
+        bg: assets.BACKGROUNDS.rahasia.lotengArsip, charLeft: img('mira', 'tersenyum'), charRight: "",
+        choices: [{ text: "Lanjut...", nextScene: "rute_m8_alvin" }]
+    },
+    rute_m7_tanya: {
+        speaker: "Mira",
+        text: "Kalian... deket banget ya? Kenapa? Cemburu? (Narator: Mira tertawa kecil melihat reaksimu). Alvin itu sahabatku dari SD. Dia baik, tapi... dia memilih tidak melanjutkan.",
+        bg: assets.BACKGROUNDS.rahasia.lotengArsip, charLeft: img('mira', 'tertawa'), charRight: "",
+        choices: [{ text: "Lanjut...", nextScene: "rute_m8_alvin" }]
+    },
+    rute_m8_alvin: {
+        speaker: "Alvin",
+        text: "Kamu deket banget sama {mira} ya, akhir-akhir ini. Aku udah kenal dia dari kecil. Aku tahu betapa susahnya dia buka diri ke orang baru. Jaga dia baik-baik. Atau— kalau kamu nggak bisa, mungkin aku yang akan coba.",
+        bg: assets.BACKGROUNDS.sekolahUmum.taman, charLeft: img('alvin', 'serius'), charRight: "",
+        choices: [
+            { text: "Tegaskan niatmu tanpa terpancing emosi (Tenang)", nextScene: "rute_m9_tenang" },
+            { text: "Terpancing, jadi defensif dan sedikit kasar (Defensif)", nextScene: "rute_m9_defensif" }
+        ]
+    },
+    rute_m9_tenang: {
+        speaker: "Narator",
+        text: "Aku nggak akan janji aku sempurna. Tapi aku nggak akan pergi selama dia masih mau aku di sini. (Narator: Alvin terdiam sejenak, lalu mengangguk pelan.)",
+        bg: assets.BACKGROUNDS.sekolahUmum.taman, charLeft: img('alvin', 'lega'), charRight: "",
+        choices: [{ text: "Lanjut...", nextScene: "rute_m10_bayangan" }]
+    },
+    rute_m9_defensif: {
+        speaker: "Mira",
+        text: "Aku bisa jaga diriku sendiri. Aku nggak butuh kalian berdua berantem soal aku kayak aku ini barang. (Narator: Mira pergi dengan kecewa.)",
+        bg: assets.BACKGROUNDS.sekolahUmum.taman, charLeft: img('mira', 'marah'), charRight: "",
+        choices: [{ text: "Lanjut...", nextScene: "rute_m10_bayangan" }]
+    },
+    rute_m10_bayangan: {
+        speaker: "Mira",
+        text: "Aku udah bilang ke diri sendiri buat nggak kebiasa deket sama siapa pun di sini. Tapi aku gagal. Aku kebiasa deket sama kamu. Dan sekarang rasanya bakal sesakit yang aku takutin dari awal.",
+        bg: assets.BACKGROUNDS.rahasia.lotengArsip, charLeft: img('mira', 'menangis'), charRight: "",
+        choices: [
+            { text: "Yakinkan dia waktu yang tersisa tetap berharga (Berani)", nextScene: "rute_m11_berani" },
+            { text: "Ikut menjaga jarak karena sama-sama takut (Takut)", nextScene: "rute_m11_takut" },
+            { text: "Janji mencari cara agar dia bisa tetap tinggal (Upaya Ekstra)", nextScene: "rute_m10_upaya" }
+        ]
+    },
+    rute_m10_upaya: {
+        speaker: "Pak Hendra",
+        text: "Ini bukan keputusan kecil, {player}. Tapi Bapak bisa bantu sampaikan opsi itu ke orang tuanya, kalau memang itu yang terbaik buat {mira}. Neneknya di kota ini bisa jadi solusi.",
+        bg: assets.BACKGROUNDS.sekolahUmum.ruangGuruBK, charLeft: img('pakHendra', 'ramah'), charRight: "",
+        choices: [{ text: "Lanjut ke upaya nyata...", nextScene: "rute_m11_berani" }]
+    },
+    rute_m11_berani: {
+        speaker: "Mira",
+        text: "Aku nggak mau nyia-nyiain waktu yang ada sekarang cuma karena takut sama yang belum tentu terjadi. Kalaupun kamu harus pergi, aku pengen kamu pergi dengan kenangan yang beneran berarti.",
+        bg: assets.BACKGROUNDS.rahasia.lotengArsip, charLeft: img('mira', 'tersenyum'), charRight: "",
+        choices: [{ text: "Lanjut...", nextScene: "rute_m12" }]
+    },
+    rute_m11_takut: {
+        speaker: "Narator",
+        text: "Adi memilih menjaga jarak 'demi kebaikan bersama'. Mira menerimanya dengan diam, tapi sejak saat itu, tembok yang sempat runtuh perlahan terbangun lagi.",
+        bg: assets.BACKGROUNDS.rahasia.lotengArsip, charLeft: img('mira', 'sedih'), charRight: "",
+        choices: [{ text: "Lanjut ke Ending...", nextScene: "rute_m13_ending_sahabat" }]
+    },
+    rute_m12: {
+        speaker: "Mira",
+        text: "Minggu-minggu berikutnya dijalani dengan lebih intens. Kabar keputusan final dari ayahku akhirnya datang.",
+        bg: assets.BACKGROUNDS.rahasia.lotengArsip, charLeft: img('mira', 'netral'), charRight: "",
+        choices: [{ text: "Menjelang akhir...", nextScene: "rute_m13" }]
+    },
+    rute_m13: {
+        speaker: "Narator",
+        text: "Hari terakhir tiba. Mira dan Adi berdiri di Halte Bus.",
+        bg: assets.BACKGROUNDS.rahasia.halteBus, charLeft: img('mira', 'bahagia'), charRight: "",
+        choices: [
+            { text: "Jika Upaya Ekstra berhasil (True Good End)", nextScene: "rute_m13_ending1" },
+            { text: "Jika upaya gagal, tapi tetap menjaga hubungan (Bittersweet Good)", nextScene: "rute_m13_ending2" },
+            { text: "Melepas dengan damai tanpa janji (Bittersweet)", nextScene: "rute_m13_ending3" }
+        ]
+    },
+    rute_m13_ending1: {
+        speaker: "Mira",
+        text: "Ini pertama kalinya aku milih buat tinggal, bukan cuma nurutin ke mana pun aku dibawa pergi. Dan aku milih di sini. Sama kamu. (True Good End)",
+        bg: assets.BACKGROUNDS.rahasia.lotengArsip, charLeft: img('mira', 'bahagia'), charRight: "",
+        unlockQuote: "quote_mira",
+        choices: [{ text: "Kembali ke Menu Utama", nextScene: "menu" }]
+    },
+    rute_m13_ending2: {
+        speaker: "Mira",
+        text: "Aku nggak akan janji ini gampang. Tapi buat pertama kalinya, aku pengen coba nggak lari dari sesuatu yang berharga, walau itu berarti harus kerja lebih keras buat mempertahankannya. (Bittersweet-Good End)",
+        bg: assets.BACKGROUNDS.rahasia.halteBus, charLeft: img('mira', 'tersenyum'), charRight: "",
+        unlockQuote: "quote_mira",
+        choices: [{ text: "Kembali ke Menu Utama", nextScene: "menu" }]
+    },
+    rute_m13_ending3: {
+        speaker: "Mira",
+        text: "Makasih udah jadi tempat yang nggak pernah bikin aku ngerasa cuma 'numpang lewat'. Aku bakal selalu inget loteng itu. Dan kamu. (Bittersweet End)",
+        bg: assets.BACKGROUNDS.rahasia.halteBus, charLeft: img('mira', 'menangis'), charRight: "",
+        choices: [{ text: "Kembali ke Menu Utama", nextScene: "menu" }]
+    },
+    rute_m13_ending_sahabat: {
+        speaker: "Narator",
+        text: "Mereka tidak pernah benar-benar saling terbuka. Mira pindah di akhir semester. Bertahun-tahun kemudian, Adi menerima sebuah buku kumpulan cerpen berjudul 'Loteng yang Kutinggalkan'. (Friend End)",
+        bg: assets.BACKGROUNDS.sekolahUmum.koridor, charLeft: "", charRight: "",
+        choices: [{ text: "Kembali ke Menu Utama", nextScene: "menu" }]
+    },
     rute_r1: {
         speaker: "Alexandra",
         text: "OSIS dan ruang seni punya cara kerja beda. Nggak akan efisien.",
@@ -469,7 +658,7 @@ const storyData = {
     },
     rute_r4: {
         speaker: "Narator",
-        text: "Aula Festival malam itu penuh dengan hasil kolaborasi mereka. Semua orang kagum.",
+        text: "Aula Festival malam itu penuh dengan hasil kolaborasi mereka. Di kejauhan, Rangga dan Farah saling menggenggam tangan.",
         bg: assets.BACKGROUNDS.spesial.aulaFestival, charLeft: "", charRight: "",
         choices: [
             { text: "Fokus merayakan keberhasilan bersama sebagai tim", nextScene: "rute_r_ending_1" },
@@ -478,8 +667,8 @@ const storyData = {
     },
     rute_r_ending_1: {
         speaker: "Narator",
-        text: "Malam itu, bertiga naik ke atap. Bukan kisah cinta segitiga dengan satu pemenang, tapi tiga orang yang saling menemukan versi terbaik diri mereka. (TRUE ENDING: Konstelasi)",
-        bg: assets.BACKGROUNDS.spesial.atapMalam, charLeft: img('alexandra', 'bahagia'), charRight: img('kirana', 'bahagia'),
+        text: "Reuni sekolah kini menghadirkan satu wajah tambahan: {mira}. 'Jadi, dari kita bertiga, siapa yang paling bikin kamu deg-degan waktu itu?' goda Kirana. (True Ending)",
+        bg: assets.BACKGROUNDS.spesial.aulaFestival, charLeft: img('alexandra', 'bahagia'), charRight: img('kirana', 'bahagia'),
         unlockQuote: "quote_epilog",
         choices: [{ text: "Kembali ke Menu Utama", nextScene: "menu" }]
     },
