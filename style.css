@@ -34,7 +34,7 @@ body { background-color: #111; display: flex; justify-content: center; align-ite
     position: absolute;
     top: -60px;
     /* Ganti data-uri SVG menjadi file PNG transparan kamu */
-    background-image: url('assets/sakura.png');
+   
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
