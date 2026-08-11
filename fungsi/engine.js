@@ -652,3 +652,117 @@ window.addEventListener('load', () => {
         triggerLobbyAnimations();
     }
 });
+/* ============================================================
+   engine.js — Trigger Animasi & Keyboard Lobby
+   ============================================================ */
+
+// ... (Kode engine.js di atas tetap sama, tambahkan kode ini di bagian paling bawah) ...
+
+/* ============================================================
+   TRIGGER ANIMASI AWAL (GARIS EMAS & SAKURA)
+   ============================================================ */
+function triggerLobbyAnimations() {
+    const goldWrapper = document.getElementById('golden-line-wrapper');
+    const sakuraContainer = document.getElementById('sakura-container');
+
+    if (!goldWrapper || !sakuraContainer) return;
+
+    // Reset state
+    goldWrapper.classList.remove('animation-done');
+    sakuraContainer.style.opacity = '0';
+    sakuraContainer.innerHTML = '';
+
+    // Jalankan animasi garis, lalu tambahkan ekor angka 9
+    setTimeout(() => {
+        goldWrapper.classList.add('animation-done');
+        
+        // Munculkan sakura
+        setTimeout(() => {
+            const petalCount = 10;
+            for(let i = 0; i < petalCount; i++) {
+                const petal = document.createElement('div');
+                petal.className = 'petal';
+                sakuraContainer.appendChild(petal);
+            }
+            sakuraContainer.style.opacity = '1';
+        }, 500);
+    }, 2200); // 2.2 detik menyesuaikan durasi animasi garis
+}
+
+/* ============================================================
+   NAVIGASI KEYBOARD LOBBY (PANAH KIRI/KANAN TANPA KOTAK)
+   ============================================================ */
+let _lobbyNavHandler = null;
+
+function attachLobbyKeyboardNav() {
+    if (_lobbyNavHandler) {
+        document.removeEventListener('keydown', _lobbyNavHandler);
+        _lobbyNavHandler = null;
+    }
+
+    const menuBar = document.getElementById('lobby-menu-bar');
+    if (!menuBar) return;
+
+    const menuBtns = Array.from(menuBar.querySelectorAll('.menu-btn'));
+    if (menuBtns.length === 0) return;
+
+    let currentFocusIndex = 0;
+    // Set fokus awal ke tombol pertama
+    menuBtns[currentFocusIndex].classList.add('text-vn-gold', 'scale-105');
+    menuBtns[currentFocusIndex].focus();
+
+    const handler = (e) => {
+        if (document.getElementById('main-menu').classList.contains('hidden')) return;
+
+        // Reset tampilan tombol sebelumnya
+        menuBtns.forEach(btn => btn.classList.remove('text-vn-gold', 'scale-105'));
+
+        if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            currentFocusIndex = (currentFocusIndex + 1) % menuBtns.length;
+        } else if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            currentFocusIndex = (currentFocusIndex - 1 + menuBtns.length) % menuBtns.length;
+        } else if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            const activeBtn = menuBtns[currentFocusIndex];
+            if (activeBtn) activeBtn.click();
+            return;
+        } else {
+            // Jika tombol lain ditekan, batalkan reset visual di atas
+            menuBtns.forEach(btn => btn.classList.remove('text-vn-gold', 'scale-105'));
+            return;
+        }
+
+        // Berikan highlight pada tombol yang sedang difokus
+        menuBtns[currentFocusIndex].classList.add('text-vn-gold', 'scale-105');
+        menuBtns[currentFocusIndex].focus();
+    };
+
+    document.addEventListener('keydown', handler);
+    _lobbyNavHandler = handler;
+}
+
+/* ============================================================
+   OVERRIDE backToMenu & WINDOW.LOAD
+   ============================================================ */
+const _originalBackToMenu = backToMenu;
+backToMenu = function() {
+    _originalBackToMenu();
+    attachLobbyKeyboardNav();
+    triggerLobbyAnimations();
+}
+
+window.addEventListener('load', () => {
+    // Fungsi init yang sudah ada (migrateOldSaveIfNeeded, dll)
+    if (typeof migrateOldSaveIfNeeded === 'function') migrateOldSaveIfNeeded();
+    if (typeof changeResolution === 'function') changeResolution(window.resolution);
+    if (typeof initAudio === 'function') initAudio();
+    if (typeof checkContinueAvailability === 'function') checkContinueAvailability();
+    
+    // Trigger jika yang dibuka pertama kali adalah lobby
+    if (!document.getElementById('main-menu').classList.contains('hidden')) {
+        attachLobbyKeyboardNav();
+        triggerLobbyAnimations();
+    }
+});

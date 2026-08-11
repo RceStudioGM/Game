@@ -53,53 +53,51 @@ body {
 #toast-notif.show { right: 20px; }
 
 /* ===============================================
-   ANIMASI HALUS & ELEGAN (GARIS EMAS & SAKURA)
+   ANIMASI GARIS EMAS "ANGKA 9" & SAKURA REALISTIS
    =============================================== */
-   
-/* --- GARIS EMAS YANG MENGALIR KE KANAN --- */
-#golden-line {
-    position: absolute;
-    top: -2px; /* Menempel di atas batas menu */
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background: transparent;
-    pointer-events: none;
-    z-index: 30;
-}
 
-#golden-line::before {
-    content: '';
+/* --- Struktur Garis Emas --- */
+.line-main, .line-tail-9 {
     position: absolute;
-    top: 0; left: 0;
-    width: 100%;
-    height: 100%;
     background: linear-gradient(90deg, transparent, #facc15, #fdf08a, #facc15, transparent);
     background-size: 200% 100%;
-    transform: scaleX(0);
-    transform-origin: left;
-    animation: lineFill 1.5s ease-in-out forwards;
-    /* Setelah animasi lineFill selesai, animasi pulseLine berjalan tanpa henti */
+    opacity: 0;
+    animation: lineFill 2s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
+}
+
+.line-main {
+    left: 0; top: 0; width: 100%; height: 2px;
+}
+
+.line-tail-9 {
+    right: 0; top: 0; width: 16px; height: 16px;
+    border-radius: 0 0 100% 0; /* Membentuk ekor angka 9 yang melengkung ke bawah */
+    background: radial-gradient(circle at top left, #fdf08a, #facc15);
+    animation-delay: 0.05s;
 }
 
 @keyframes lineFill {
-    0% { transform: scaleX(0); }
-    100% { transform: scaleX(1); }
+    0% { opacity: 0; background-position: 0% 0%; transform: scaleX(0); transform-origin: left; }
+    30% { opacity: 1; }
+    100% { opacity: 1; background-position: 100% 0%; transform: scaleX(1); transform-origin: left; }
 }
 
-/* Setelah garis mengisi penuh, dia akan berdenyut/penguatan warna seperti mengisi daya */
-@keyframes pulseLine {
-    0% { background-position: 0% 0%; opacity: 0.7; }
-    50% { background-position: 100% 0%; opacity: 1; box-shadow: 0 0 12px 2px rgba(250, 204, 21, 0.8); }
-    100% { background-position: 0% 0%; opacity: 0.7; }
+/* Saat animasi selesai (ditambahkan oleh JS), jalankan pulse halus */
+#golden-line-wrapper.animation-done .line-main,
+#golden-line-wrapper.animation-done .line-tail-9 {
+    animation: none;
+    opacity: 1;
+    background: linear-gradient(90deg, #facc15, #fdf08a, #facc15);
+    background-size: 200% 100%;
+    animation: softGoldPulse 3.5s infinite cubic-bezier(0.4, 0.0, 0.2, 1);
 }
 
-#golden-line.line-filled::before {
-    /* Hentikan animasi lineFill (agar tidak berulang), lalu jalankan pulseLine */
-    animation: pulseLine 2.5s ease-in-out infinite;
+@keyframes softGoldPulse {
+    0%, 100% { opacity: 0.7; background-position: 0% 0%; }
+    50% { opacity: 1; box-shadow: 0 0 15px 1px rgba(250, 204, 21, 0.15); background-position: 100% 0%; }
 }
 
-/* --- ANIMASI SAKURA --- */
+/* --- ANIMASI SAKURA REALISTIS (SVG PATH) --- */
 #sakura-container {
     position: absolute; inset: 0; z-index: 10; pointer-events: none;
     overflow: hidden;
@@ -107,31 +105,37 @@ body {
 
 .petal {
     position: absolute;
+    width: 24px; height: 24px;
     top: -60px;
-    width: 12px; height: 14px;
-    background: #fbcfe8;
-    border-radius: 100% 0px 100% 0px / 0px 100% 0px 100%;
-    box-shadow: inset 0 0 8px #f9a8d4;
-    transform-origin: center;
     opacity: 0;
     animation: petalFall linear infinite;
 }
 
-@keyframes petalFall {
-    0% { transform: translate(0, 0) rotate(0deg) scale(0.8); opacity: 0; }
-    10% { opacity: 0.8; }
-    90% { opacity: 0.8; }
-    100% { transform: translate(calc(var(--move-x)), 500px) rotate(720deg) scale(1); opacity: 0; }
+/* Menggunakan SVG Data URI untuk bentuk kelopak yang halus dan melengkung */
+.petal::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50,15 C70,15 85,35 85,60 C85,80 65,95 50,95 C35,95 15,80 15,60 C15,35 30,15 50,15Z' fill='%23fbcfe8' opacity='0.9'/%3E%3C/svg%3E");
+    background-size: cover;
+    background-position: center;
+    filter: drop-shadow(0 0 2px rgba(251, 207, 232, 0.3));
 }
 
-/* Posisi penyebaran sakura */
-.petal:nth-child(1) { left: 10%; animation-duration: 7s; animation-delay: 0s; --move-x: 70px; width: 10px; height: 12px; }
-.petal:nth-child(2) { left: 30%; animation-duration: 9s; animation-delay: 0.5s; --move-x: -50px; width: 15px; height: 17px; }
-.petal:nth-child(3) { left: 50%; animation-duration: 6s; animation-delay: 1s; --move-x: 120px; width: 8px; height: 10px; }
-.petal:nth-child(4) { left: 70%; animation-duration: 10s; animation-delay: 1.5s; --move-x: -100px; width: 13px; height: 15px; }
-.petal:nth-child(5) { left: 85%; animation-duration: 8s; animation-delay: 2s; --move-x: 40px; width: 11px; height: 13px; }
-.petal:nth-child(6) { left: 5%; animation-duration: 11s; animation-delay: 2.5s; --move-x: 90px; width: 9px; height: 11px; }
-.petal:nth-child(7) { left: 65%; animation-duration: 7.5s; animation-delay: 3s; --move-x: -30px; width: 14px; height: 16px; }
-.petal:nth-child(8) { left: 20%; animation-duration: 8.5s; animation-delay: 3.5s; --move-x: 60px; width: 10px; height: 12px; }
-.petal:nth-child(9) { left: 90%; animation-duration: 6.5s; animation-delay: 4s; --move-x: -80px; width: 12px; height: 14px; }
-.petal:nth-child(10) { left: 40%; animation-duration: 12s; animation-delay: 4.5s; --move-x: 100px; width: 8px; height: 10px; }
+@keyframes petalFall {
+    0% { transform: translate(0, 0) rotate(0deg) scale(0.6); opacity: 0; }
+    10% { opacity: 0.9; }
+    90% { opacity: 0.8; }
+    100% { transform: translate(calc(var(--move-x)), 550px) rotate(720deg) scale(1); opacity: 0; }
+}
+
+.petal:nth-child(1) { left: 10%; animation-duration: 7s; animation-delay: 0s; --move-x: 60px; width: 20px; height: 20px;}
+.petal:nth-child(2) { left: 30%; animation-duration: 9s; animation-delay: 0.5s; --move-x: -50px; width: 28px; height: 28px;}
+.petal:nth-child(3) { left: 50%; animation-duration: 6s; animation-delay: 1s; --move-x: 120px; width: 16px; height: 16px;}
+.petal:nth-child(4) { left: 70%; animation-duration: 10s; animation-delay: 1.5s; --move-x: -100px; width: 26px; height: 26px;}
+.petal:nth-child(5) { left: 85%; animation-duration: 8s; animation-delay: 2s; --move-x: 40px; width: 22px; height: 22px;}
+.petal:nth-child(6) { left: 5%; animation-duration: 11s; animation-delay: 2.5s; --move-x: 90px; width: 18px; height: 18px;}
+.petal:nth-child(7) { left: 65%; animation-duration: 7.5s; animation-delay: 3s; --move-x: -30px; width: 30px; height: 30px;}
+.petal:nth-child(8) { left: 20%; animation-duration: 8.5s; animation-delay: 3.5s; --move-x: 60px; width: 20px; height: 20px;}
+.petal:nth-child(9) { left: 90%; animation-duration: 6.5s; animation-delay: 4s; --move-x: -80px; width: 24px; height: 24px;}
+.petal:nth-child(10) { left: 40%; animation-duration: 12s; animation-delay: 4.5s; --move-x: 100px; width: 16px; height: 16px;}
