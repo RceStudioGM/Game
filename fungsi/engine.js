@@ -1,12 +1,12 @@
 /* ============================================================
-   engine.js — Mesin Game + GSAP Animations + Fixed Arrows
+   engine.js — Mesin Game + GSAP MotionPath + Sakura Alami
    ============================================================ */
 
 let currentScene = 'prolog_1';
 let bgmAudio = null;
-let gsapTimeline = null; // Untuk menampung timeline animasi
+let gsapTimeline = null;
 
-/* --- Audio Settings --- */
+/* --- Audio --- */
 window.bgmVolume = parseInt(localStorage.getItem('vn_bgm_volume')) || 70;
 window.sfxVolume = parseInt(localStorage.getItem('vn_sfx_volume')) || 80;
 window.resolution = localStorage.getItem('vn_resolution') || '960x600';
@@ -114,14 +114,11 @@ function checkContinueAvailability() {
     else { btn.disabled = true; btn.innerText = "🔒 (BELUM ADA SAVE)"; btn.style.opacity = "0.5"; btn.style.cursor = "not-allowed"; }
 }
 
-/* --- OVERRIDE backToMenu (AGAR ARROW TETAP BERFUNGSI) --- */
 function backToMenu() {
     hideAllScreens();
     document.getElementById('main-menu').classList.remove('hidden');
     checkContinueAvailability();
     if (bgmAudio) bgmAudio.pause();
-    
-    // Panggil trigger animasi & keyboard
     attachLobbyKeyboardNav();
     triggerLobbyAnimations();
 }
@@ -255,7 +252,6 @@ function loadScene(sceneKey) {
             choicesContainer.appendChild(btn);
             choiceBtns.push(btn);
         });
-        // NAV KEYBOARD IN-GAME
         let currentChoiceIndex = 0;
         choiceBtns.forEach(b => b.classList.remove('text-vn-gold'));
         if (choiceBtns.length > 0) {
@@ -285,86 +281,60 @@ function loadScene(sceneKey) {
 }
 
 /* ============================================================
-   ANIMASI LOBBY DENGAN GSAP (TANPA CSS KEYFRAMES)
+   ANIMASI LOBBY DENGAN GSAP + MOTIONPATH
    ============================================================ */
 function triggerLobbyAnimations() {
-    // Hentikan timeline sebelumnya jika ada
     if (gsapTimeline) { gsapTimeline.kill(); gsapTimeline = null; }
 
-    const mainLine = document.getElementById('line-main');
-    const tail9 = document.getElementById('line-tail');
+    const mover = document.getElementById('line-mover');
     const sakuraContainer = document.getElementById('sakura-container');
-    if (!mainLine || !tail9 || !sakuraContainer) return;
+    if (!mover || !sakuraContainer) return;
 
-    // Reset Element
-    gsap.set(mainLine, { width: '0%', opacity: 0 });
-    gsap.set(tail9, { scale: 0, opacity: 0 });
+    // Reset
+    gsap.set(mover, { strokeDasharray: "0 1000" });
     sakuraContainer.innerHTML = '';
     gsap.set(sakuraContainer, { opacity: 1 });
 
-    // Buat Timeline GSAP
-    gsapTimeline = gsap.timeline({ delay: 0.2 });
+    // Timeline
+    gsapTimeline = gsap.timeline({ delay: 0.3 });
 
-    // 1. Garis Membentang
-    gsapTimeline.to(mainLine, { 
-        duration: 1.6, 
-        width: '100%', 
-        opacity: 1, 
-        ease: "power2.inOut" 
-    });
-    
-    // 2. Ekor Angka 9 Muncul (Melengkung dan scale up)
-    gsapTimeline.to(tail9, { 
-        duration: 0.5, 
-        scale: 1, 
-        opacity: 1, 
-        ease: "back.out(1.7)",
-        onComplete: () => {
-            // 3. Efek penguatan/pulse berulang hanya pada garis utama
-            gsap.to(mainLine, {
-                duration: 2.2,
-                opacity: 0.7,
-                ease: "sine.inOut",
-                yoyo: true,
-                repeat: -1
-            });
-        }
+    // 1. Garis membentang lurus & melengkung ke angka 9
+    gsapTimeline.to(mover, {
+        duration: 2.5,
+        strokeDasharray: "1000 1000",
+        ease: "power4.inOut",
     });
 
-    // 4. Memunculkan Sakura setelah garis selesai
+    // 2. Jatuhkan sakura setelah garis selesai
     gsapTimeline.add(() => {
-        const count = 15; // 15 helai Sakura
+        const count = 20;
         for (let i = 0; i < count; i++) {
             const petal = document.createElement('div');
             petal.className = 'petal';
-            // Acak posisi horizontal secara natural
             petal.style.left = Math.random() * 100 + '%';
-            // Ukuran acak (18px - 34px)
             const size = 18 + Math.random() * 16;
             petal.style.width = size + 'px';
             petal.style.height = size + 'px';
-            // Putar awal acak
             petal.style.transform = `rotate(${Math.random() * 360}deg)`;
             sakuraContainer.appendChild(petal);
 
-            // Loop animasi GSAP per kelopak
             gsap.to(petal, {
-                duration: 6 + Math.random() * 6, // Durasi acak 6-12 detik
-                y: "+=550", // Jatuh ke bawah
-                rotation: 360 * (Math.random() * 4 + 2), // Berputar berkali-kali
-                x: (Math.random() - 0.5) * 200, // Bergoyang kiri-kanan
+                duration: 8 + Math.random() * 6,
+                y: "+=600",
+                rotation: 720 + Math.random() * 720,
+                x: (Math.random() - 0.5) * 300,
                 opacity: 0,
                 ease: "power1.in",
-                delay: Math.random() * 0.5, // Jeda awal acak
+                delay: i * 0.1,
                 repeat: -1,
                 yoyo: false
             });
         }
-    }, "-=0.1"); // Mulai sedikit sebelum ekor selesai
+    }, "-=0.5");
 }
 
 /* ============================================================
-   NAVIGASI ARROW LOBBY (FIXED!)
+   NAVIGASI ARROW LOBBY
    ============================================================ */
 let _lobbyNavHandler = null;
 
@@ -374,16 +344,13 @@ function attachLobbyKeyboardNav() {
     const menuBtns = Array.from(document.querySelectorAll('#lobby-menu-bar .menu-btn'));
     if (menuBtns.length === 0) return;
 
-    // Reset visual semua tombol
     menuBtns.forEach(btn => btn.classList.remove('text-vn-gold'));
-
     let currentFocusIndex = 0;
     menuBtns[currentFocusIndex].classList.add('text-vn-gold');
     menuBtns[currentFocusIndex].focus();
 
     const handler = (e) => {
         if (document.getElementById('main-menu').classList.contains('hidden')) return;
-        
         menuBtns.forEach(btn => btn.classList.remove('text-vn-gold'));
 
         if (e.key === 'ArrowRight') {
@@ -477,7 +444,9 @@ function showToast(title, message) { const toast = document.getElementById('toas
 
 function migrateOldSaveIfNeeded() { try { const legacy = localStorage.getItem('vn_save_data'); if (!legacy) return; if (!getSlotData(1)) { const parsed = JSON.parse(legacy); const data = { playerName: parsed.playerName || 'Adi', currentScene: parsed.currentScene || 'prolog_1', gameFlags: parsed.gameFlags || { routeA: false, routeB: false, secretRoute: false }, unlockedQuotes: parsed.unlockedQuotes || [], dialoguePreview: '(migrated)', savedAt: new Date().toISOString() }; localStorage.setItem(slotKey(1), JSON.stringify(data)); } localStorage.removeItem('vn_save_data'); } catch (e) {} }
 
-// INISIALISASI LOAD
+/* ============================================================
+   INISIALISASI
+   ============================================================ */
 window.addEventListener('load', () => {
     migrateOldSaveIfNeeded(); changeResolution(window.resolution); initAudio(); checkContinueAvailability();
     if (!document.getElementById('main-menu').classList.contains('hidden')) {

@@ -47,7 +47,7 @@ body {
 #lobby-menu-bar .menu-btn { transition: color 0.2s; }
 #lobby-menu-bar .menu-btn:focus-visible { outline: none; }
 
-/* SVG Kelopak Sakura yang siap digunakan oleh GSAP */
+/* SVG Sakura (bentuk kelopak halus) */
 .petal {
     position: absolute;
     top: -60px; width: 22px; height: 22px;
