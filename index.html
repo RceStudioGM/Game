@@ -17,7 +17,6 @@
                     colors: {
                         'vn-gold': '#facc15',
                         'vn-dark': '#1a1a2e',
-                        'vn-pink': '#fbcfe8',
                     },
                     fontFamily: {
                         'display': ['"Playfair Display"', 'serif'],
@@ -52,9 +51,17 @@
             <!-- Sakura Container -->
             <div id="sakura-container" class="absolute inset-0 z-10 pointer-events-none opacity-0 transition-opacity duration-1000"></div>
 
-            <!-- Menu Bar Horizontal (Garis Emas Di Atasnya) -->
-            <div id="lobby-menu-bar" class="relative z-20 w-full bg-black/40 backdrop-blur-sm border-t-[3px] border-vn-gold py-4 flex justify-center items-center gap-10 text-lg font-bold tracking-wider">
+            <!-- Menu Bar Horizontal (Background Transparan Total) -->
+            <div id="lobby-menu-bar" class="relative z-20 w-full bg-transparent py-6 flex justify-center items-center gap-8 text-lg font-bold tracking-wider">
                 
+                <!-- Garis Emas Dinamis (Ekor Angka 9) -->
+                <div id="golden-track" class="absolute -top-[3px] left-0 w-full h-[5px] overflow-visible z-30 pointer-events-none">
+                    <!-- Garis Utama yang Membentang -->
+                    <div class="golden-line-main"></div>
+                    <!-- Ekor Melengkung di Ujung Kanan -->
+                    <div class="golden-line-tail"></div>
+                </div>
+
                 <button id="btn-continue" onclick="openSaveLoad('load')" class="menu-btn text-white/80 hover:text-vn-gold transition-all duration-300 bg-transparent border-none cursor-pointer outline-none" tabindex="0">
                     ▶ LANJUTKAN
                 </button>
@@ -166,7 +173,7 @@
         </div>
     </div>
 
-    <!-- Scripts (Urutan tetap sama) -->
+    <!-- Scripts (Urutan tetap sama di folder fungsi) -->
     <script src="./fungsi/main.js"></script>
     <script src="./fungsi/engine.js"></script>
     <script src="./fungsi/config.js"></script>

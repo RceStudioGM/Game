@@ -659,37 +659,44 @@ window.addEventListener('load', () => {
 // ... (Kode engine.js di atas tetap sama, tambahkan kode ini di bagian paling bawah) ...
 
 /* ============================================================
-   engine.js — Tambahan Animasi Awal & Nav Keyboard (Kiri/Kanan)
+   engine.js — Animasi Garis Angka 9 & Sakura
    ============================================================ */
 
-// ... (Kode engine.js sebelumnya tetap sama di atas) ...
+// ... (Semua kode fungsi save/load/pause/settings di atas tetap sama, tambahkan kode di bawah ini di bagian paling bawah) ...
 
 /* ============================================================
-   ADD-ON: ANIMASI SAKURA SAAT LOBBY DIBUKA
+   TRIGGER ANIMASI LOBBY (GARIS ANGKA 9 DAN SAKURA)
    ============================================================ */
 function triggerLobbyAnimations() {
+    const track = document.getElementById('golden-track');
     const sakuraContainer = document.getElementById('sakura-container');
 
-    if (!sakuraContainer) return;
+    if (!track || !sakuraContainer) return;
 
-    // Reset state
+    // Reset elemen agar animasi bisa diulang saat kembali ke menu
+    track.classList.remove('animation-done');
     sakuraContainer.style.opacity = '0';
     sakuraContainer.innerHTML = '';
 
-    // Tunda sebentar agar loading terlihat smooth, lalu ciptakan kelopak sakura
+    // Waktu kemunculan ekor disesuaikan dengan durasi CSS (1.8s)
     setTimeout(() => {
-        // Tambahkan kelopak sakura
-        for(let i = 0; i < 10; i++) {
-            const petal = document.createElement('div');
-            petal.className = 'petal';
-            sakuraContainer.appendChild(petal);
-        }
-        sakuraContainer.style.opacity = '1';
-    }, 500); 
+        track.classList.add('animation-done');
+
+        // Setelah garis utama jadi, munculkan efek penguatan warna (softGoldPulse)
+        setTimeout(() => {
+            // Tambahkan kelopak sakura setelah garis meredup sejenak
+            for(let i = 0; i < 10; i++) {
+                const petal = document.createElement('div');
+                petal.className = 'petal';
+                sakuraContainer.appendChild(petal);
+            }
+            sakuraContainer.style.opacity = '1';
+        }, 800); // Jeda agar sakura tidak muncul terlalu cepat
+    }, 1900); 
 }
 
 /* ============================================================
-   NAVIGASI KEYBOARD LOBBY (PANAH KIRI/KANAN)
+   NAVIGASI KEYBOARD LOBBY (PANAH KIRI/KANAN TANPA KOTAK FOKUS)
    ============================================================ */
 let _lobbyNavHandler = null;
 
@@ -728,12 +735,12 @@ function attachLobbyKeyboardNav() {
             if (activeBtn) activeBtn.click();
             return;
         } else {
-            // Jika tombol lain ditekan, batalkan reset visual di atas
+            // Jika tombol lain ditekan, batalkan reset
             menuBtns.forEach(btn => btn.classList.remove('text-vn-gold', 'scale-105'));
             return;
         }
 
-        // Berikan highlight pada tombol yang sedang difokus
+        // Berikan highlight (hanya teks emas) pada tombol yang sedang difokus
         menuBtns[currentFocusIndex].classList.add('text-vn-gold', 'scale-105');
         menuBtns[currentFocusIndex].focus();
     };
@@ -743,23 +750,24 @@ function attachLobbyKeyboardNav() {
 }
 
 /* ============================================================
-   OVERRIDE: backToMenu dan window.load trigger untuk lobby
+   OVERRIDE NAVIGASI KEMBALI KE MENU
    ============================================================ */
+// Simpan fungsi backToMenu asli agar tidak merusak fitur Save/Load
 const _originalBackToMenu = backToMenu;
-backToMenu = function() {
-    _originalBackToMenu(); 
+window.backToMenu = function() {
+    _originalBackToMenu();
     attachLobbyKeyboardNav();
-    triggerLobbyAnimations(); // Jalankan lagi saat kembali ke menu
+    triggerLobbyAnimations();
 }
 
 window.addEventListener('load', () => {
-    // Panggil fungsi init yang sudah ada
+    // Inisialisasi fungsi engine yang sudah ada
     if (typeof migrateOldSaveIfNeeded === 'function') migrateOldSaveIfNeeded();
     if (typeof changeResolution === 'function') changeResolution(window.resolution);
     if (typeof initAudio === 'function') initAudio();
     if (typeof checkContinueAvailability === 'function') checkContinueAvailability();
     
-    // Jalankan animasi & navigasi lobby saat page pertama kali dimuat
+    // Jalankan animasi jika halaman pertama kali dibuka di lobby
     if (!document.getElementById('main-menu').classList.contains('hidden')) {
         attachLobbyKeyboardNav();
         triggerLobbyAnimations();
