@@ -29,4 +29,17 @@ body { background-color: #111; display: flex; justify-content: center; align-ite
 #toast-notif.show { right: 20px; }
 #lobby-menu-bar .menu-btn { transition: color 0.2s; }
 #lobby-menu-bar .menu-btn:focus-visible { outline: none; }
-.petal { position: absolute; top: -60px; width: 22px; height: 22px; background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50,15 C70,15 85,35 85,60 C85,80 65,95 50,95 C35,95 15,80 15,60 C15,35 30,15 50,15Z' fill='%23fbcfe8' opacity='0.85'/%3E%3C/svg%3E"); background-size: contain; background-repeat: no-repeat; background-position: center; filter: drop-shadow(0 0 6px rgba(251, 207, 232, 0.4)); }
+/* --- SAKURA PNG REALISTIS --- */
+.petal {
+    position: absolute;
+    top: -60px;
+    /* Ganti data-uri SVG menjadi file PNG transparan kamu */
+    background-image: url('assets/sakura.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    /* Tetap berikan sedikit efek cahaya lembut agar terlihat menyatu dengan background */
+    filter: drop-shadow(0 0 6px rgba(251, 207, 232, 0.4));
+    /* Ukuran width dan height akan diatur secara otomatis oleh kode di engine.js, 
+       jadi kamu tidak perlu menuliskannya lagi di sini. */
+}
