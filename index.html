@@ -43,25 +43,30 @@
     <!-- Game Container -->
     <div id="game-container" class="relative w-[960px] h-[600px] overflow-hidden shadow-2xl rounded-2xl bg-black">
         
-        <!-- ===== MAIN MENU (Lobi Baru Horizontal di Bawah) ===== -->
-        <div id="main-menu" class="screen flex items-end justify-center w-full h-full bg-cover bg-center bg-no-repeat pb-12" style="background-image: url('assets/lobby/bg.jpg');">
-            <!-- Menu Container Horizontal di Bagian Bawah -->
-            <div class="flex flex-row flex-wrap justify-center gap-4 w-full max-w-5xl z-10 px-8">
-                <button id="btn-continue" onclick="openSaveLoad('load')" class="py-4 px-8 bg-vn-gold hover:bg-[#eab308] text-black font-bold text-lg rounded-xl shadow-lg transition-all hover:scale-105 min-w-[140px] text-center">
-                    ▶ Lanjutkan
+        <!-- ===== MAIN MENU (Model "The Noodle Nook" Horizontal di Bawah) ===== -->
+        <div id="main-menu" class="screen flex flex-col justify-end w-full h-full bg-cover bg-center bg-no-repeat" style="background-image: url('assets/lobby/bg.jpg');">
+            <!-- Overlay Gelap Transparan agar tulisan terbaca -->
+            <div class="absolute inset-0 bg-black/30 z-0"></div>
+
+            <!-- Menu Bar Horizontal di bagian bawah -->
+            <div id="lobby-menu-bar" class="relative z-10 w-full bg-[#1e293b]/70 backdrop-blur-sm border-t border-white/10 py-5 flex justify-center items-center gap-12 text-lg font-bold tracking-wider">
+                
+                <button id="btn-continue" onclick="openSaveLoad('load')" class="text-white hover:text-vn-gold transition-all duration-300 bg-transparent border-none cursor-pointer">
+                    LANJUTKAN
                 </button>
-                <button onclick="showNameInput()" class="py-4 px-8 bg-black/50 hover:bg-black/70 backdrop-blur-[1px] border border-white/20 text-white font-semibold text-lg rounded-xl shadow-lg transition-all hover:scale-105 min-w-[140px] text-center">
-                    ▶ Mulai Game Baru
+                <button onclick="showNameInput()" class="text-white hover:text-vn-gold transition-all duration-300 bg-transparent border-none cursor-pointer">
+                    MULAI BARU
                 </button>
-                <button onclick="showProfiles()" class="py-4 px-8 bg-black/50 hover:bg-black/70 backdrop-blur-[1px] border border-white/20 text-white font-semibold text-lg rounded-xl shadow-lg transition-all hover:scale-105 min-w-[140px] text-center">
-                    📖 Profil
+                <button onclick="showProfiles()" class="text-white hover:text-vn-gold transition-all duration-300 bg-transparent border-none cursor-pointer">
+                    PROFIL
                 </button>
-                <button onclick="showGallery()" class="py-4 px-8 bg-black/50 hover:bg-black/70 backdrop-blur-[1px] border border-white/20 text-white font-semibold text-lg rounded-xl shadow-lg transition-all hover:scale-105 min-w-[140px] text-center">
-                    📖 Quotes
+                <button onclick="showGallery()" class="text-white hover:text-vn-gold transition-all duration-300 bg-transparent border-none cursor-pointer">
+                    QUOTES
                 </button>
-                <button onclick="showSettings()" class="py-4 px-8 bg-black/50 hover:bg-black/70 backdrop-blur-[1px] border border-white/20 text-white font-semibold text-lg rounded-xl shadow-lg transition-all hover:scale-105 min-w-[140px] text-center">
-                    ⚙️ Pengaturan
+                <button onclick="showSettings()" class="text-white hover:text-vn-gold transition-all duration-300 bg-transparent border-none cursor-pointer">
+                    PENGATURAN
                 </button>
+
             </div>
         </div>
 
@@ -78,12 +83,11 @@
             </div>
         </div>
 
-        <!-- ===== GAME SCREEN (TOMBOL SIMPAN SUDAH DIHAPUS) ===== -->
+        <!-- ===== GAME SCREEN ===== -->
         <div id="game-screen" class="screen hidden relative w-full h-full">
             <button id="btn-pause" onclick="openPauseMenu()" class="absolute top-4 left-4 z-20 bg-black/50 hover:bg-black/70 text-white px-4 py-2 rounded-full backdrop-blur-sm border border-white/20 transition-all">
                 ⏸️
             </button>
-            <!-- (Tombol Simpan di pojok kanan atas dihapus) -->
 
             <div id="background-image" class="absolute inset-0 bg-cover bg-center z-0"></div>
             <img id="char-left" class="character absolute bottom-[18%] left-[5%] h-[75%] max-h-[500px] z-10 hidden" src="" alt="Karakter Kiri">
@@ -156,7 +160,7 @@
             </div>
         </div>
 
-        <!-- ===== SAVE / LOAD (TABEL SLOT ala RPG Maker & Ren'Py) ===== -->
+        <!-- ===== SAVE / LOAD (TABEL SLOT) ===== -->
         <div id="saveload-overlay" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-md flex items-center justify-center p-6">
             <div class="bg-[#1e2a3a] border border-white/20 rounded-2xl p-6 sm:p-8 max-w-3xl w-full shadow-2xl max-h-[85vh] flex flex-col">
                 <h2 id="saveload-title" class="font-display text-3xl text-vn-gold text-center mb-1">💾 Simpan Permainan</h2>
@@ -168,7 +172,7 @@
             </div>
         </div>
 
-        <!-- ===== KONFIRMASI (GENERIK) ===== -->
+        <!-- ===== KONFIRMASI ===== -->
         <div id="confirm-overlay" class="fixed inset-0 z-[60] hidden bg-black/70 backdrop-blur-sm flex items-center justify-center">
             <div id="confirm-modal" class="bg-[#1e2a3a] border border-white/20 rounded-2xl p-8 max-w-sm w-full shadow-2xl text-center">
                 <h3 id="confirm-title" class="text-2xl font-bold text-white mb-2">Apakah Anda Yakin?</h3>
@@ -181,7 +185,7 @@
         </div>
     </div>
 
-    <!-- Scripts (URUTAN TEPAT SEPERTI SEBELUMNYA, JANGAN DIUBAH) -->
+    <!-- Scripts (URUTAN TEPAT SEPERTI SEBELUMNYA) -->
     <script src="./fungsi/main.js"></script>
     <script src="./fungsi/engine.js"></script>
     <script src="./fungsi/config.js"></script>
