@@ -47,7 +47,7 @@
         <div id="main-menu" class="screen flex items-center justify-end pr-16 w-full h-full bg-cover bg-center bg-no-repeat" style="background-image: url('assets/lobby/bg.jpg');">
             <!-- Menu Container Vertikal di Sisi Kanan -->
             <div class="flex flex-col gap-4 w-[280px] z-10">
-                <button id="btn-continue" onclick="continueGame()" class="w-full py-4 px-6 bg-vn-gold hover:bg-[#eab308] text-black font-bold text-lg rounded-xl shadow-lg transition-all hover:scale-105 text-center">
+                <button id="btn-continue" onclick="openSaveLoad('load')" class="w-full py-4 px-6 bg-vn-gold hover:bg-[#eab308] text-black font-bold text-lg rounded-xl shadow-lg transition-all hover:scale-105 text-center">
                     ▶ Lanjutkan
                 </button>
                 <button onclick="showNameInput()" class="w-full py-4 px-6 bg-black/40 hover:bg-black/60 backdrop-blur-[1px] border border-white/20 text-white font-semibold text-lg rounded-xl shadow-lg transition-all hover:scale-105 text-center">
@@ -84,7 +84,7 @@
                 ⏸️
             </button>
             <div class="absolute top-4 right-4 z-20 flex gap-2">
-                <button id="btn-save-game" onclick="saveGame()" class="bg-black/50 hover:bg-black/70 text-white px-4 py-2 rounded-full backdrop-blur-sm border border-white/20 transition-all">💾 Simpan</button>
+                <button id="btn-save-game" onclick="openSaveLoad('save')" class="bg-black/50 hover:bg-black/70 text-white px-4 py-2 rounded-full backdrop-blur-sm border border-white/20 transition-all">💾 Simpan</button>
             </div>
 
             <div id="background-image" class="absolute inset-0 bg-cover bg-center z-0"></div>
@@ -121,7 +121,8 @@
             <div id="pause-modal" class="bg-[#1e2a3a] border border-white/20 rounded-2xl p-8 max-w-md w-full shadow-2xl transform scale-95 transition-all duration-300">
                 <h2 class="font-display text-3xl text-white text-center mb-6">⏸️ Jeda</h2>
                 <div class="space-y-3">
-                    <button onclick="saveGame(); closePauseMenu();" class="w-full py-3 bg-vn-gold text-black font-bold rounded-xl hover:scale-105 transition-all">💾 Simpan</button>
+                    <button onclick="openSaveLoad('save')" class="w-full py-3 bg-vn-gold text-black font-bold rounded-xl hover:scale-105 transition-all">💾 Simpan</button>
+                    <button onclick="openSaveLoad('load')" class="w-full py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-all">📂 Lanjutkan (Muat Slot)</button>
                     <button onclick="openSettingsFromPause()" class="w-full py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-all">⚙️ Pengaturan</button>
                     <button onclick="confirmQuit()" class="w-full py-3 bg-red-600/80 hover:bg-red-600 text-white rounded-xl transition-all">🚪 Keluar Game</button>
                     <button onclick="closePauseMenu()" class="w-full py-3 bg-gray-700/50 hover:bg-gray-700 text-white rounded-xl transition-all">Kembali</button>
@@ -144,18 +145,38 @@
                         <input type="range" id="sfx-volume" min="0" max="100" value="80" class="w-full accent-vn-gold cursor-pointer" oninput="updateVolume('sfx', this.value)">
                         <span id="sfx-volume-label" class="text-sm text-gray-400">80%</span>
                     </div>
+                    <div>
+                        <label class="text-white block mb-1">🖥️ Resolusi Layar</label>
+                        <select id="resolution-select" onchange="changeResolution(this.value)" class="w-full px-3 py-2 rounded-lg bg-white/10 text-white border border-white/20 focus:outline-none focus:ring-2 focus:ring-vn-gold/50">
+                            <option value="960x600">960 × 600 (Standar)</option>
+                            <option value="1152x720">1152 × 720</option>
+                            <option value="1280x800">1280 × 800</option>
+                        </select>
+                    </div>
                     <button onclick="closeSettingsModal()" class="w-full py-3 bg-vn-gold text-black font-bold rounded-xl hover:scale-105 transition-all mt-2">Kembali</button>
                 </div>
             </div>
         </div>
 
-        <!-- ===== KONFIRMASI KELUAR ===== -->
-        <div id="confirm-overlay" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-sm flex items-center justify-center">
+        <!-- ===== SAVE / LOAD (TABEL SLOT ala RPG Maker & Ren'Py) ===== -->
+        <div id="saveload-overlay" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-md flex items-center justify-center p-6">
+            <div class="bg-[#1e2a3a] border border-white/20 rounded-2xl p-6 sm:p-8 max-w-3xl w-full shadow-2xl max-h-[85vh] flex flex-col">
+                <h2 id="saveload-title" class="font-display text-3xl text-vn-gold text-center mb-1">💾 Simpan Permainan</h2>
+                <p id="saveload-subtitle" class="text-center text-gray-400 text-sm mb-6">Pilih slot untuk menyimpan progress kamu</p>
+
+                <div id="saveload-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-4 overflow-y-auto pr-1 flex-1"></div>
+
+                <button onclick="closeSaveLoad()" class="mt-6 w-full py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-all">Kembali</button>
+            </div>
+        </div>
+
+        <!-- ===== KONFIRMASI (GENERIK) ===== -->
+        <div id="confirm-overlay" class="fixed inset-0 z-[60] hidden bg-black/70 backdrop-blur-sm flex items-center justify-center">
             <div id="confirm-modal" class="bg-[#1e2a3a] border border-white/20 rounded-2xl p-8 max-w-sm w-full shadow-2xl text-center">
-                <h3 class="text-2xl font-bold text-white mb-2">🚪 Keluar?</h3>
-                <p class="text-gray-300 mb-6">Yakin ingin keluar game? Progress belum disimpan akan hilang.</p>
+                <h3 id="confirm-title" class="text-2xl font-bold text-white mb-2">Apakah Anda Yakin?</h3>
+                <p id="confirm-message" class="text-gray-300 mb-6">Tindakan ini tidak bisa dibatalkan.</p>
                 <div class="flex gap-3">
-                    <button onclick="quitGame()" class="flex-1 py-3 bg-red-600 text-white rounded-xl hover:scale-105 transition-all">Ya, Keluar</button>
+                    <button onclick="runConfirmedAction()" class="flex-1 py-3 bg-vn-gold text-black font-bold rounded-xl hover:scale-105 transition-all">Ya, Lanjutkan</button>
                     <button onclick="closeConfirm()" class="flex-1 py-3 bg-gray-600 text-white rounded-xl hover:scale-105 transition-all">Batal</button>
                 </div>
             </div>

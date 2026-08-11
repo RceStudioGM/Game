@@ -88,19 +88,40 @@ function closeSettingsModal() {
     }
 }
 
-/* --- Konfirmasi Keluar --- */
-function confirmQuit() {
-    closePauseMenu();
+/* --- Konfirmasi (GENERIK) ---
+   Dipakai untuk: keluar game, menimpa slot save, dan memuat slot save.
+   Panggil showConfirm(judul, pesan, callback) dari mana saja;
+   tombol "Ya" di modal akan menjalankan callback tsb. */
+let _pendingConfirmAction = null;
+
+function showConfirm(title, message, onConfirm) {
+    document.getElementById('confirm-title').innerText = title;
+    document.getElementById('confirm-message').innerText = message;
+    _pendingConfirmAction = onConfirm;
     document.getElementById('confirm-overlay').classList.remove('hidden');
+}
+
+function runConfirmedAction() {
+    const action = _pendingConfirmAction;
+    closeConfirm();
+    if (typeof action === 'function') action();
 }
 
 function closeConfirm() {
     document.getElementById('confirm-overlay').classList.add('hidden');
+    _pendingConfirmAction = null;
+}
+
+function confirmQuit() {
+    closePauseMenu();
+    showConfirm(
+        '🚪 Keluar?',
+        'Yakin ingin keluar game? Progress yang belum disimpan akan hilang.',
+        quitGame
+    );
 }
 
 function quitGame() {
-    // Tutup semua modal dan kembali ke menu utama
-    document.getElementById('confirm-overlay').classList.add('hidden');
     hideAllScreens();
     document.getElementById('main-menu').classList.remove('hidden');
     if (bgmAudio) bgmAudio.pause();
@@ -124,8 +145,8 @@ function hideAllScreens() {
 function checkContinueAvailability() {
     const btn = document.getElementById('btn-continue');
     if (!btn) return;
-    const hasSave = localStorage.getItem('vn_save_data');
-    if (hasSave) {
+    const hasAnySave = getAllSlots().some(slot => slot.data !== null);
+    if (hasAnySave) {
         btn.disabled = false;
         btn.innerText = "▶ Lanjutkan";
         btn.style.opacity = "1";
@@ -308,39 +329,182 @@ function loadScene(sceneKey) {
     }
 }
 
-function saveGame() {
-    const saveData = { playerName: window.playerName, currentScene: currentScene, gameFlags: window.gameFlags, unlockedQuotes: window.unlockedQuotes };
+/* ============================================================
+   SISTEM SAVE / LOAD — Tabel Slot (ala RPG Maker & Ren'Py)
+   ============================================================ */
+const SAVE_SLOT_COUNT = 9;
+let saveLoadMode = 'save'; // 'save' atau 'load'
+
+function slotKey(n) { return `vn_save_slot_${n}`; }
+
+function getSlotData(n) {
     try {
-        localStorage.setItem('vn_save_data', JSON.stringify(saveData));
-        const toast = document.getElementById('toast-notif');
-        toast.classList.remove('hidden');
-        document.querySelector('#toast-notif h4').innerText = "✅ Tersimpan!";
-        document.querySelector('#toast-notif p').innerText = "Progress game berhasil disimpan.";
-        setTimeout(() => toast.classList.add('show'), 100);
-        setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.classList.add('hidden'), 500); }, 3000);
-    } catch (e) { console.error("Gagal menyimpan game:", e); }
+        const raw = localStorage.getItem(slotKey(n));
+        return raw ? JSON.parse(raw) : null;
+    } catch (e) { return null; }
 }
 
-function continueGame() {
+function getAllSlots() {
+    const slots = [];
+    for (let n = 1; n <= SAVE_SLOT_COUNT; n++) slots.push({ n, data: getSlotData(n) });
+    return slots;
+}
+
+function formatSaveDate(iso) {
     try {
-        const rawData = localStorage.getItem('vn_save_data');
-        if (!rawData) { alert("Tidak ada data simpan yang ditemukan. Mulai game baru!"); return; }
-        const saveData = JSON.parse(rawData);
-        window.playerName = saveData.playerName || 'Adi';
-        window.gameFlags = saveData.gameFlags || { routeA: false, routeB: false, secretRoute: false };
-        window.unlockedQuotes = saveData.unlockedQuotes || [];
+        const d = new Date(iso);
+        const tgl = d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+        const jam = d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+        return `${tgl}, ${jam}`;
+    } catch (e) { return ''; }
+}
+
+function openSaveLoad(mode) {
+    saveLoadMode = mode; // 'save' dari pause/lobby-save, 'load' dari tombol Lanjutkan
+    document.getElementById('saveload-title').innerText = mode === 'save' ? '💾 Simpan Permainan' : '📂 Muat Permainan';
+    document.getElementById('saveload-subtitle').innerText = mode === 'save'
+        ? 'Pilih slot untuk menyimpan progress kamu'
+        : 'Pilih slot yang ingin dimuat';
+    renderSaveSlots();
+    document.getElementById('saveload-overlay').classList.remove('hidden');
+}
+
+function closeSaveLoad() {
+    document.getElementById('saveload-overlay').classList.add('hidden');
+}
+
+function renderSaveSlots() {
+    const grid = document.getElementById('saveload-grid');
+    grid.innerHTML = '';
+
+    getAllSlots().forEach(({ n, data }) => {
+        const card = document.createElement('div');
+        const isEmpty = !data;
+        const clickable = saveLoadMode === 'save' || !isEmpty; // slot kosong tidak bisa di-load
+
+        card.className = `relative rounded-xl border p-4 transition-all text-left ${
+            isEmpty
+                ? 'border-dashed border-white/20 bg-white/[0.02]'
+                : 'border-white/20 bg-white/5 hover:border-vn-gold hover:bg-white/10'
+        } ${clickable ? 'cursor-pointer' : 'opacity-40 cursor-not-allowed'}`;
+
+        if (clickable) card.onclick = () => handleSlotClick(n);
+
+        if (isEmpty) {
+            card.innerHTML = `
+                <div class="text-vn-gold font-bold text-sm mb-2">Slot ${n}</div>
+                <div class="text-gray-500 text-sm py-4 text-center">${saveLoadMode === 'save' ? '+ Simpan di sini' : 'Kosong'}</div>
+            `;
+        } else {
+            const preview = (data.dialoguePreview || '').slice(0, 70) + (data.dialoguePreview && data.dialoguePreview.length > 70 ? '…' : '');
+            card.innerHTML = `
+                <button class="slot-delete-btn absolute top-2 right-2 text-gray-500 hover:text-red-400 text-sm w-6 h-6 flex items-center justify-center rounded-full hover:bg-white/10" title="Hapus slot ini">✕</button>
+                <div class="text-vn-gold font-bold text-sm mb-1">Slot ${n}</div>
+                <div class="text-white font-semibold text-sm truncate">${data.playerName || 'Adi'}</div>
+                <div class="text-gray-400 text-xs mt-1">${formatSaveDate(data.savedAt)}</div>
+                <div class="text-gray-300 text-xs italic mt-2 leading-snug">"${preview || '...'}"</div>
+            `;
+            // Tombol hapus tidak boleh ikut memicu klik kartu (save/load)
+            card.querySelector('.slot-delete-btn').onclick = (e) => {
+                e.stopPropagation();
+                showConfirm('Hapus Slot?', `Slot ${n} akan dihapus permanen dan tidak bisa dikembalikan.`, () => {
+                    localStorage.removeItem(slotKey(n));
+                    renderSaveSlots();
+                    checkContinueAvailability();
+                });
+            };
+        }
+
+        grid.appendChild(card);
+    });
+}
+
+function handleSlotClick(n) {
+    if (saveLoadMode === 'save') {
+        const existing = getSlotData(n);
+        if (existing) {
+            showConfirm('Timpa Slot?', `Slot ${n} sudah terisi (${formatSaveDate(existing.savedAt)}). Timpa dengan progress saat ini?`, () => doSaveToSlot(n));
+        } else {
+            doSaveToSlot(n);
+        }
+    } else {
+        showConfirm('Muat Slot Ini?', `Progress yang belum disimpan saat ini akan hilang. Lanjutkan memuat Slot ${n}?`, () => doLoadFromSlot(n));
+    }
+}
+
+function doSaveToSlot(n) {
+    const dialogueEl = document.getElementById('dialogue-text');
+    const data = {
+        playerName: window.playerName,
+        currentScene: currentScene,
+        gameFlags: window.gameFlags,
+        unlockedQuotes: window.unlockedQuotes,
+        dialoguePreview: dialogueEl ? dialogueEl.innerText : '',
+        savedAt: new Date().toISOString(),
+    };
+    try {
+        localStorage.setItem(slotKey(n), JSON.stringify(data));
+        renderSaveSlots();
+        checkContinueAvailability();
+        showToast('✅ Tersimpan!', `Progress berhasil disimpan di Slot ${n}.`);
+    } catch (e) { console.error('Gagal menyimpan game:', e); }
+}
+
+function doLoadFromSlot(n) {
+    const data = getSlotData(n);
+    if (!data) return;
+    try {
+        window.playerName = data.playerName || 'Adi';
+        window.gameFlags = data.gameFlags || { routeA: false, routeB: false, secretRoute: false };
+        window.unlockedQuotes = data.unlockedQuotes || [];
         try { localStorage.setItem('vn_quotes', JSON.stringify(window.unlockedQuotes)); } catch (e) {}
         saveFlags();
+        closeSaveLoad();
+        closePauseMenu();
         hideAllScreens();
         document.getElementById('game-screen').classList.remove('hidden');
-        loadScene(saveData.currentScene || 'prolog_1');
-        // Play BGM if defined
+        loadScene(data.currentScene || 'prolog_1');
         if (bgmAudio) bgmAudio.play().catch(() => {});
-    } catch (e) { console.error("Gagal memuat game:", e); alert("Gagal memuat data simpan."); }
+    } catch (e) { console.error('Gagal memuat game:', e); }
 }
 
-// Load resolution on start
+function showToast(title, message) {
+    const toast = document.getElementById('toast-notif');
+    toast.classList.remove('hidden');
+    const h4 = toast.querySelector('h4');
+    const p = toast.querySelector('p');
+    if (h4) h4.innerText = title;
+    if (p) p.innerText = message;
+    setTimeout(() => toast.classList.add('show'), 100);
+    setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.classList.add('hidden'), 500); }, 3000);
+}
+
+/* Migrasi otomatis: kalau ada data save lama (versi single-slot) dan
+   Slot 1 masih kosong, pindahkan ke Slot 1 sekali saja supaya progress
+   pemain lama tidak hilang. */
+function migrateOldSaveIfNeeded() {
+    try {
+        const legacy = localStorage.getItem('vn_save_data');
+        if (!legacy) return;
+        if (!getSlotData(1)) {
+            const parsed = JSON.parse(legacy);
+            const data = {
+                playerName: parsed.playerName || 'Adi',
+                currentScene: parsed.currentScene || 'prolog_1',
+                gameFlags: parsed.gameFlags || { routeA: false, routeB: false, secretRoute: false },
+                unlockedQuotes: parsed.unlockedQuotes || [],
+                dialoguePreview: '(disimpan sebelum update sistem slot)',
+                savedAt: new Date().toISOString(),
+            };
+            localStorage.setItem(slotKey(1), JSON.stringify(data));
+        }
+        localStorage.removeItem('vn_save_data');
+    } catch (e) { /* abaikan */ }
+}
+/* --- Inisialisasi saat halaman dimuat --- */
 window.addEventListener('load', () => {
+    migrateOldSaveIfNeeded();
     changeResolution(window.resolution);
     initAudio();
+    checkContinueAvailability();
 });
