@@ -17,6 +17,7 @@
                     colors: {
                         'vn-gold': '#facc15',
                         'vn-dark': '#1a1a2e',
+                        'vn-pink': '#fbcfe8',
                     },
                     fontFamily: {
                         'display': ['"Playfair Display"', 'serif'],
@@ -43,30 +44,35 @@
     <!-- Game Container -->
     <div id="game-container" class="relative w-[960px] h-[600px] overflow-hidden shadow-2xl rounded-2xl bg-black">
         
-        <!-- ===== MAIN MENU (Model "The Noodle Nook" Horizontal di Bawah) ===== -->
+        <!-- ===== MAIN MENU ===== -->
         <div id="main-menu" class="screen flex flex-col justify-end w-full h-full bg-cover bg-center bg-no-repeat" style="background-image: url('assets/lobby/bg.jpg');">
-            <!-- Overlay Gelap Transparan agar tulisan terbaca -->
+            <!-- Overlay Gelap Transparan -->
             <div class="absolute inset-0 bg-black/30 z-0"></div>
 
+            <!-- Sakura Container (Muncul setelah animasi garis selesai) -->
+            <div id="sakura-container" class="absolute inset-0 z-10 pointer-events-none opacity-0 transition-opacity duration-1000"></div>
+
             <!-- Menu Bar Horizontal di bagian bawah -->
-            <div id="lobby-menu-bar" class="relative z-10 w-full bg-[#1e293b]/70 backdrop-blur-sm border-t border-white/10 py-5 flex justify-center items-center gap-12 text-lg font-bold tracking-wider">
+            <div id="lobby-menu-bar" class="relative z-20 w-full bg-[#1e293b]/70 backdrop-blur-sm border-t border-white/10 pt-5 pb-4 flex justify-center items-center gap-10 text-lg font-bold tracking-wider">
                 
-                <button id="btn-continue" onclick="openSaveLoad('load')" class="text-white hover:text-vn-gold transition-all duration-300 bg-transparent border-none cursor-pointer">
-                    LANJUTKAN
+                <!-- Garis Emas Dinamis -->
+                <div id="golden-line" class="absolute -top-[1px] left-0 w-full h-[2px] bg-transparent overflow-hidden"></div>
+
+                <button id="btn-continue" onclick="openSaveLoad('load')" class="menu-btn text-white/80 hover:text-vn-gold transition-all duration-300 bg-transparent border-none cursor-pointer outline-none focus:outline-none" tabindex="0">
+                    ▶ LANJUTKAN
                 </button>
-                <button onclick="showNameInput()" class="text-white hover:text-vn-gold transition-all duration-300 bg-transparent border-none cursor-pointer">
+                <button onclick="showNameInput()" class="menu-btn text-white/80 hover:text-vn-gold transition-all duration-300 bg-transparent border-none cursor-pointer outline-none focus:outline-none" tabindex="0">
                     MULAI BARU
                 </button>
-                <button onclick="showProfiles()" class="text-white hover:text-vn-gold transition-all duration-300 bg-transparent border-none cursor-pointer">
+                <button onclick="showProfiles()" class="menu-btn text-white/80 hover:text-vn-gold transition-all duration-300 bg-transparent border-none cursor-pointer outline-none focus:outline-none" tabindex="0">
                     PROFIL
                 </button>
-                <button onclick="showGallery()" class="text-white hover:text-vn-gold transition-all duration-300 bg-transparent border-none cursor-pointer">
+                <button onclick="showGallery()" class="menu-btn text-white/80 hover:text-vn-gold transition-all duration-300 bg-transparent border-none cursor-pointer outline-none focus:outline-none" tabindex="0">
                     QUOTES
                 </button>
-                <button onclick="showSettings()" class="text-white hover:text-vn-gold transition-all duration-300 bg-transparent border-none cursor-pointer">
+                <button onclick="showSettings()" class="menu-btn text-white/80 hover:text-vn-gold transition-all duration-300 bg-transparent border-none cursor-pointer outline-none focus:outline-none" tabindex="0">
                     PENGATURAN
                 </button>
-
             </div>
         </div>
 
@@ -160,14 +166,12 @@
             </div>
         </div>
 
-        <!-- ===== SAVE / LOAD (TABEL SLOT) ===== -->
+        <!-- ===== SAVE / LOAD ===== -->
         <div id="saveload-overlay" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-md flex items-center justify-center p-6">
             <div class="bg-[#1e2a3a] border border-white/20 rounded-2xl p-6 sm:p-8 max-w-3xl w-full shadow-2xl max-h-[85vh] flex flex-col">
                 <h2 id="saveload-title" class="font-display text-3xl text-vn-gold text-center mb-1">💾 Simpan Permainan</h2>
                 <p id="saveload-subtitle" class="text-center text-gray-400 text-sm mb-6">Pilih slot untuk menyimpan progress kamu</p>
-
                 <div id="saveload-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-4 overflow-y-auto pr-1 flex-1"></div>
-
                 <button onclick="closeSaveLoad()" class="mt-6 w-full py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-all">Kembali</button>
             </div>
         </div>
@@ -185,7 +189,7 @@
         </div>
     </div>
 
-    <!-- Scripts (URUTAN TEPAT SEPERTI SEBELUMNYA) -->
+    <!-- Scripts (Urutan tetap sama di folder fungsi) -->
     <script src="./fungsi/main.js"></script>
     <script src="./fungsi/engine.js"></script>
     <script src="./fungsi/config.js"></script>

@@ -534,3 +534,121 @@ window.addEventListener('load', () => {
     initAudio();
     checkContinueAvailability();
 });
+/* ============================================================
+   engine.js — Tambahan Animasi Awal & Nav Keyboard (Kiri/Kanan)
+   ============================================================ */
+
+// ... (Kode di atas hingga fungsi migrateOldSaveIfNeeded dan window.onload tetap sama) ...
+
+/* ============================================================
+   ADD-ON: ANIMASI AWAL LOBBY (Garis Emas & Sakura)
+   ============================================================ */
+function triggerLobbyAnimations() {
+    const goldenLine = document.getElementById('golden-line');
+    const sakuraContainer = document.getElementById('sakura-container');
+
+    if (!goldenLine || !sakuraContainer) return;
+
+    // Reset state jika kembali ke lobby
+    goldenLine.classList.remove('line-filled');
+    sakuraContainer.style.opacity = '0';
+    
+    // Hapus semua petal lama (jika ada)
+    sakuraContainer.innerHTML = '';
+
+    // Tunggu hingga garis selesai terbentuk (1.5 detik), lalu tambahkan class line-filled untuk efek penguatan
+    // Setelah itu (0.5 detik kemudian) munculkan sakura
+    setTimeout(() => {
+        goldenLine.classList.add('line-filled'); // Memicu animasi penguatan berulang
+        
+        // Munculkan sakura (jeda sedikit setelah garis penuh)
+        setTimeout(() => {
+            // Tambahkan kelopak sakura ke dalam container
+            const petalCount = 10;
+            for(let i = 0; i < petalCount; i++) {
+                const petal = document.createElement('div');
+                petal.className = 'petal';
+                sakuraContainer.appendChild(petal);
+            }
+            sakuraContainer.style.opacity = '1';
+        }, 500);
+    }, 1500);
+}
+
+/* ============================================================
+   NAVIGASI KEYBOARD DI LOBBY (PANAH KIRI/KANAN)
+   ============================================================ */
+let _lobbyNavHandler = null;
+
+function attachLobbyKeyboardNav() {
+    // Bersihkan event lama jika ada
+    if (_lobbyNavHandler) {
+        document.removeEventListener('keydown', _lobbyNavHandler);
+        _lobbyNavHandler = null;
+    }
+
+    const menuBar = document.getElementById('lobby-menu-bar');
+    if (!menuBar) return;
+
+    const menuBtns = Array.from(menuBar.querySelectorAll('.menu-btn'));
+    if (menuBtns.length === 0) return;
+
+    let currentFocusIndex = 0;
+    
+    // Set fokus awal ke tombol pertama jika ada
+    menuBtns[currentFocusIndex].focus();
+
+    const handler = (e) => {
+        // Abaikan jika lobby tidak terlihat
+        if (document.getElementById('main-menu').classList.contains('hidden')) return;
+
+        // Hapus highlight (visual) sebelumnya
+        menuBtns.forEach(btn => btn.classList.remove('text-vn-gold', 'scale-105'));
+        
+        if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            currentFocusIndex = (currentFocusIndex + 1) % menuBtns.length;
+            menuBtns[currentFocusIndex].focus();
+            menuBtns[currentFocusIndex].classList.add('text-vn-gold', 'scale-105');
+        } else if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            currentFocusIndex = (currentFocusIndex - 1 + menuBtns.length) % menuBtns.length;
+            menuBtns[currentFocusIndex].focus();
+            menuBtns[currentFocusIndex].classList.add('text-vn-gold', 'scale-105');
+        } else if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            // Simulasi klik pada tombol yang sedang di-fokus
+            const activeBtn = menuBtns[currentFocusIndex];
+            if (activeBtn) activeBtn.click();
+        }
+    };
+
+    document.addEventListener('keydown', handler);
+    _lobbyNavHandler = handler;
+}
+
+/* ============================================================
+   OVERRIDE: backToMenu dan loadScene trigger untuk lobby
+   ============================================================ */
+const _originalBackToMenu = backToMenu;
+backToMenu = function() {
+    _originalBackToMenu(); // Panggil fungsi asli
+    // Pasang navigasi keyboard lobby
+    attachLobbyKeyboardNav();
+    // Jalankan animasi awal (garis & sakura) jika lobby ditampilkan
+    triggerLobbyAnimations();
+}
+
+/* --- OVERRIDE FUNGSI SEBELUMNYA untuk inisialisasi --- */
+window.addEventListener('load', () => {
+    migrateOldSaveIfNeeded();
+    changeResolution(window.resolution);
+    initAudio();
+    checkContinueAvailability();
+    
+    // Jalankan animasi & navigasi lobby saat page pertama kali dimuat
+    if (!document.getElementById('main-menu').classList.contains('hidden')) {
+        attachLobbyKeyboardNav();
+        triggerLobbyAnimations();
+    }
+});
