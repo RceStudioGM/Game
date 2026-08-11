@@ -1,5 +1,5 @@
 /* ============================================================
-   engine.js — Mesin Game + GSAP MotionPath + Sparkle Texture
+   engine.js — Mesin Game + GSAP + 2 Sakura Overlap + Video Garis
    ============================================================ */
 
 let currentScene = 'prolog_1';
@@ -281,99 +281,34 @@ function loadScene(sceneKey) {
 }
 
 /* ============================================================
-   ANIMASI LOBBY (PREMIUM): GARIS PREMIUM + PARTIKEL SPARKLE
+   ANIMASI SAKURA: 2 GAMBAR BERJALAN BERSAMAAN (OVERLAP)
+   Video garis sudah ditangani oleh HTML <video>, jadi di sini hanya sakura.
    ============================================================ */
 function triggerLobbyAnimations() {
     if (gsapTimeline) { gsapTimeline.kill(); gsapTimeline = null; }
 
-    const lineGlow = document.getElementById('line-glow');
-    const lineCore = document.getElementById('line-core');
-    const sparkle1 = document.getElementById('sparkle-1');
-    const sparkle2 = document.getElementById('sparkle-2');
     const sakuraContainer = document.getElementById('sakura-container');
-    if (!lineGlow || !lineCore || !sparkle1 || !sparkle2 || !sakuraContainer) return;
+    if (!sakuraContainer) return;
 
-    // Reset state
-    gsap.set([lineGlow, lineCore], { strokeDasharray: "0 2000", opacity: 0 });
-    gsap.set([sparkle1, sparkle2], { opacity: 0 });
+    // Reset
     sakuraContainer.innerHTML = '';
     gsap.set(sakuraContainer, { opacity: 1 });
 
-    const pathLength = lineGlow.getTotalLength();
+    // Daftar gambar yang ada di folder utama (tempat index.html berada)
+    const gambar1 = 'sakura1.png';
+    const gambar2 = 'sakura2.png';
 
-    // Timeline
-    gsapTimeline = gsap.timeline({ delay: 0.2 });
+    gsapTimeline = gsap.timeline();
 
-    // 1. Garis Glow muncul (Lapisan luar, tebal, redup)
-    gsapTimeline.to(lineGlow, {
-        strokeDasharray: pathLength,
-        strokeDashoffset: 0,
-        opacity: 0.4,
-        duration: 2.5,
-        ease: "power4.inOut"
-    }, 0);
-
-    // 2. Garis Inti muncul (Lapisan dalam, tipis, cerah, delay sedikit untuk efek 3D)
-    gsapTimeline.to(lineCore, {
-        strokeDasharray: pathLength,
-        strokeDashoffset: 0,
-        opacity: 1,
-        duration: 2.3,
-        ease: "power3.inOut"
-    }, 0.2);
-
-    // 3. Sparkle 1 mulai bergerak di jalur path secara abadi
-    gsapTimeline.to(sparkle1, {
-        opacity: 1,
-        duration: 0.5,
-        ease: "power1.out"
-    }, 2.6);
-    gsapTimeline.to(sparkle1, {
-        motionPath: {
-            path: lineGlow,
-            align: lineGlow,
-            alignOrigin: [0.5, 0.5],
-            autoRotate: true,
-            start: 0,
-            end: 1
-        },
-        duration: 3.5,
-        ease: "none",
-        repeat: -1,
-        onRepeat: () => {
-            gsap.to(sparkle1, { opacity: 0.5, duration: 0.1, yoyo: true, repeat: 1 }); // efek berkedip
-        }
-    }, 2.8);
-
-    // 4. Sparkle 2 bergerak (offset sedikit lebih lambat)
-    gsapTimeline.to(sparkle2, {
-        opacity: 1,
-        duration: 0.5,
-        ease: "power1.out"
-    }, 3);
-    gsapTimeline.to(sparkle2, {
-        motionPath: {
-            path: lineGlow,
-            align: lineGlow,
-            alignOrigin: [0.5, 0.5],
-            autoRotate: true,
-            start: 0,
-            end: 1
-        },
-        duration: 4.2,
-        ease: "none",
-        repeat: -1,
-        onRepeat: () => {
-            gsap.to(sparkle2, { opacity: 0.6, duration: 0.1, yoyo: true, repeat: 1 });
-        }
-    }, 3.2);
-
-    // 5. Sakura berjatuhan (setelah garis animasi selesai)
     gsapTimeline.add(() => {
-        const count = 20;
-        for (let i = 0; i < count; i++) {
+        
+        // ===== GELOMBANG 1: Gambar 1 =====
+        const count1 = 15;
+        for (let i = 0; i < count1; i++) {
             const petal = document.createElement('div');
             petal.className = 'petal';
+            petal.style.backgroundImage = `url('${gambar1}')`;
+
             petal.style.left = Math.random() * 100 + '%';
             const size = 18 + Math.random() * 16;
             petal.style.width = size + 'px';
@@ -393,7 +328,34 @@ function triggerLobbyAnimations() {
                 yoyo: false
             });
         }
-    }, 3.6);
+
+        // ===== GELOMBANG 2: Gambar 2 (Berjalan Bersamaan) =====
+        const count2 = 15;
+        for (let i = 0; i < count2; i++) {
+            const petal = document.createElement('div');
+            petal.className = 'petal';
+            petal.style.backgroundImage = `url('${gambar2}')`;
+
+            petal.style.left = Math.random() * 100 + '%';
+            const size = 18 + Math.random() * 16;
+            petal.style.width = size + 'px';
+            petal.style.height = size + 'px';
+            petal.style.transform = `rotate(${Math.random() * 360}deg)`;
+            sakuraContainer.appendChild(petal);
+
+            gsap.to(petal, {
+                duration: 9 + Math.random() * 6, // durasi beda tipis
+                y: "+=600",
+                rotation: 720 + Math.random() * 720,
+                x: (Math.random() - 0.5) * 300,
+                opacity: 0,
+                ease: "power1.in",
+                delay: (i * 0.1) + 0.5, // dimulai sedikit setelah gelombang 1
+                repeat: -1,
+                yoyo: false
+            });
+        }
+    }, 0.5);
 }
 
 /* ============================================================
@@ -515,7 +477,6 @@ window.addEventListener('load', () => {
     changeResolution(window.resolution);
     initAudio();
     checkContinueAvailability();
-    // Pastikan animasi lobby berjalan jika lobby terbuka
     if (!document.getElementById('main-menu').classList.contains('hidden')) {
         attachLobbyKeyboardNav();
         triggerLobbyAnimations();
