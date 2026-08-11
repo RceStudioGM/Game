@@ -185,11 +185,19 @@ function goToScene(nextScene) {
     loadScene(nextScene);
 }
 
+/* ============================================================
+   LOAD SCENE (DENGAN SISTEM SPASI UNTUK PILIHAN & LANJUT)
+   ============================================================ */
 function loadScene(sceneKey) {
     if (sceneKey === 'menu') { backToMenu(); return; }
     currentScene = sceneKey;
     const scene = storyData[sceneKey];
     if (!scene) { console.error('Scene tidak ditemukan:', sceneKey); return; }
+
+    // Hapus semua event listener keyboard dari scene sebelumnya
+    if (window._vn_advance_handler) { document.removeEventListener('keydown', window._vn_advance_handler); window._vn_advance_handler = null; }
+    if (window._vn_choice_handler) { document.removeEventListener('keydown', window._vn_choice_handler); window._vn_choice_handler = null; }
+
     if (sceneKey === 'bab1_pilihan') {
         let baseChoices = [
             { text: "Bantu di Sekretariat OSIS bersama Alexandra", nextScene: "rute_a2a" },
@@ -230,6 +238,7 @@ function loadScene(sceneKey) {
     choicesContainer.innerHTML = '';
 
     if (scene.choices.length === 1) {
+        // ===== MODE 1 PILIHAN (LANJUT) =====
         const nextKey = scene.choices[0].nextScene;
         const btn = document.createElement('button');
         btn.className = 'choice-btn hidden';
@@ -238,8 +247,22 @@ function loadScene(sceneKey) {
         choicesContainer.appendChild(btn);
         document.getElementById('dialogue-box').onclick = () => { if (!document.getElementById('game-screen').classList.contains('hidden')) { playSFX(); goToScene(nextKey); } };
         document.getElementById('dialogue-text').style.cursor = 'pointer';
-        document.getElementById('dialogue-text').title = 'Klik untuk melanjutkan...';
+        document.getElementById('dialogue-text').title = 'Klik atau tekan Spasi untuk melanjutkan...';
+
+        // Tambahkan dukungan Keyboard (Spasi/Enter) untuk Lanjut
+        const advanceHandler = (e) => {
+            if (document.getElementById('game-screen').classList.contains('hidden')) return;
+            if (e.key === ' ' || e.key === 'Space' || e.key === 'Enter') {
+                e.preventDefault();
+                playSFX();
+                goToScene(nextKey);
+            }
+        };
+        document.addEventListener('keydown', advanceHandler);
+        window._vn_advance_handler = advanceHandler;
+
     } else {
+        // ===== MODE BANYAK PILIHAN (NAVIGASI ARROW & SPASI) =====
         document.getElementById('dialogue-text').style.cursor = 'default';
         document.getElementById('dialogue-text').title = '';
         document.getElementById('dialogue-box').onclick = null;
@@ -258,7 +281,8 @@ function loadScene(sceneKey) {
             choiceBtns[currentChoiceIndex].classList.add('text-vn-gold');
             choiceBtns[currentChoiceIndex].focus();
         }
-        const keyHandler = (e) => {
+
+        const choiceHandler = (e) => {
             if (document.getElementById('game-screen').classList.contains('hidden')) return;
             choiceBtns.forEach(b => b.classList.remove('text-vn-gold'));
             if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
@@ -275,14 +299,13 @@ function loadScene(sceneKey) {
             choiceBtns[currentChoiceIndex].classList.add('text-vn-gold');
             choiceBtns[currentChoiceIndex].focus();
         };
-        document.addEventListener('keydown', keyHandler);
-        window._vn_choice_handler = keyHandler;
+        document.addEventListener('keydown', choiceHandler);
+        window._vn_choice_handler = choiceHandler;
     }
 }
 
 /* ============================================================
    ANIMASI SAKURA: 2 GAMBAR BERJALAN BERSAMAAN (OVERLAP)
-   Video garis sudah ditangani oleh HTML <video>, jadi di sini hanya sakura.
    ============================================================ */
 function triggerLobbyAnimations() {
     if (gsapTimeline) { gsapTimeline.kill(); gsapTimeline = null; }
@@ -290,25 +313,21 @@ function triggerLobbyAnimations() {
     const sakuraContainer = document.getElementById('sakura-container');
     if (!sakuraContainer) return;
 
-    // Reset
     sakuraContainer.innerHTML = '';
     gsap.set(sakuraContainer, { opacity: 1 });
 
-    // Daftar gambar yang ada di folder utama (tempat index.html berada)
     const gambar1 = 'sakura1.png';
     const gambar2 = 'sakura2.png';
 
     gsapTimeline = gsap.timeline();
 
     gsapTimeline.add(() => {
-        
-        // ===== GELOMBANG 1: Gambar 1 =====
+        // GELOMBANG 1
         const count1 = 15;
         for (let i = 0; i < count1; i++) {
             const petal = document.createElement('div');
             petal.className = 'petal';
             petal.style.backgroundImage = `url('${gambar1}')`;
-
             petal.style.left = Math.random() * 100 + '%';
             const size = 18 + Math.random() * 16;
             petal.style.width = size + 'px';
@@ -329,13 +348,12 @@ function triggerLobbyAnimations() {
             });
         }
 
-        // ===== GELOMBANG 2: Gambar 2 (Berjalan Bersamaan) =====
+        // GELOMBANG 2 (Overlap)
         const count2 = 15;
         for (let i = 0; i < count2; i++) {
             const petal = document.createElement('div');
             petal.className = 'petal';
             petal.style.backgroundImage = `url('${gambar2}')`;
-
             petal.style.left = Math.random() * 100 + '%';
             const size = 18 + Math.random() * 16;
             petal.style.width = size + 'px';
@@ -344,13 +362,13 @@ function triggerLobbyAnimations() {
             sakuraContainer.appendChild(petal);
 
             gsap.to(petal, {
-                duration: 9 + Math.random() * 6, // durasi beda tipis
+                duration: 9 + Math.random() * 6,
                 y: "+=600",
                 rotation: 720 + Math.random() * 720,
                 x: (Math.random() - 0.5) * 300,
                 opacity: 0,
                 ease: "power1.in",
-                delay: (i * 0.1) + 0.5, // dimulai sedikit setelah gelombang 1
+                delay: (i * 0.1) + 0.5,
                 repeat: -1,
                 yoyo: false
             });
