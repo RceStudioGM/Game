@@ -290,18 +290,25 @@ function loadScene(sceneKey) {
     }
 }
 
+/* ============================================================
+   ANIMASI SAKURA SAJA (TANPA GARIS)
+   ============================================================ */
 function triggerLobbyAnimations() {
     if (gsapTimeline) { gsapTimeline.kill(); gsapTimeline = null; }
     const sakuraContainer = document.getElementById('sakura-container');
     if (!sakuraContainer) return;
+
     sakuraContainer.innerHTML = '';
     gsap.set(sakuraContainer, { opacity: 1 });
+
+    // Nama file PNG yang ada di folder utama
     const gambar1 = 'sakura1.png';
     const gambar2 = 'sakura2.png';
+
     gsapTimeline = gsap.timeline();
     gsapTimeline.add(() => {
-        const count1 = 15;
-        for (let i = 0; i < count1; i++) {
+        // Gelombang 1 (Gambar 1)
+        for (let i = 0; i < 15; i++) {
             const petal = document.createElement('div');
             petal.className = 'petal';
             petal.style.backgroundImage = `url('${gambar1}')`;
@@ -313,8 +320,8 @@ function triggerLobbyAnimations() {
             sakuraContainer.appendChild(petal);
             gsap.to(petal, { duration: 8 + Math.random() * 6, y: "+=600", rotation: 720 + Math.random() * 720, x: (Math.random() - 0.5) * 300, opacity: 0, ease: "power1.in", delay: i * 0.1, repeat: -1, yoyo: false });
         }
-        const count2 = 15;
-        for (let i = 0; i < count2; i++) {
+        // Gelombang 2 (Gambar 2)
+        for (let i = 0; i < 15; i++) {
             const petal = document.createElement('div');
             petal.className = 'petal';
             petal.style.backgroundImage = `url('${gambar2}')`;
