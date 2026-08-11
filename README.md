@@ -30,14 +30,12 @@ Setiap pilihan kata dan keputusan yang kamu ambil akan menentukan rute cintamu, 
 
 ## 🎭 Karakter Game
 
-| Karakter | Peran & Deskripsi |
+| DIPENUHI BERBAGAI KARAKTER YANG MENARIK |
 | :--- | :--- |
-| 🎒 **MC (Protagonis)** | **Karakter Utama (Pemain)**<br>Siswa SMA biasa yang namamu tentukan sendiri. Keputusanmu menentukan jalan ceritanya! |
-| 👑 **Alexandra Wijaya** | **Heroine Utama (Ketua OSIS)**<br>Perfeksionis, disiplin, dan tegas. Di balik sikap dinginnya, ia memikul beban berat dan mencari seseorang yang benar-benar bisa memahaminya. |
-| 🎨 **Kirana Maheswari** | **Heroine Utama (Jenius Seni)**<br>Ceria, ekspresif, dan penuh warna. Namun di balik kuas lukisnya, ia takut kehilangan bakat dan perhatian orang-orang tersayang. |
-| 👥 **Bima Satrio** | **Sahabat MC (NPC)**<br>Cerewet, humoris, dan selalu tahu kabar gosip sekolah terbaru. Tempat curhat setia MC. |
-| 🛡️ **Rangga Aditya** | **Wakil Ketua OSIS (NPC)**<br>Protektif dan bertanggung jawab. Sangat menjaga reputasi OSIS dan keselamatan Alexandra. |
-| 📝 **Farah Novita** | **Sekretaris OSIS (NPC)**<br>Ramah, empatik, dan merupakan sahabat dekat Alexandra yang memahami perasaannya. |
+| NANTIKAN KESURUHAN NYA DENGAN KEBERAGAMAN KARAKTER DENGAN BERBAGAI SIFAT DAN PENAMPILAN. |
+| BERBAGAI KARAKTER SIAP MEMENUHI CERITA MU. |
+| BERISI 3 HEROINE UTAMA DAN 8 NPC LAIN NYA YANG SIAP MENEMANI CERITA MU DENGAN BERBAGAI KESERUAN DAN HAL HAL ROMANSA UNIK YANG AKAN KAMU DAPATKAN |
+| NANTIKAN KESERUAN MU BERSAMA PARA PARA KARAKTER|
 
 ---
 
@@ -78,6 +76,12 @@ Game ini dibangun secara *custom web-based engine* dari nol tanpa menggunakan en
 3. Buka file `index.html` menggunakan browser utama pilihanmu (Google Chrome, Firefox, Microsoft Edge, Safari).
 4. Masukkan nama karaktermu di menu awal dan mulailah petualangan cintamu di koridor sekolah!
 
+---
+
+| RAIH ENDING MENARIK DARI TOTAL 17 ENDING YANG BERISI 6 ENDING UTAMA DAN RAIH JUGA 11 ENDING ALTERNATIF LAINNYA|
+| NANTIKAN KESERUAN MU DISINI |
+| SAMPAI JUMPA DAN SELAMAT BERSENANG SENANG |
+  
 ---
 
 <div align="center">
