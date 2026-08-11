@@ -1,27 +1,21 @@
-* {
-    margin: 0; padding: 0; box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
     background-color: #111;
     display: flex; justify-content: center; align-items: center;
-    height: 100vh;
-    overflow: hidden;
+    height: 100vh; overflow: hidden;
 }
 
 #game-container {
     width: 960px; height: 600px;
-    background-color: #1a1a1a;
-    position: relative;
-    box-shadow: 0 0 30px rgba(0,0,0,0.9);
-    color: white;
+    background-color: #1a1a1a; position: relative;
+    box-shadow: 0 0 30px rgba(0,0,0,0.9); color: white;
     transition: width 0.3s, height 0.3s;
 }
 
 .screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
 .hidden { display: none !important; }
 
-/* GAME SCREEN */
 #background-image { width: 100%; height: 100%; background-size: cover; background-position: center; position: absolute; z-index: 1; }
 .character { position: absolute; bottom: 18%; height: 75%; max-height: 500px; z-index: 5; transition: opacity 0.4s; }
 #char-left { left: 5%; margin-bottom: -100px; }
@@ -37,7 +31,6 @@ body {
 .choice-btn { padding: 12px; background: rgba(52, 73, 94, 0.95); color: white; border: 1px solid #7f8c8d; border-radius: 8px; cursor: pointer; font-size: 16px; text-align: left; transition: 0.2s; }
 .choice-btn:hover { background: #f1c40f; color: black; font-weight: bold; border-color: #f1c40f; }
 
-/* --- PROFIL CARD --- */
 .profile-card { background: rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 20px; display: flex; align-items: center; gap: 15px; border: 1px solid #34495e; transition: 0.3s; }
 .profile-card:hover { background: rgba(255, 255, 255, 0.1); border-color: #f1c40f; }
 .profile-img { width: 80px; height: 80px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: #2c3e50; border-radius: 50%; overflow: hidden; }
@@ -48,100 +41,17 @@ body {
 .profile-role { font-size: 12px; color: #f1c40f; text-transform: uppercase; letter-spacing: 1px; }
 .profile-desc { font-size: 13px; line-height: 1.5; color: #bdc3c7; margin-top: 8px; }
 
-/* --- TOAST --- */
 #toast-notif { position: fixed; top: 20px; right: -350px; background: rgba(41, 128, 185, 0.95); color: white; padding: 15px 20px; border-radius: 8px; border-left: 5px solid #f1c40f; box-shadow: 0 4px 10px rgba(0,0,0,0.5); display: flex; align-items: center; gap: 15px; z-index: 100; transition: right 0.5s ease-in-out; }
 #toast-notif.show { right: 20px; }
 
-/* ===============================================
-   ANIMASI GARIS ANGKA 9 & SAKURA
-   =============================================== */
+#lobby-menu-bar .menu-btn { transition: color 0.2s; }
+#lobby-menu-bar .menu-btn:focus-visible { outline: none; }
 
-/* --- GARIS UTAMA (MEMANJANG KIRI KE KANAN) --- */
-.golden-line-main {
-    position: absolute;
-    top: 0; left: 0;
-    width: 0%;
-    height: 100%;
-    background: linear-gradient(90deg, #facc15, #fdf08a, #facc15);
-    background-size: 200% 100%;
-    animation: drawMainLine 1.8s cubic-bezier(0.4, 0.0, 0.2, 1) forwards;
-}
-
-@keyframes drawMainLine {
-    0% { width: 0%; }
-    100% { width: 100%; }
-}
-
-/* --- EKOR ANGKA 9 DI UJUNG KANAN --- */
-.golden-line-tail {
-    position: absolute;
-    top: -10px;
-    right: -10px;
-    width: 20px;
-    height: 20px;
-    border-right: 5px solid #facc15;
-    border-bottom: 5px solid #facc15;
-    border-bottom-right-radius: 100%;
-    opacity: 0;
-    animation: appearTail 0.6s ease-out 1.8s forwards;
-    box-shadow: 2px 4px 10px rgba(250, 204, 21, 0.2);
-}
-
-@keyframes appearTail {
-    0% { opacity: 0; transform: scale(0.8) rotate(-10deg); }
-    100% { opacity: 1; transform: scale(1) rotate(0deg); }
-}
-
-/* --- EFEK PENGUATAN WARNA SETELAH GARIS JADI --- */
-#golden-track.animation-done .golden-line-main {
-    animation: softGoldPulse 3.5s infinite alternate ease-in-out;
-}
-
-@keyframes softGoldPulse {
-    0% { opacity: 0.7; background-position: 0% 0%; }
-    100% { opacity: 1; background-position: 100% 0%; }
-}
-
-/* --- SAKURA HALUS (Pasti Muncul dan Tidak Kotak) --- */
-#sakura-container {
-    position: absolute; inset: 0; z-index: 10; pointer-events: none;
-    overflow: hidden;
-}
-
+/* SVG Kelopak Sakura yang siap digunakan oleh GSAP */
 .petal {
     position: absolute;
-    width: 22px; height: 22px;
-    top: -40px;
-    opacity: 0;
-    animation: petalFall linear infinite;
-}
-
-/* SVG Data URI untuk membentuk kelopak bunga yang lembut */
-.petal::before {
-    content: '';
-    position: absolute;
-    inset: 0;
+    top: -60px; width: 22px; height: 22px;
     background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50,15 C70,15 85,35 85,60 C85,80 65,95 50,95 C35,95 15,80 15,60 C15,35 30,15 50,15Z' fill='%23fbcfe8' opacity='0.85'/%3E%3C/svg%3E");
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    filter: drop-shadow(0 0 4px rgba(251, 207, 232, 0.4));
+    background-size: contain; background-repeat: no-repeat; background-position: center;
+    filter: drop-shadow(0 0 6px rgba(251, 207, 232, 0.4));
 }
-
-@keyframes petalFall {
-    0% { transform: translate(0, 0) rotate(0deg) scale(0.5); opacity: 0; }
-    10% { opacity: 0.9; }
-    90% { opacity: 0.8; }
-    100% { transform: translate(calc(var(--move-x)), 550px) rotate(720deg) scale(1); opacity: 0; }
-}
-
-.petal:nth-child(1)  { left: 05%; animation-duration: 7s; animation-delay: 0s;   --move-x: 50px; width: 18px; height: 18px; }
-.petal:nth-child(2)  { left: 15%; animation-duration: 9s; animation-delay: 0.5s; --move-x: -40px; width: 26px; height: 26px; }
-.petal:nth-child(3)  { left: 30%; animation-duration: 6s; animation-delay: 1s;   --move-x: 80px; width: 14px; height: 14px; }
-.petal:nth-child(4)  { left: 45%; animation-duration: 10s; animation-delay: 1.5s; --move-x: -80px; width: 24px; height: 24px; }
-.petal:nth-child(5)  { left: 60%; animation-duration: 8s; animation-delay: 2s;   --move-x: 60px; width: 20px; height: 20px; }
-.petal:nth-child(6)  { left: 70%; animation-duration: 11s; animation-delay: 2.5s; --move-x: -50px; width: 22px; height: 22px; }
-.petal:nth-child(7)  { left: 80%; animation-duration: 7.5s; animation-delay: 3s;   --move-x: 90px; width: 28px; height: 28px; }
-.petal:nth-child(8)  { left: 90%; animation-duration: 8.5s; animation-delay: 3.5s; --move-x: -30px; width: 18px; height: 18px; }
-.petal:nth-child(9)  { left: 35%; animation-duration: 6.5s; animation-delay: 4s;   --move-x: 110px; width: 24px; height: 24px; }
-.petal:nth-child(10) { left: 75%; animation-duration: 12s; animation-delay: 4.5s; --move-x: -70px; width: 16px; height: 16px; }
