@@ -1,5 +1,6 @@
 /* ============================================================
    engine.js — Mesin Game Utama + Sistem Pause & Settings
+   + Navigasi Keyboard (Panah Atas/Bawah, Spasi)
    ============================================================ */
 
 let currentScene = 'prolog_1';
@@ -9,19 +10,15 @@ window.bgmVolume = parseInt(localStorage.getItem('vn_bgm_volume')) || 70;
 window.sfxVolume = parseInt(localStorage.getItem('vn_sfx_volume')) || 80;
 window.resolution = localStorage.getItem('vn_resolution') || '960x600';
 
-// Inisialisasi audio placeholder (BGM & SFX disediakan user)
-let bgmAudio = null; // user akan assign file audio
-let sfxPool = [];    // array audio untuk efek klik
+let bgmAudio = null;
 
 function initAudio() {
-    // Bisa dipanggil saat game start, user tinggal set bgmAudio.src
     bgmAudio = new Audio('assets/sound/bgm.mp3');
     bgmAudio.loop = true;
     bgmAudio.volume = window.bgmVolume / 100;
 }
 
 function playSFX() {
-    // Klik sound effect
     const sfx = new Audio('assets/sound/click.mp3');
     sfx.volume = window.sfxVolume / 100;
     sfx.play().catch(() => {});
@@ -63,35 +60,29 @@ function closePauseMenu() {
     document.getElementById('pause-modal').classList.add('scale-95');
 }
 
-/* --- Settings Modal (dari pause atau menu utama) --- */
+/* --- Settings Modal --- */
 function openSettingsFromPause() {
     closePauseMenu();
     showSettingsModal();
 }
 
 function showSettingsModal() {
-    // Sync slider values
     document.getElementById('bgm-volume').value = window.bgmVolume;
     document.getElementById('bgm-volume-label').innerText = window.bgmVolume + '%';
     document.getElementById('sfx-volume').value = window.sfxVolume;
     document.getElementById('sfx-volume-label').innerText = window.sfxVolume + '%';
     document.getElementById('resolution-select').value = window.resolution;
-    
     document.getElementById('settings-overlay').classList.remove('hidden');
 }
 
 function closeSettingsModal() {
     document.getElementById('settings-overlay').classList.add('hidden');
-    // Jika settings dipanggil dari pause, kembali ke pause
     if (!document.getElementById('pause-overlay').classList.contains('hidden')) {
         openPauseMenu();
     }
 }
 
-/* --- Konfirmasi (GENERIK) ---
-   Dipakai untuk: keluar game, menimpa slot save, dan memuat slot save.
-   Panggil showConfirm(judul, pesan, callback) dari mana saja;
-   tombol "Ya" di modal akan menjalankan callback tsb. */
+/* --- Konfirmasi --- */
 let _pendingConfirmAction = null;
 
 function showConfirm(title, message, onConfirm) {
@@ -114,11 +105,7 @@ function closeConfirm() {
 
 function confirmQuit() {
     closePauseMenu();
-    showConfirm(
-        '🚪 Keluar?',
-        'Yakin ingin keluar game? Progress yang belum disimpan akan hilang.',
-        quitGame
-    );
+    showConfirm('🚪 Keluar?', 'Yakin ingin keluar game? Progress yang belum disimpan akan hilang.', quitGame);
 }
 
 function quitGame() {
@@ -128,7 +115,7 @@ function quitGame() {
     checkContinueAvailability();
 }
 
-/* --- Original Engine Functions (dengan tambahan SFX di tombol) --- */
+/* --- Fungsi Dasar Engine --- */
 function img(charName, exprKey) {
     const folder = assets.CHARACTER_PATHS[charName];
     if (!folder) return ''; 
@@ -170,10 +157,7 @@ function saveFlags() {
     try { localStorage.setItem('vn_flags', JSON.stringify(window.gameFlags)); } catch (e) {}
 }
 
-// Settings lama tetap ada untuk kompatibilitas
-function showSettings() {
-    showSettingsModal();
-}
+function showSettings() { showSettingsModal(); }
 
 function showGallery() {
     hideAllScreens();
@@ -196,7 +180,6 @@ function showProfiles() {
     document.getElementById('profile-screen').classList.remove('hidden');
     const container = document.getElementById('profile-container');
     container.innerHTML = '';
-
     for (const [key, profile] of Object.entries(characterProfiles)) {
         const card = document.createElement('div');
         card.className = 'profile-card';
@@ -205,7 +188,6 @@ function showProfiles() {
         else if (profile.unlockKey === 'routeA' && window.gameFlags.routeA) isUnlocked = true;
         else if (profile.unlockKey === 'routeB' && window.gameFlags.routeB) isUnlocked = true;
         else if (profile.unlockKey === 'secretRoute' && window.gameFlags.secretRoute) isUnlocked = true;
-
         if (isUnlocked) {
             card.innerHTML = `
                 <div class="profile-img"><img src="${img(profile.id, 'netral')}" alt="${profile.name}" onerror="this.style.display='none'"></div>
@@ -248,6 +230,9 @@ function goToScene(nextScene) {
     loadScene(nextScene);
 }
 
+/* ============================================================
+   CORE ENGINE: LOAD SCENE + NAVIGASI KEYBOARD
+   ============================================================ */
 function loadScene(sceneKey) {
     if (sceneKey === 'menu') { backToMenu(); return; }
     currentScene = sceneKey;
@@ -303,6 +288,12 @@ function loadScene(sceneKey) {
     const choicesContainer = document.getElementById('choices-container');
     choicesContainer.innerHTML = '';
 
+    // HAPUS EVENT LISTENER KEYBOARD LAMA SEBELUM MEMBUAT YANG BARU
+    if (window._vn_keydown_handler) {
+        document.removeEventListener('keydown', window._vn_keydown_handler);
+        window._vn_keydown_handler = null;
+    }
+
     if (scene.choices.length === 1) {
         const nextKey = scene.choices[0].nextScene;
         const btn = document.createElement('button');
@@ -319,21 +310,65 @@ function loadScene(sceneKey) {
         document.getElementById('dialogue-text').style.cursor = 'default';
         document.getElementById('dialogue-text').title = '';
         document.getElementById('dialogue-box').onclick = null;
+        
+        const choiceBtns = [];
         scene.choices.forEach(choice => {
             const btn = document.createElement('button');
             btn.className = 'choice-btn';
             btn.innerText = replaceTags(choice.text);
             btn.onclick = () => { playSFX(); goToScene(choice.nextScene); };
             choicesContainer.appendChild(btn);
+            choiceBtns.push(btn);
         });
+
+        /* ============================================================
+           NAVIGASI KEYBOARD (PANAH ATAS/BAWAH & SPASI)
+           ============================================================ */
+        let currentChoiceIndex = 0;
+        if (choiceBtns.length > 0) {
+            // Fokus ke tombol pertama secara visual (tanpa menyembunyikan kursor asli)
+            choiceBtns[currentChoiceIndex].classList.add('ring-2', 'ring-vn-gold', 'ring-offset-2', 'ring-offset-gray-900');
+            choiceBtns[currentChoiceIndex].focus();
+        }
+
+        const keyHandler = (e) => {
+            // Hanya aktif jika game screen terlihat
+            if (document.getElementById('game-screen').classList.contains('hidden')) return;
+
+            if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+                e.preventDefault();
+                // Hapus highlight lama
+                choiceBtns[currentChoiceIndex].classList.remove('ring-2', 'ring-vn-gold', 'ring-offset-2', 'ring-offset-gray-900');
+                // Pindah indeks
+                currentChoiceIndex = (currentChoiceIndex + 1) % choiceBtns.length;
+                // Highlight baru
+                choiceBtns[currentChoiceIndex].classList.add('ring-2', 'ring-vn-gold', 'ring-offset-2', 'ring-offset-gray-900');
+                choiceBtns[currentChoiceIndex].focus();
+            } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                e.preventDefault();
+                choiceBtns[currentChoiceIndex].classList.remove('ring-2', 'ring-vn-gold', 'ring-offset-2', 'ring-offset-gray-900');
+                currentChoiceIndex = (currentChoiceIndex - 1 + choiceBtns.length) % choiceBtns.length;
+                choiceBtns[currentChoiceIndex].classList.add('ring-2', 'ring-vn-gold', 'ring-offset-2', 'ring-offset-gray-900');
+                choiceBtns[currentChoiceIndex].focus();
+            } else if (e.key === ' ' || e.key === 'Space' || e.key === 'Enter') {
+                // Tekan Spasi atau Enter untuk mengklik tombol yang sedang disorot
+                e.preventDefault();
+                if (currentChoiceIndex >= 0 && currentChoiceIndex < choiceBtns.length) {
+                    choiceBtns[currentChoiceIndex].click();
+                }
+            }
+        };
+
+        document.addEventListener('keydown', keyHandler);
+        window._vn_keydown_handler = keyHandler;
     }
 }
 
 /* ============================================================
-   SISTEM SAVE / LOAD — Tabel Slot (ala RPG Maker & Ren'Py)
+   SISTEM SAVE / LOAD (SAMA SEPERTI SEBELUMNYA)
    ============================================================ */
 const SAVE_SLOT_COUNT = 9;
-let saveLoadMode = 'save'; // 'save' atau 'load'
+let saveLoadMode = 'save';
 
 function slotKey(n) { return `vn_save_slot_${n}`; }
 
@@ -360,7 +395,7 @@ function formatSaveDate(iso) {
 }
 
 function openSaveLoad(mode) {
-    saveLoadMode = mode; // 'save' dari pause/lobby-save, 'load' dari tombol Lanjutkan
+    saveLoadMode = mode;
     document.getElementById('saveload-title').innerText = mode === 'save' ? '💾 Simpan Permainan' : '📂 Muat Permainan';
     document.getElementById('saveload-subtitle').innerText = mode === 'save'
         ? 'Pilih slot untuk menyimpan progress kamu'
@@ -376,20 +411,16 @@ function closeSaveLoad() {
 function renderSaveSlots() {
     const grid = document.getElementById('saveload-grid');
     grid.innerHTML = '';
-
     getAllSlots().forEach(({ n, data }) => {
         const card = document.createElement('div');
         const isEmpty = !data;
-        const clickable = saveLoadMode === 'save' || !isEmpty; // slot kosong tidak bisa di-load
-
+        const clickable = saveLoadMode === 'save' || !isEmpty;
         card.className = `relative rounded-xl border p-4 transition-all text-left ${
             isEmpty
                 ? 'border-dashed border-white/20 bg-white/[0.02]'
                 : 'border-white/20 bg-white/5 hover:border-vn-gold hover:bg-white/10'
         } ${clickable ? 'cursor-pointer' : 'opacity-40 cursor-not-allowed'}`;
-
         if (clickable) card.onclick = () => handleSlotClick(n);
-
         if (isEmpty) {
             card.innerHTML = `
                 <div class="text-vn-gold font-bold text-sm mb-2">Slot ${n}</div>
@@ -404,7 +435,6 @@ function renderSaveSlots() {
                 <div class="text-gray-400 text-xs mt-1">${formatSaveDate(data.savedAt)}</div>
                 <div class="text-gray-300 text-xs italic mt-2 leading-snug">"${preview || '...'}"</div>
             `;
-            // Tombol hapus tidak boleh ikut memicu klik kartu (save/load)
             card.querySelector('.slot-delete-btn').onclick = (e) => {
                 e.stopPropagation();
                 showConfirm('Hapus Slot?', `Slot ${n} akan dihapus permanen dan tidak bisa dikembalikan.`, () => {
@@ -414,7 +444,6 @@ function renderSaveSlots() {
                 });
             };
         }
-
         grid.appendChild(card);
     });
 }
@@ -479,9 +508,6 @@ function showToast(title, message) {
     setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.classList.add('hidden'), 500); }, 3000);
 }
 
-/* Migrasi otomatis: kalau ada data save lama (versi single-slot) dan
-   Slot 1 masih kosong, pindahkan ke Slot 1 sekali saja supaya progress
-   pemain lama tidak hilang. */
 function migrateOldSaveIfNeeded() {
     try {
         const legacy = localStorage.getItem('vn_save_data');
@@ -501,7 +527,7 @@ function migrateOldSaveIfNeeded() {
         localStorage.removeItem('vn_save_data');
     } catch (e) { /* abaikan */ }
 }
-/* --- Inisialisasi saat halaman dimuat --- */
+
 window.addEventListener('load', () => {
     migrateOldSaveIfNeeded();
     changeResolution(window.resolution);
