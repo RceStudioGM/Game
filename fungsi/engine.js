@@ -1,12 +1,13 @@
 /* ============================================================
-   engine.js — Mesin Game + GSAP MotionPath + Sakura Alami
+   engine.js — Mesin Game + GSAP strokeDashoffset untuk Garis Angka 9
    ============================================================ */
 
 let currentScene = 'prolog_1';
 let bgmAudio = null;
 let gsapTimeline = null;
+let gsapLineAnim = null; // khusus untuk garis
 
-/* --- Audio --- */
+/* --- Audio & Settings --- */
 window.bgmVolume = parseInt(localStorage.getItem('vn_bgm_volume')) || 70;
 window.sfxVolume = parseInt(localStorage.getItem('vn_sfx_volume')) || 80;
 window.resolution = localStorage.getItem('vn_resolution') || '960x600';
@@ -281,31 +282,36 @@ function loadScene(sceneKey) {
 }
 
 /* ============================================================
-   ANIMASI LOBBY DENGAN GSAP + MOTIONPATH
+   ANIMASI LOBBY: GARIS ANGKA 9 & SAKURA
    ============================================================ */
 function triggerLobbyAnimations() {
+    // Hentikan animasi sebelumnya
     if (gsapTimeline) { gsapTimeline.kill(); gsapTimeline = null; }
+    if (gsapLineAnim) { gsapLineAnim.kill(); gsapLineAnim = null; }
 
-    const mover = document.getElementById('line-mover');
+    const path = document.getElementById('line-path');
     const sakuraContainer = document.getElementById('sakura-container');
-    if (!mover || !sakuraContainer) return;
+    if (!path || !sakuraContainer) return;
 
-    // Reset
-    gsap.set(mover, { strokeDasharray: "0 1000" });
+    // Reset path
+    const totalLength = path.getTotalLength();
+    gsap.set(path, { strokeDasharray: totalLength, strokeDashoffset: totalLength });
+
+    // Reset sakura
     sakuraContainer.innerHTML = '';
     gsap.set(sakuraContainer, { opacity: 1 });
 
     // Timeline
-    gsapTimeline = gsap.timeline({ delay: 0.3 });
+    gsapTimeline = gsap.timeline({ delay: 0.2 });
 
-    // 1. Garis membentang lurus & melengkung ke angka 9
-    gsapTimeline.to(mover, {
+    // 1. Garis membentang mengikuti path angka 9 (2.5 detik)
+    gsapTimeline.to(path, {
+        strokeDashoffset: 0,
         duration: 2.5,
-        strokeDasharray: "1000 1000",
-        ease: "power4.inOut",
-    });
+        ease: "power4.inOut"
+    }, 0);
 
-    // 2. Jatuhkan sakura setelah garis selesai
+    // 2. Setelah garis selesai, sakura berjatuhan
     gsapTimeline.add(() => {
         const count = 20;
         for (let i = 0; i < count; i++) {
@@ -330,7 +336,18 @@ function triggerLobbyAnimations() {
                 yoyo: false
             });
         }
-    }, "-=0.5");
+    }, 2.6); // mulai setelah garis selesai
+
+    // Opsional: efek pulse halus pada garis yang sudah terbentuk
+    gsapTimeline.add(() => {
+        gsap.to(path, {
+            strokeOpacity: 0.7,
+            duration: 2,
+            yoyo: true,
+            repeat: -1,
+            ease: "sine.inOut"
+        });
+    }, 2.8);
 }
 
 /* ============================================================
@@ -445,11 +462,16 @@ function showToast(title, message) { const toast = document.getElementById('toas
 function migrateOldSaveIfNeeded() { try { const legacy = localStorage.getItem('vn_save_data'); if (!legacy) return; if (!getSlotData(1)) { const parsed = JSON.parse(legacy); const data = { playerName: parsed.playerName || 'Adi', currentScene: parsed.currentScene || 'prolog_1', gameFlags: parsed.gameFlags || { routeA: false, routeB: false, secretRoute: false }, unlockedQuotes: parsed.unlockedQuotes || [], dialoguePreview: '(migrated)', savedAt: new Date().toISOString() }; localStorage.setItem(slotKey(1), JSON.stringify(data)); } localStorage.removeItem('vn_save_data'); } catch (e) {} }
 
 /* ============================================================
-   INISIALISASI
+   INISIALISASI SAAT LOAD
    ============================================================ */
 window.addEventListener('load', () => {
-    migrateOldSaveIfNeeded(); changeResolution(window.resolution); initAudio(); checkContinueAvailability();
+    migrateOldSaveIfNeeded();
+    changeResolution(window.resolution);
+    initAudio();
+    checkContinueAvailability();
+    // Pastikan animasi lobby berjalan jika lobby terbuka
     if (!document.getElementById('main-menu').classList.contains('hidden')) {
-        attachLobbyKeyboardNav(); triggerLobbyAnimations();
+        attachLobbyKeyboardNav();
+        triggerLobbyAnimations();
     }
 });
