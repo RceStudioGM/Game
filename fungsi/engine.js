@@ -24,6 +24,66 @@ function t(key) {
     return langData[key];
 }
 
+/* ============================================================
+   FUNGSI NAVIGASI KEYBOARD UNTUK SUB-MENU (SETTINGS, PAUSE, DLL)
+   ============================================================ */
+let _subMenuNavHandler = null;
+
+function attachSubMenuKeyboardNav() {
+    // Hapus handler lama agar tidak terjadi konflik ganda
+    if (_subMenuNavHandler) {
+        document.removeEventListener('keydown', _subMenuNavHandler);
+        _subMenuNavHandler = null;
+    }
+
+    // Cek apakah ada popup yang sedang terbuka (tidak hidden)
+    const activeModal = document.querySelector(
+        '#pause-overlay:not(.hidden), #settings-overlay:not(.hidden), #saveload-overlay:not(.hidden), #howtoplay-overlay:not(.hidden), #name-input-screen:not(.hidden)'
+    );
+    if (!activeModal) return;
+
+    // Ambil semua tombol yang bisa difokuskan di dalam popup tersebut
+    const focusable = Array.from(activeModal.querySelectorAll('button, select, [tabindex="0"]'));
+    if (focusable.length === 0) return;
+
+    let currentFocusIndex = 0;
+    const activeEl = document.activeElement;
+    if (activeEl && focusable.includes(activeEl)) {
+        currentFocusIndex = focusable.indexOf(activeEl);
+    } else {
+        focusable[currentFocusIndex].focus();
+    }
+
+    const handler = (e) => {
+        // Jika popup tiba-tiba ditutup saat tombol ditekan, hentikan
+        if (activeModal.classList.contains('hidden')) {
+            document.removeEventListener('keydown', handler);
+            return;
+        }
+
+        // Gunakan Up/Down atau Left/Right untuk menavigasi tombol vertikal/horizontal
+        if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+            e.preventDefault();
+            currentFocusIndex = (currentFocusIndex + 1) % focusable.length;
+            focusable[currentFocusIndex].focus();
+        } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+            e.preventDefault();
+            currentFocusIndex = (currentFocusIndex - 1 + focusable.length) % focusable.length;
+            focusable[currentFocusIndex].focus();
+        } else if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            const activeBtn = focusable[currentFocusIndex];
+            if (activeBtn) activeBtn.click();
+        }
+    };
+
+    document.addEventListener('keydown', handler);
+    _subMenuNavHandler = handler;
+}
+
+/* ============================================================
+   UI TERJEMAHAN
+   ============================================================ */
 function applyLanguageUI() {
     const titleEl = document.querySelector('#main-menu .menu-title-box h1');
     const subEl = document.querySelector('#main-menu .menu-title-box p');
@@ -83,7 +143,6 @@ function applyLanguageUI() {
     if (settingsLangLabel) settingsLangLabel.innerText = t('settingsLang');
     if (settingsBackBtn) settingsBackBtn.innerText = t('settingsBack');
 
-    // --- UPDATE HOW TO PLAY BUTTON & POPUP ---
     const btnHowToPlay = document.getElementById('btn-how-to-play');
     if (btnHowToPlay) btnHowToPlay.innerText = t('btnHowToPlay');
 
@@ -140,6 +199,7 @@ function openPauseMenu() {
     document.getElementById('pause-modal').classList.remove('scale-95');
     document.getElementById('pause-modal').classList.add('scale-100');
     applyLanguageUI();
+    attachSubMenuKeyboardNav(); // Aktifkan arrow untuk Pause Menu
 }
 
 function closePauseMenu() {
@@ -162,6 +222,7 @@ function showSettingsModal() {
     document.getElementById('lang-select').value = window.currentLang;
     document.getElementById('settings-overlay').classList.remove('hidden');
     applyLanguageUI();
+    attachSubMenuKeyboardNav(); // Aktifkan arrow untuk Settings
 }
 
 function closeSettingsModal() {
@@ -171,10 +232,10 @@ function closeSettingsModal() {
     }
 }
 
-// --- FUNGSI HOW TO PLAY ---
 function openHowToPlay() {
     document.getElementById('howtoplay-overlay').classList.remove('hidden');
     applyLanguageUI();
+    attachSubMenuKeyboardNav(); // Aktifkan arrow untuk How to Play
 }
 
 function closeHowToPlay() {
@@ -188,6 +249,7 @@ function showConfirm(title, message, onConfirm) {
     document.getElementById('confirm-message').innerText = message;
     _pendingConfirmAction = onConfirm;
     document.getElementById('confirm-overlay').classList.remove('hidden');
+    attachSubMenuKeyboardNav();
 }
 
 function runConfirmedAction() {
@@ -542,6 +604,7 @@ function openSaveLoad(mode) {
     document.getElementById('saveload-subtitle').innerText = mode === 'save' ? t('saveLoadSubSave') : t('saveLoadSubLoad');
     renderSaveSlots();
     document.getElementById('saveload-overlay').classList.remove('hidden');
+    attachSubMenuKeyboardNav(); // Aktifkan arrow untuk Save/Load
 }
 
 function closeSaveLoad() {

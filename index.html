@@ -76,8 +76,8 @@
                 <p class="font-body text-gray-300 mt-1 text-sm">Enter the protagonist's nickname</p>
                 <input type="text" id="player-name-input" placeholder="Example: Adi" value="Adi" maxlength="15" class="mt-6 w-full px-4 py-3 rounded-xl bg-white/90 text-black font-bold text-center border-2 border-vn-gold focus:outline-none focus:ring-2 focus:ring-vn-gold/50">
                 <div class="mt-6 flex gap-3">
-                    <button onclick="startGameWithCustomName()" class="flex-1 py-3 bg-vn-gold text-black font-bold rounded-xl hover:scale-105 transition-all">Start the Story</button>
-                    <button onclick="backToMenu()" class="flex-1 py-3 bg-red-500/80 text-white font-bold rounded-xl hover:scale-105 transition-all">Cancel</button>
+                    <button onclick="startGameWithCustomName()" class="flex-1 py-3 bg-vn-gold text-black font-bold rounded-xl hover:scale-105 transition-all focus:outline-none focus:ring-2 focus:ring-vn-gold">Start the Story</button>
+                    <button onclick="backToMenu()" class="flex-1 py-3 bg-red-500/80 text-white font-bold rounded-xl hover:scale-105 transition-all focus:outline-none focus:ring-2 focus:ring-vn-gold">Cancel</button>
                 </div>
             </div>
         </div>
@@ -103,14 +103,14 @@
         <div id="sub-menu-screen" class="screen hidden flex flex-col items-center justify-center w-full h-full bg-black/80 backdrop-blur-md z-30">
             <h2 id="sub-menu-title" class="font-display text-4xl text-vn-gold mb-6">Judul Menu</h2>
             <div id="sub-menu-content" class="w-[80%] max-h-[400px] overflow-y-auto bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10"></div>
-            <button onclick="backToMenu()" class="mt-8 px-8 py-3 bg-white/20 hover:bg-white/30 text-white rounded-xl transition-all">Kembali ke Menu</button>
+            <button onclick="backToMenu()" class="mt-8 px-8 py-3 bg-white/20 hover:bg-white/30 text-white rounded-xl transition-all focus:outline-none focus:ring-2 focus:ring-vn-gold">Kembali ke Menu</button>
         </div>
 
         <!-- PROFIL KARAKTER -->
         <div id="profile-screen" class="screen hidden flex flex-col items-center justify-center w-full h-full bg-black/80 backdrop-blur-md z-30 overflow-y-auto">
             <h2 id="profile-title" class="font-display text-4xl text-vn-gold mt-6">📖 Character Profiles</h2>
             <div id="profile-container" class="grid grid-cols-1 md:grid-cols-2 gap-4 w-[90%] max-w-4xl mt-6"></div>
-            <button onclick="backToMenu()" class="mt-8 px-8 py-3 bg-white/20 hover:bg-white/30 text-white rounded-xl transition-all">Kembali ke Menu</button>
+            <button onclick="backToMenu()" class="mt-8 px-8 py-3 bg-white/20 hover:bg-white/30 text-white rounded-xl transition-all focus:outline-none focus:ring-2 focus:ring-vn-gold">Kembali ke Menu</button>
         </div>
 
         <!-- PAUSE MENU -->
@@ -118,11 +118,11 @@
             <div id="pause-modal" class="bg-[#1e2a3a] border border-white/20 rounded-2xl p-8 max-w-md w-full shadow-2xl transform scale-95 transition-all duration-300">
                 <h2 class="font-display text-3xl text-white text-center mb-6">⏸️ Pause</h2>
                 <div class="space-y-3">
-                    <button onclick="openSaveLoad('save')" class="w-full py-3 bg-vn-gold text-black font-bold rounded-xl hover:scale-105 transition-all">💾 Save Game</button>
-                    <button onclick="openSaveLoad('load')" class="w-full py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-all">📂 Load Game</button>
-                    <button onclick="openSettingsFromPause()" class="w-full py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-all">⚙️ Settings</button>
-                    <button onclick="confirmQuit()" class="w-full py-3 bg-red-600/80 hover:bg-red-600 text-white rounded-xl transition-all">🚪 Quit Game</button>
-                    <button onclick="closePauseMenu()" class="w-full py-3 bg-gray-700/50 hover:bg-gray-700 text-white rounded-xl transition-all">Back</button>
+                    <button onclick="openSaveLoad('save')" class="w-full py-3 bg-vn-gold text-black font-bold rounded-xl hover:scale-105 transition-all focus:outline-none focus:ring-2 focus:ring-vn-gold">💾 Save Game</button>
+                    <button onclick="openSaveLoad('load')" class="w-full py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-all focus:outline-none focus:ring-2 focus:ring-vn-gold">📂 Load Game</button>
+                    <button onclick="openSettingsFromPause()" class="w-full py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-all focus:outline-none focus:ring-2 focus:ring-vn-gold">⚙️ Settings</button>
+                    <button onclick="confirmQuit()" class="w-full py-3 bg-red-600/80 hover:bg-red-600 text-white rounded-xl transition-all focus:outline-none focus:ring-2 focus:ring-vn-gold">🚪 Quit Game</button>
+                    <button onclick="closePauseMenu()" class="w-full py-3 bg-gray-700/50 hover:bg-gray-700 text-white rounded-xl transition-all focus:outline-none focus:ring-2 focus:ring-vn-gold">Back</button>
                 </div>
             </div>
         </div>
@@ -132,8 +132,8 @@
             <div id="settings-modal" class="bg-[#1e2a3a] border border-white/20 rounded-2xl p-8 max-w-md w-full shadow-2xl">
                 <h2 class="font-display text-3xl text-white text-center mb-6">⚙️ Settings</h2>
                 <div class="space-y-5">
-                    <div><label class="text-white block mb-1">🎵 BGM Volume</label><input type="range" id="bgm-volume" min="0" max="100" value="70" class="w-full accent-vn-gold cursor-pointer" oninput="updateVolume('bgm', this.value)"><span id="bgm-volume-label" class="text-sm text-gray-400">70%</span></div>
-                    <div><label class="text-white block mb-1">🔊 SFX Volume</label><input type="range" id="sfx-volume" min="0" max="100" value="80" class="w-full accent-vn-gold cursor-pointer" oninput="updateVolume('sfx', this.value)"><span id="sfx-volume-label" class="text-sm text-gray-400">80%</span></div>
+                    <div><label class="text-white block mb-1">🎵 BGM Volume</label><input type="range" id="bgm-volume" min="0" max="100" value="70" class="w-full accent-vn-gold cursor-pointer focus:outline-none" oninput="updateVolume('bgm', this.value)"><span id="bgm-volume-label" class="text-sm text-gray-400">70%</span></div>
+                    <div><label class="text-white block mb-1">🔊 SFX Volume</label><input type="range" id="sfx-volume" min="0" max="100" value="80" class="w-full accent-vn-gold cursor-pointer focus:outline-none" oninput="updateVolume('sfx', this.value)"><span id="sfx-volume-label" class="text-sm text-gray-400">80%</span></div>
                     <div><label class="text-white block mb-1">🖥️ Resolution</label><select id="resolution-select" onchange="changeResolution(this.value)" class="w-full px-3 py-2 rounded-lg bg-white/10 text-white border border-white/20 focus:outline-none focus:ring-2 focus:ring-vn-gold/50"><option value="960x600">960 × 600 (Standard)</option><option value="1152x720">1152 × 720</option><option value="1280x800">1280 × 800</option></select></div>
                     
                     <div>
@@ -145,9 +145,9 @@
                     </div>
 
                     <!-- TOMBOL HOW TO PLAY -->
-                    <button id="btn-how-to-play" onclick="openHowToPlay()" class="w-full py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-all mt-2">🕹️ How to Play</button>
+                    <button id="btn-how-to-play" onclick="openHowToPlay()" class="w-full py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-all mt-2 focus:outline-none focus:ring-2 focus:ring-vn-gold">🕹️ How to Play</button>
                     
-                    <button onclick="closeSettingsModal()" class="w-full py-3 bg-vn-gold text-black font-bold rounded-xl hover:scale-105 transition-all mt-2">Back</button>
+                    <button onclick="closeSettingsModal()" class="w-full py-3 bg-vn-gold text-black font-bold rounded-xl hover:scale-105 transition-all mt-2 focus:outline-none focus:ring-2 focus:ring-vn-gold">Back</button>
                 </div>
             </div>
         </div>
@@ -157,9 +157,8 @@
             <div id="howtoplay-modal" class="bg-[#1e2a3a] border border-white/20 rounded-2xl p-8 max-w-md w-full shadow-2xl">
                 <h2 id="howtoplay-title" class="font-display text-3xl text-white text-center mb-6">🕹️ How to Play</h2>
                 <div id="howtoplay-content" class="space-y-4 text-gray-300 text-sm leading-relaxed text-center">
-                    <!-- Isi instruksi akan diisi oleh JS applyLanguageUI -->
                 </div>
-                <button onclick="closeHowToPlay()" class="w-full py-3 bg-vn-gold text-black font-bold rounded-xl hover:scale-105 transition-all mt-6">Close</button>
+                <button onclick="closeHowToPlay()" class="w-full py-3 bg-vn-gold text-black font-bold rounded-xl hover:scale-105 transition-all mt-6 focus:outline-none focus:ring-2 focus:ring-vn-gold">Close</button>
             </div>
         </div>
 
@@ -169,7 +168,7 @@
                 <h2 id="saveload-title" class="font-display text-3xl text-vn-gold text-center mb-1">💾 Save Game</h2>
                 <p id="saveload-subtitle" class="text-center text-gray-400 text-sm mb-6">Select a slot to save your progress</p>
                 <div id="saveload-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-4 overflow-y-auto pr-1 flex-1"></div>
-                <button onclick="closeSaveLoad()" class="mt-6 w-full py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-all">Back</button>
+                <button onclick="closeSaveLoad()" class="mt-6 w-full py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-all focus:outline-none focus:ring-2 focus:ring-vn-gold">Back</button>
             </div>
         </div>
 
@@ -178,7 +177,7 @@
             <div id="confirm-modal" class="bg-[#1e2a3a] border border-white/20 rounded-2xl p-8 max-w-sm w-full shadow-2xl text-center">
                 <h3 id="confirm-title" class="text-2xl font-bold text-white mb-2">Are You Sure?</h3>
                 <p id="confirm-message" class="text-gray-300 mb-6">This action cannot be undone.</p>
-                <div class="flex gap-3"><button onclick="runConfirmedAction()" class="flex-1 py-3 bg-vn-gold text-black font-bold rounded-xl hover:scale-105 transition-all">Yes, Proceed</button><button onclick="closeConfirm()" class="flex-1 py-3 bg-gray-600 text-white rounded-xl hover:scale-105 transition-all">Cancel</button></div>
+                <div class="flex gap-3"><button onclick="runConfirmedAction()" class="flex-1 py-3 bg-vn-gold text-black font-bold rounded-xl hover:scale-105 transition-all focus:outline-none focus:ring-2 focus:ring-vn-gold">Yes, Proceed</button><button onclick="closeConfirm()" class="flex-1 py-3 bg-gray-600 text-white rounded-xl hover:scale-105 transition-all focus:outline-none focus:ring-2 focus:ring-vn-gold">Cancel</button></div>
             </div>
         </div>
     </div>
