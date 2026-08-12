@@ -42,31 +42,15 @@ const assets = {
     }
 };
 
-/* ============================================================
-   config.js — Koleksi Quotes (Diperbarui untuk 17 Ending)
-   ============================================================ */
-
 const allQuotes = {
-    // --- ENDING UTAMA (GOOD / TRUE ENDS) ---
-    // 1. Rute Alexandra (A1)
     quote_a1: "Kamu nggak bikin aku harus jadi 'Ketua OSIS' terus. Cukup jadi Alexandra aja. — Alexandra",
-    // 2. Rute Kirana (B1)
     quote_b1: "Ini karya paling berarti yang pernah aku buat. Bukan karena hasilnya, tapi karena siapa yang bikin bareng aku. — Kirana",
-    // 3. Rute Mira (M1)
     quote_m1: "Ini pertama kalinya aku milih buat tinggal, bukan cuma nurutin ke mana pun aku dibawa pergi. Dan aku milih di sini. Sama kamu. — Mira",
-    // 4. Rute C (Ending Terbuka)
     quote_c: "Nilai ulanganmu minggu ini naik. Saya masih belum tahu jawabannya, Pak. Nggak masalah, yang penting kamu nggak lari dari pertanyaannya. — Pak Hendra",
-    // 5. Rute Rahasia (R1 - Konstelasi)
     quote_r1: "Bukan kisah cinta segitiga dengan satu pemenang, tapi tiga orang yang saling menemukan versi terbaik diri mereka. — Narator",
-    // 6. Rute Rahasia (R2 - Romantis)
     quote_r2: "Terima kasih sudah memilihku. / Senang banget kamu memilihku! — Alexandra & Kirana",
-
-    // --- ENDING ALTERNATIF (BITTERSWEET / FRIEND / BONUS) ---
-    // 1. Rute Alexandra (A2 - Bittersweet)
     quote_a2: "Aku cuma takut kalau aku jujur, aku bakal kelihatan lemah. — Alexandra",
-    // 2. Rute Kirana (B2 - Epilog Pasar Malam)
     quote_b2: "Ternyata seru juga jadi orang biasa. Makasih udah nunjukin ini. — Kirana",
-    // 3. Rute Mira (M3 - Bittersweet Kenangan)
     quote_m3: "Makasih udah jadi tempat yang nggak pernah bikin aku ngerasa cuma 'numpang lewat'. Aku bakal selalu inget loteng itu. Dan kamu. — Mira",
 };
 
@@ -80,6 +64,8 @@ const locales = {
         btnProfiles: "📖 CHARACTER PROFILES",
         btnGallery: "📖 QUOTE GALLERY",
         btnSettings: "⚙️ SETTINGS",
+        inputTitle: "WHO ARE YOU?",
+        inputSub: "Enter the protagonist's nickname",
         inputPlaceholder: "Example: Adi",
         inputBtnStart: "Start the Story",
         inputBtnCancel: "Cancel",
@@ -139,6 +125,8 @@ const locales = {
         btnProfiles: "📖 PROFIL KARAKTER",
         btnGallery: "📖 KOLEKSI QUOTES",
         btnSettings: "⚙️ PENGATURAN",
+        inputTitle: "SIAPA NAMA KAMU?",
+        inputSub: "Masukkan nama panggilan karakter utama",
         inputPlaceholder: "Contoh: Adi",
         inputBtnStart: "Mulai Masuk Cerita",
         inputBtnCancel: "Batal",

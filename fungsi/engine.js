@@ -47,8 +47,8 @@ function applyLanguageUI() {
     const inputField = document.getElementById('player-name-input');
     const inputStart = document.querySelector('#name-input-screen .menu-buttons button:first-child');
     const inputCancel = document.querySelector('#name-input-screen .menu-buttons button:last-child');
-    if (inputTitle) inputTitle.innerText = "SIAPA NAMA KAMU?";
-    if (inputSub) inputSub.innerText = "Masukkan nama panggilan karakter utama";
+    if (inputTitle) inputTitle.innerText = t('inputTitle');
+    if (inputSub) inputSub.innerText = t('inputSub');
     if (inputField) inputField.placeholder = t('inputPlaceholder');
     if (inputStart) inputStart.innerText = t('inputBtnStart');
     if (inputCancel) inputCancel.innerText = t('inputBtnCancel');
@@ -90,9 +90,7 @@ function applyLanguageUI() {
 function changeLanguage(lang) {
     localStorage.setItem('vn_lang', lang);
     window.currentLang = lang;
-    applyLanguageUI(); // Update tombol UI
-    
-    // Panggil fungsi pemuat cerita dari main.js
+    applyLanguageUI();
     if (typeof loadStoryByLanguage === 'function') {
         loadStoryByLanguage();
     }
@@ -144,7 +142,6 @@ function showSettingsModal() {
     document.getElementById('sfx-volume').value = window.sfxVolume;
     document.getElementById('sfx-volume-label').innerText = window.sfxVolume + '%';
     document.getElementById('resolution-select').value = window.resolution;
-    // PERBAIKAN PENTING: Sinkronkan dropdown bahasa saat modal Settings dibuka
     document.getElementById('lang-select').value = window.currentLang;
     document.getElementById('settings-overlay').classList.remove('hidden');
     applyLanguageUI();
