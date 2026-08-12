@@ -25,7 +25,7 @@ function t(key) {
 }
 
 /* ============================================================
-   FUNGSI NAVIGASI KEYBOARD UNTUK SUB-MENU (FIXED SPACE & ENTER!)
+   FUNGSI NAVIGASI KEYBOARD (FIX: BISA KE SLIDER DAN DROPDOWN)
    ============================================================ */
 let _subMenuNavHandler = null;
 
@@ -40,7 +40,8 @@ function attachSubMenuKeyboardNav() {
     );
     if (!activeModal) return;
 
-    const focusable = Array.from(activeModal.querySelectorAll('button:not([disabled])'));
+    // SEKARANG: Ambil semua tombol, slider volume, dan dropdown bahasa
+    const focusable = Array.from(activeModal.querySelectorAll('button:not([disabled]), input[type="range"], select'));
     if (focusable.length === 0) return;
 
     let currentFocusIndex = 0;
@@ -57,6 +58,7 @@ function attachSubMenuKeyboardNav() {
             return;
         }
 
+        // Navigasi antar elemen (Tombol, Slider, Dropdown)
         if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
             e.preventDefault();
             currentFocusIndex = (currentFocusIndex + 1) % focusable.length;
@@ -65,13 +67,17 @@ function attachSubMenuKeyboardNav() {
             e.preventDefault();
             currentFocusIndex = (currentFocusIndex - 1 + focusable.length) % focusable.length;
             focusable[currentFocusIndex].focus();
-        } else if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault(); // CEK: Mencegah scroll ke bawah dan mencegah klik ganda pada input
-            const activeBtn = focusable[currentFocusIndex];
-            if (activeBtn && activeBtn.tagName === 'BUTTON') {
-                playSFX(); // Tambahkan efek suara klik
-                activeBtn.click();
+        } 
+        // Enter dan Spasi (Hanya mengeksekusi klik jika elemennya TOMBOL)
+        else if (e.key === 'Enter' || e.key === ' ') {
+            const activeElm = focusable[currentFocusIndex];
+            // Jika elemen yang sedang difokus adalah BUTTON, jalankan klik
+            if (activeElm && activeElm.tagName === 'BUTTON') {
+                e.preventDefault(); // Cegah scroll ke bawah
+                playSFX();
+                activeElm.click();
             }
+            // Jika elemen adalah <select> atau <input>, biarkan browser menangani (misal: Spasi buka dropdown)
         }
     };
 
@@ -309,9 +315,8 @@ function backToMenu() {
     document.getElementById('main-menu').classList.remove('hidden');
     checkContinueAvailability();
     if (bgmAudio) bgmAudio.pause();
-    // Urutan: Navigasi -> Animasi Sakura -> Terjemahkan UI
     attachLobbyKeyboardNav();
-    triggerLobbyAnimations(); // Reset sakura jika sebelumnya terganggu
+    triggerLobbyAnimations();
     applyLanguageUI();
 }
 
@@ -378,7 +383,6 @@ function showProfiles() {
         }
         container.appendChild(card);
     }
-    // SAKURA TIDAK TERGANGGU KARENA PROFIL MEMILIKI LAYAR TERPISAH.
 }
 
 function saveQuote(quoteId) {
