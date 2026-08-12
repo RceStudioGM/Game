@@ -469,7 +469,7 @@ function triggerLobbyAnimations() {
 let _lobbyNavHandler = null;
 
 /* ============================================================
-   FUNGSI NAVIGASI PANAH (DENGAN PERBAIKAN DOUBLE HOVER)
+   FUNGSI NAVIGASI PANAH (HANYA WARNA & GARIS BAWAH)
    ============================================================ */
 function attachLobbyKeyboardNav() {
     if (_lobbyNavHandler) { document.removeEventListener('keydown', _lobbyNavHandler); _lobbyNavHandler = null; }
@@ -477,13 +477,13 @@ function attachLobbyKeyboardNav() {
     const menuBtns = Array.from(document.querySelectorAll('#lobby-menu-bar .menu-btn'));
     if (menuBtns.length === 0) return;
 
-    // Reset class dari keyboard (agar tidak mengunci hover mouse)
+    // Reset class keyboard dari semua tombol
     menuBtns.forEach(btn => {
         btn.classList.remove('keyboard-selected');
     });
 
     let currentFocusIndex = 0;
-    // Beri penanda active via class keyboard-selected
+    // Beri penanda active via class keyboard-selected (tanpa scale)
     menuBtns[currentFocusIndex].classList.add('keyboard-selected');
     menuBtns[currentFocusIndex].focus();
 
@@ -510,7 +510,7 @@ function attachLobbyKeyboardNav() {
             return;
         }
 
-        // Beri penanda keyboard ke tombol baru
+        // Beri penanda keyboard ke tombol baru (tidak ada scale)
         menuBtns[currentFocusIndex].classList.add('keyboard-selected');
         menuBtns[currentFocusIndex].focus();
     };
