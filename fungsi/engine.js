@@ -1,7 +1,3 @@
-/* ============================================================
-   engine.js — Sistem Engine Visual Novel Ultimate
-   ============================================================ */
-
 let currentScene = 'prolog_1';
 let bgmAudio = null;
 let gsapTimeline = null;
@@ -15,10 +11,84 @@ function initAudio() {
     bgmAudio.loop = true;
     bgmAudio.volume = window.bgmVolume / 100;
 }
+
 function playSFX() {
     const sfx = new Audio('assets/sound/click.mp3');
     sfx.volume = window.sfxVolume / 100;
     sfx.play().catch(() => {});
+}
+
+function t(key) {
+    const langData = locales[window.currentLang];
+    if (!langData || !langData[key]) return key;
+    return langData[key];
+}
+
+function applyLanguageUI() {
+    const titleEl = document.querySelector('#main-menu .menu-title-box h1');
+    const subEl = document.querySelector('#main-menu .menu-title-box p');
+    if (titleEl) titleEl.innerText = t('gameTitle');
+    if (subEl) subEl.innerText = t('gameSub');
+
+    const btnContinue = document.getElementById('btn-continue');
+    const btnNewGame = document.querySelector('#main-menu .menu-buttons button:nth-child(2)');
+    const btnProfiles = document.querySelector('#main-menu .menu-buttons button:nth-child(3)');
+    const btnGallery = document.querySelector('#main-menu .menu-buttons button:nth-child(4)');
+    const btnSettings = document.querySelector('#main-menu .menu-buttons button:nth-child(5)');
+    if (btnContinue && !btnContinue.disabled) btnContinue.innerText = t('btnContinue');
+    else if (btnContinue) btnContinue.innerText = t('btnContinue');
+    if (btnNewGame) btnNewGame.innerText = t('btnNewGame');
+    if (btnProfiles) btnProfiles.innerText = t('btnProfiles');
+    if (btnGallery) btnGallery.innerText = t('btnGallery');
+    if (btnSettings) btnSettings.innerText = t('btnSettings');
+
+    const inputTitle = document.querySelector('#name-input-screen h2');
+    const inputSub = document.querySelector('#name-input-screen p');
+    const inputField = document.getElementById('player-name-input');
+    const inputStart = document.querySelector('#name-input-screen .menu-buttons button:first-child');
+    const inputCancel = document.querySelector('#name-input-screen .menu-buttons button:last-child');
+    if (inputTitle) inputTitle.innerText = "SIAPA NAMA KAMU?";
+    if (inputSub) inputSub.innerText = "Masukkan nama panggilan karakter utama";
+    if (inputField) inputField.placeholder = t('inputPlaceholder');
+    if (inputStart) inputStart.innerText = t('inputBtnStart');
+    if (inputCancel) inputCancel.innerText = t('inputBtnCancel');
+
+    const pauseBtn = document.getElementById('btn-pause');
+    if (pauseBtn) pauseBtn.innerHTML = '⏸️';
+
+    const pauseTitle = document.querySelector('#pause-modal h2');
+    const pauseSave = document.querySelector('#pause-modal .space-y-3 button:nth-child(1)');
+    const pauseLoad = document.querySelector('#pause-modal .space-y-3 button:nth-child(2)');
+    const pauseSettings = document.querySelector('#pause-modal .space-y-3 button:nth-child(3)');
+    const pauseQuit = document.querySelector('#pause-modal .space-y-3 button:nth-child(4)');
+    const pauseBack = document.querySelector('#pause-modal .space-y-3 button:nth-child(5)');
+    if (pauseTitle) pauseTitle.innerText = t('pauseTitle');
+    if (pauseSave) pauseSave.innerText = t('pauseSave');
+    if (pauseLoad) pauseLoad.innerText = t('pauseLoad');
+    if (pauseSettings) pauseSettings.innerText = t('pauseSettings');
+    if (pauseQuit) pauseQuit.innerText = t('pauseQuit');
+    if (pauseBack) pauseBack.innerText = t('pauseBack');
+
+    const settingsTitle = document.querySelector('#settings-modal h2');
+    const settingsBGM = document.querySelector('#settings-modal .space-y-5 > div:nth-child(1) label');
+    const settingsSFX = document.querySelector('#settings-modal .space-y-5 > div:nth-child(2) label');
+    const settingsRes = document.querySelector('#settings-modal .space-y-5 > div:nth-child(3) label');
+    const settingsLangLabel = document.getElementById('settings-lang-label');
+    const settingsBackBtn = document.querySelector('#settings-modal button:last-child');
+    if (settingsTitle) settingsTitle.innerText = t('settingsTitle');
+    if (settingsBGM) settingsBGM.innerText = t('settingsBGM');
+    if (settingsSFX) settingsSFX.innerText = t('settingsSFX');
+    if (settingsRes) settingsRes.innerText = t('settingsRes');
+    if (settingsLangLabel) settingsLangLabel.innerText = t('settingsLang');
+    if (settingsBackBtn) settingsBackBtn.innerText = t('settingsBack');
+}
+
+function changeLanguage(lang) {
+    localStorage.setItem('vn_lang', lang);
+    window.currentLang = lang;
+    applyLanguageUI();
+    const langSelect = document.getElementById('lang-select');
+    if (langSelect) langSelect.value = lang;
 }
 
 function updateVolume(type, val) {
@@ -33,33 +103,45 @@ function updateVolume(type, val) {
         document.getElementById('sfx-volume-label').innerText = val + '%';
     }
 }
+
 function changeResolution(res) {
     window.resolution = res;
     localStorage.setItem('vn_resolution', res);
     const container = document.getElementById('game-container');
     const [w, h] = res.split('x').map(Number);
-    container.style.width = w + 'px'; container.style.height = h + 'px';
+    container.style.width = w + 'px';
+    container.style.height = h + 'px';
 }
 
 function openPauseMenu() {
     document.getElementById('pause-overlay').classList.remove('hidden');
     document.getElementById('pause-modal').classList.remove('scale-95');
     document.getElementById('pause-modal').classList.add('scale-100');
+    applyLanguageUI();
 }
+
 function closePauseMenu() {
     document.getElementById('pause-overlay').classList.add('hidden');
     document.getElementById('pause-modal').classList.remove('scale-100');
     document.getElementById('pause-modal').classList.add('scale-95');
 }
-function openSettingsFromPause() { closePauseMenu(); showSettingsModal(); }
+
+function openSettingsFromPause() {
+    closePauseMenu();
+    showSettingsModal();
+}
+
 function showSettingsModal() {
     document.getElementById('bgm-volume').value = window.bgmVolume;
     document.getElementById('bgm-volume-label').innerText = window.bgmVolume + '%';
     document.getElementById('sfx-volume').value = window.sfxVolume;
     document.getElementById('sfx-volume-label').innerText = window.sfxVolume + '%';
     document.getElementById('resolution-select').value = window.resolution;
+    document.getElementById('lang-select').value = window.currentLang;
     document.getElementById('settings-overlay').classList.remove('hidden');
+    applyLanguageUI();
 }
+
 function closeSettingsModal() {
     document.getElementById('settings-overlay').classList.add('hidden');
     if (!document.getElementById('pause-overlay').classList.contains('hidden')) {
@@ -68,25 +150,36 @@ function closeSettingsModal() {
 }
 
 let _pendingConfirmAction = null;
+
 function showConfirm(title, message, onConfirm) {
     document.getElementById('confirm-title').innerText = title;
     document.getElementById('confirm-message').innerText = message;
     _pendingConfirmAction = onConfirm;
     document.getElementById('confirm-overlay').classList.remove('hidden');
 }
+
 function runConfirmedAction() {
     const action = _pendingConfirmAction;
     closeConfirm();
     if (typeof action === 'function') action();
 }
-function closeConfirm() { document.getElementById('confirm-overlay').classList.add('hidden'); _pendingConfirmAction = null; }
-function confirmQuit() { closePauseMenu(); showConfirm('🚪 Keluar?', 'Yakin ingin keluar game?', quitGame); }
+
+function closeConfirm() {
+    document.getElementById('confirm-overlay').classList.add('hidden');
+    _pendingConfirmAction = null;
+}
+
+function confirmQuit() {
+    closePauseMenu();
+    showConfirm(t('confirmQuitTitle'), t('confirmQuitMsg'), quitGame);
+}
 
 function quitGame() {
     hideAllScreens();
     document.getElementById('main-menu').classList.remove('hidden');
     if (bgmAudio) bgmAudio.pause();
     checkContinueAvailability();
+    applyLanguageUI();
 }
 
 function img(charName, exprKey) {
@@ -94,19 +187,31 @@ function img(charName, exprKey) {
     if (!folder) return ''; 
     return `assets/characters/${folder}/${exprKey}.png`;
 }
+
 function hideAllScreens() {
     ['main-menu', 'name-input-screen', 'game-screen', 'sub-menu-screen', 'profile-screen'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.classList.add('hidden');
     });
 }
+
 function checkContinueAvailability() {
     const btn = document.getElementById('btn-continue');
     if (!btn) return;
     const hasAnySave = getAllSlots().some(slot => slot.data !== null);
-    if (hasAnySave) { btn.disabled = false; btn.innerText = "▶ LANJUTKAN"; btn.style.opacity = "1"; btn.style.cursor = "pointer"; } 
-    else { btn.disabled = true; btn.innerText = "🔒 (BELUM ADA SAVE)"; btn.style.opacity = "0.5"; btn.style.cursor = "not-allowed"; }
+    if (hasAnySave) {
+        btn.disabled = false;
+        btn.innerText = t('btnContinue');
+        btn.style.opacity = "1";
+        btn.style.cursor = "pointer";
+    } else {
+        btn.disabled = true;
+        btn.innerText = t('btnContinue');
+        btn.style.opacity = "0.5";
+        btn.style.cursor = "not-allowed";
+    }
 }
+
 function backToMenu() {
     hideAllScreens();
     document.getElementById('main-menu').classList.remove('hidden');
@@ -114,28 +219,41 @@ function backToMenu() {
     if (bgmAudio) bgmAudio.pause();
     attachLobbyKeyboardNav();
     triggerLobbyAnimations();
+    applyLanguageUI();
 }
-function saveFlags() { try { localStorage.setItem('vn_flags', JSON.stringify(window.gameFlags)); } catch (e) {} }
 
-function showSettings() { showSettingsModal(); }
+function saveFlags() {
+    try { localStorage.setItem('vn_flags', JSON.stringify(window.gameFlags)); } catch (e) {}
+}
+
+function showSettings() {
+    showSettingsModal();
+}
+
 function showGallery() {
     hideAllScreens();
     document.getElementById('sub-menu-screen').classList.remove('hidden');
-    document.getElementById('sub-menu-title').innerText = 'Koleksi Quotes';
+    document.getElementById('sub-menu-title').innerText = t('btnGallery');
     const box = document.getElementById('sub-menu-content');
     box.innerHTML = '';
     for (const [key, text] of Object.entries(allQuotes)) {
         const item = document.createElement('div');
         item.className = 'quote-item';
-        item.innerHTML = window.unlockedQuotes.includes(key) ? `<strong>Terbuka:</strong> "${text}"` : `🔒 <em>(Mainkan rute lain untuk membuka)</em>`;
+        item.innerHTML = window.unlockedQuotes.includes(key)
+            ? `<strong>${t('toastUnlock')}:</strong> "${text}"`
+            : `🔒 <em>(${t('lockRouteA')})</em>`;
         box.appendChild(item);
     }
 }
+
 function showProfiles() {
     hideAllScreens();
     document.getElementById('profile-screen').classList.remove('hidden');
+    document.getElementById('profile-title').innerText = t('btnProfiles');
     const container = document.getElementById('profile-container');
     container.innerHTML = '';
+    applyLanguageUI();
+
     for (const [key, profile] of Object.entries(characterProfiles)) {
         const card = document.createElement('div');
         card.className = 'profile-card';
@@ -145,19 +263,30 @@ function showProfiles() {
         else if (profile.unlockKey === 'routeB' && window.gameFlags.routeB) isUnlocked = true;
         else if (profile.unlockKey === 'routeM' && window.gameFlags.routeM) isUnlocked = true;
         else if (profile.unlockKey === 'secretRoute' && window.gameFlags.secretRoute) isUnlocked = true;
+
+        const profileNameKey = `profile_${profile.id}`;
+        const displayName = t(profileNameKey);
+
         if (isUnlocked) {
-            card.innerHTML = `<div class="profile-img"><img src="${img(profile.id, 'netral')}" alt="${profile.name}" onerror="this.style.display='none'"></div><div class="profile-info"><h3>${profile.name}</h3><span class="profile-role">${profile.role}</span><p class="profile-desc">${profile.desc}</p></div>`;
+            card.innerHTML = `
+                <div class="profile-img"><img src="${img(profile.id, 'netral')}" alt="${displayName}" onerror="this.style.display='none'"></div>
+                <div class="profile-info"><h3>${displayName}</h3><span class="profile-role">${profile.role}</span><p class="profile-desc">${profile.desc}</p></div>
+            `;
         } else {
-            let lockText = "🔒 Terkunci";
-            if (profile.unlockKey === 'routeA') lockText = "🔒 Selesaikan Rute Alexandra";
-            else if (profile.unlockKey === 'routeB') lockText = "🔒 Selesaikan Rute Kirana";
-            else if (profile.unlockKey === 'routeM') lockText = "🔒 Selesaikan Rute Mira";
-            else if (profile.unlockKey === 'secretRoute') lockText = "🔒 Selesaikan Semua Rute Heroine";
-            card.innerHTML = `<div class="profile-img locked"><span class="lock-icon">🔒</span></div><div class="profile-info"><h3 style="color:#7f8c8d;">???</h3><span class="profile-role">${lockText}</span></div>`;
+            let lockText = t('lockText');
+            if (profile.unlockKey === 'routeA') lockText = t('lockRouteA');
+            else if (profile.unlockKey === 'routeB') lockText = t('lockRouteB');
+            else if (profile.unlockKey === 'routeM') lockText = t('lockRouteM');
+            else if (profile.unlockKey === 'secretRoute') lockText = t('lockSecret');
+            card.innerHTML = `
+                <div class="profile-img locked"><span class="lock-icon">🔒</span></div>
+                <div class="profile-info"><h3 style="color:#7f8c8d;">???</h3><span class="profile-role">${lockText}</span></div>
+            `;
         }
         container.appendChild(card);
     }
 }
+
 function saveQuote(quoteId) {
     if (window.unlockedQuotes.includes(quoteId)) return;
     window.unlockedQuotes.push(quoteId);
@@ -165,10 +294,15 @@ function saveQuote(quoteId) {
     const toast = document.getElementById('toast-notif');
     toast.classList.remove('hidden');
     setTimeout(() => toast.classList.add('show'), 100);
-    setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.classList.add('hidden'), 500); }, 4000);
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.classList.add('hidden'), 500);
+    }, 4000);
 }
 
-let lastAdvanceTime = 0; const ADVANCE_COOLDOWN_MS = 1000;
+let lastAdvanceTime = 0;
+const ADVANCE_COOLDOWN_MS = 1000;
+
 function goToScene(nextScene) {
     const now = Date.now();
     if (now - lastAdvanceTime < ADVANCE_COOLDOWN_MS) return;
@@ -290,24 +424,16 @@ function loadScene(sceneKey) {
     }
 }
 
-/* ============================================================
-   ANIMASI SAKURA SAJA (TANPA GARIS)
-   ============================================================ */
 function triggerLobbyAnimations() {
     if (gsapTimeline) { gsapTimeline.kill(); gsapTimeline = null; }
     const sakuraContainer = document.getElementById('sakura-container');
     if (!sakuraContainer) return;
-
     sakuraContainer.innerHTML = '';
     gsap.set(sakuraContainer, { opacity: 1 });
-
-    // Nama file PNG yang ada di folder utama
     const gambar1 = './assets/sakura1.png';
     const gambar2 = './assets/sakura2.png';
-
     gsapTimeline = gsap.timeline();
     gsapTimeline.add(() => {
-        // Gelombang 1 (Gambar 1)
         for (let i = 0; i < 15; i++) {
             const petal = document.createElement('div');
             petal.className = 'petal';
@@ -320,7 +446,6 @@ function triggerLobbyAnimations() {
             sakuraContainer.appendChild(petal);
             gsap.to(petal, { duration: 8 + Math.random() * 6, y: "+=600", rotation: 720 + Math.random() * 720, x: (Math.random() - 0.5) * 300, opacity: 0, ease: "power1.in", delay: i * 0.1, repeat: -1, yoyo: false });
         }
-        // Gelombang 2 (Gambar 2)
         for (let i = 0; i < 15; i++) {
             const petal = document.createElement('div');
             petal.className = 'petal';
@@ -337,6 +462,7 @@ function triggerLobbyAnimations() {
 }
 
 let _lobbyNavHandler = null;
+
 function attachLobbyKeyboardNav() {
     if (_lobbyNavHandler) { document.removeEventListener('keydown', _lobbyNavHandler); _lobbyNavHandler = null; }
     const menuBtns = Array.from(document.querySelectorAll('#lobby-menu-bar .menu-btn'));
@@ -361,18 +487,35 @@ function attachLobbyKeyboardNav() {
 
 const SAVE_SLOT_COUNT = 9;
 let saveLoadMode = 'save';
+
 function slotKey(n) { return `vn_save_slot_${n}`; }
-function getSlotData(n) { try { const raw = localStorage.getItem(slotKey(n)); return raw ? JSON.parse(raw) : null; } catch (e) { return null; } }
-function getAllSlots() { const slots = []; for (let n = 1; n <= SAVE_SLOT_COUNT; n++) slots.push({ n, data: getSlotData(n) }); return slots; }
-function formatSaveDate(iso) { try { const d = new Date(iso); return `${d.toLocaleDateString('id-ID')}, ${d.toLocaleTimeString('id-ID')}`; } catch (e) { return ''; } }
+
+function getSlotData(n) {
+    try { const raw = localStorage.getItem(slotKey(n)); return raw ? JSON.parse(raw) : null; } catch (e) { return null; }
+}
+
+function getAllSlots() {
+    const slots = [];
+    for (let n = 1; n <= SAVE_SLOT_COUNT; n++) slots.push({ n, data: getSlotData(n) });
+    return slots;
+}
+
+function formatSaveDate(iso) {
+    try { const d = new Date(iso); return `${d.toLocaleDateString('id-ID')}, ${d.toLocaleTimeString('id-ID')}`; } catch (e) { return ''; }
+}
+
 function openSaveLoad(mode) {
     saveLoadMode = mode;
-    document.getElementById('saveload-title').innerText = mode === 'save' ? '💾 Simpan Permainan' : '📂 Muat Permainan';
-    document.getElementById('saveload-subtitle').innerText = mode === 'save' ? 'Pilih slot untuk menyimpan progress kamu' : 'Pilih slot yang ingin dimuat';
+    document.getElementById('saveload-title').innerText = mode === 'save' ? t('saveLoadTitleSave') : t('saveLoadTitleLoad');
+    document.getElementById('saveload-subtitle').innerText = mode === 'save' ? t('saveLoadSubSave') : t('saveLoadSubLoad');
     renderSaveSlots();
     document.getElementById('saveload-overlay').classList.remove('hidden');
 }
-function closeSaveLoad() { document.getElementById('saveload-overlay').classList.add('hidden'); }
+
+function closeSaveLoad() {
+    document.getElementById('saveload-overlay').classList.add('hidden');
+}
+
 function renderSaveSlots() {
     const grid = document.getElementById('saveload-grid');
     grid.innerHTML = '';
@@ -382,33 +525,83 @@ function renderSaveSlots() {
         const clickable = saveLoadMode === 'save' || !isEmpty;
         card.className = `relative rounded-xl border p-4 transition-all text-left ${isEmpty ? 'border-dashed border-white/20 bg-white/[0.02]' : 'border-white/20 bg-white/5 hover:border-vn-gold hover:bg-white/10'} ${clickable ? 'cursor-pointer' : 'opacity-40 cursor-not-allowed'}`;
         if (clickable) card.onclick = () => handleSlotClick(n);
-        if (isEmpty) { card.innerHTML = `<div class="text-vn-gold font-bold text-sm mb-2">Slot ${n}</div><div class="text-gray-500 text-sm py-4 text-center">${saveLoadMode === 'save' ? '+ Simpan di sini' : 'Kosong'}</div>`; }
-        else {
+        if (isEmpty) {
+            card.innerHTML = `<div class="text-vn-gold font-bold text-sm mb-2">${t('saveLoadTitleSave')} ${n}</div><div class="text-gray-500 text-sm py-4 text-center">${saveLoadMode === 'save' ? '+ ' + t('saveLoadSubSave') : t('lockText')}</div>`;
+        } else {
             const preview = (data.dialoguePreview || '').slice(0, 70) + (data.dialoguePreview && data.dialoguePreview.length > 70 ? '…' : '');
-            card.innerHTML = `<button class="slot-delete-btn absolute top-2 right-2 text-gray-500 hover:text-red-400 text-sm w-6 h-6 flex items-center justify-center rounded-full hover:bg-white/10" title="Hapus slot ini">✕</button><div class="text-vn-gold font-bold text-sm mb-1">Slot ${n}</div><div class="text-white font-semibold text-sm truncate">${data.playerName || 'Adi'}</div><div class="text-gray-400 text-xs mt-1">${formatSaveDate(data.savedAt)}</div><div class="text-gray-300 text-xs italic mt-2 leading-snug">"${preview || '...'}"</div>`;
-            card.querySelector('.slot-delete-btn').onclick = (e) => { e.stopPropagation(); showConfirm('Hapus Slot?', `Slot ${n} akan dihapus permanen.`, () => { localStorage.removeItem(slotKey(n)); renderSaveSlots(); checkContinueAvailability(); }); };
+            card.innerHTML = `<button class="slot-delete-btn absolute top-2 right-2 text-gray-500 hover:text-red-400 text-sm w-6 h-6 flex items-center justify-center rounded-full hover:bg-white/10" title="${t('confirmDeleteTitle')}">✕</button><div class="text-vn-gold font-bold text-sm mb-1">${t('saveLoadTitleSave')} ${n}</div><div class="text-white font-semibold text-sm truncate">${data.playerName || 'Adi'}</div><div class="text-gray-400 text-xs mt-1">${formatSaveDate(data.savedAt)}</div><div class="text-gray-300 text-xs italic mt-2 leading-snug">"${preview || '...'}"</div>`;
+            card.querySelector('.slot-delete-btn').onclick = (e) => {
+                e.stopPropagation();
+                showConfirm(t('confirmDeleteTitle'), t('confirmDeleteMsg', n), () => { localStorage.removeItem(slotKey(n)); renderSaveSlots(); checkContinueAvailability(); });
+            };
         }
         grid.appendChild(card);
     });
 }
+
 function handleSlotClick(n) {
-    if (saveLoadMode === 'save') { const existing = getSlotData(n); if (existing) showConfirm('Timpa Slot?', `Slot ${n} sudah terisi. Timpa?`, () => doSaveToSlot(n)); else doSaveToSlot(n); }
-    else { showConfirm('Muat Slot Ini?', `Progress saat ini akan hilang. Muat Slot ${n}?`, () => doLoadFromSlot(n)); }
+    if (saveLoadMode === 'save') {
+        const existing = getSlotData(n);
+        if (existing) showConfirm(t('confirmOverwriteTitle'), t('confirmOverwriteMsg', {n: n, date: formatSaveDate(existing.savedAt)}), () => doSaveToSlot(n));
+        else doSaveToSlot(n);
+    } else {
+        showConfirm(t('confirmLoadTitle'), t('confirmLoadMsg', n), () => doLoadFromSlot(n));
+    }
 }
+
 function doSaveToSlot(n) {
     const dialogueEl = document.getElementById('dialogue-text');
     const data = { playerName: window.playerName, currentScene: currentScene, gameFlags: window.gameFlags, unlockedQuotes: window.unlockedQuotes, dialoguePreview: dialogueEl ? dialogueEl.innerText : '', savedAt: new Date().toISOString() };
-    try { localStorage.setItem(slotKey(n), JSON.stringify(data)); renderSaveSlots(); checkContinueAvailability(); showToast('✅ Tersimpan!', `Progress berhasil disimpan di Slot ${n}.`); } catch (e) { console.error('Gagal menyimpan game:', e); }
+    try { localStorage.setItem(slotKey(n), JSON.stringify(data)); renderSaveSlots(); checkContinueAvailability(); showToast(t('toastSave'), t('toastSaveMsg', n)); } catch (e) { console.error('Gagal menyimpan game:', e); }
 }
+
 function doLoadFromSlot(n) {
     const data = getSlotData(n); if (!data) return;
     try {
-        window.playerName = data.playerName || 'Adi'; window.gameFlags = data.gameFlags || { routeA: false, routeB: false, routeM: false, secretRoute: false }; window.unlockedQuotes = data.unlockedQuotes || [];
-        try { localStorage.setItem('vn_quotes', JSON.stringify(window.unlockedQuotes)); } catch (e) {} saveFlags(); closeSaveLoad(); closePauseMenu(); hideAllScreens(); document.getElementById('game-screen').classList.remove('hidden'); loadScene(data.currentScene || 'prolog_1'); if (bgmAudio) bgmAudio.play().catch(() => {});
+        window.playerName = data.playerName || 'Adi';
+        window.gameFlags = data.gameFlags || { routeA: false, routeB: false, routeM: false, secretRoute: false };
+        window.unlockedQuotes = data.unlockedQuotes || [];
+        try { localStorage.setItem('vn_quotes', JSON.stringify(window.unlockedQuotes)); } catch (e) {}
+        saveFlags();
+        closeSaveLoad();
+        closePauseMenu();
+        hideAllScreens();
+        document.getElementById('game-screen').classList.remove('hidden');
+        loadScene(data.currentScene || 'prolog_1');
+        if (bgmAudio) bgmAudio.play().catch(() => {});
     } catch (e) { console.error('Gagal memuat game:', e); }
 }
-function showToast(title, message) { const toast = document.getElementById('toast-notif'); toast.classList.remove('hidden'); const h4 = toast.querySelector('h4'); const p = toast.querySelector('p'); if (h4) h4.innerText = title; if (p) p.innerText = message; setTimeout(() => toast.classList.add('show'), 100); setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.classList.add('hidden'), 500); }, 3000); }
-function migrateOldSaveIfNeeded() { try { const legacy = localStorage.getItem('vn_save_data'); if (!legacy) return; if (!getSlotData(1)) { const parsed = JSON.parse(legacy); const data = { playerName: parsed.playerName || 'Adi', currentScene: parsed.currentScene || 'prolog_1', gameFlags: parsed.gameFlags || { routeA: false, routeB: false, routeM: false, secretRoute: false }, unlockedQuotes: parsed.unlockedQuotes || [], dialoguePreview: '(migrated)', savedAt: new Date().toISOString() }; localStorage.setItem(slotKey(1), JSON.stringify(data)); } localStorage.removeItem('vn_save_data'); } catch (e) {} }
+
+function showToast(title, message) {
+    const toast = document.getElementById('toast-notif');
+    toast.classList.remove('hidden');
+    const h4 = toast.querySelector('h4');
+    const p = toast.querySelector('p');
+    if (h4) h4.innerText = title;
+    if (p) p.innerText = message;
+    setTimeout(() => toast.classList.add('show'), 100);
+    setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.classList.add('hidden'), 500); }, 3000);
+}
+
+function migrateOldSaveIfNeeded() {
+    try {
+        const legacy = localStorage.getItem('vn_save_data');
+        if (!legacy) return;
+        if (!getSlotData(1)) {
+            const parsed = JSON.parse(legacy);
+            const data = {
+                playerName: parsed.playerName || 'Adi',
+                currentScene: parsed.currentScene || 'prolog_1',
+                gameFlags: parsed.gameFlags || { routeA: false, routeB: false, routeM: false, secretRoute: false },
+                unlockedQuotes: parsed.unlockedQuotes || [],
+                dialoguePreview: '(migrated)',
+                savedAt: new Date().toISOString(),
+            };
+            localStorage.setItem(slotKey(1), JSON.stringify(data));
+        }
+        localStorage.removeItem('vn_save_data');
+    } catch (e) {}
+}
 
 window.addEventListener('load', () => {
     migrateOldSaveIfNeeded();
@@ -418,5 +611,6 @@ window.addEventListener('load', () => {
     if (!document.getElementById('main-menu').classList.contains('hidden')) {
         attachLobbyKeyboardNav();
         triggerLobbyAnimations();
+        applyLanguageUI();
     }
 });

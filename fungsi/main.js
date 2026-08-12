@@ -1,11 +1,7 @@
-/* ============================================================
-   main.js
-   ============================================================ */
-
 window.playerName = 'Adi';
 window.unlockedQuotes = [];
-// Tambahkan routeM di sini
 window.gameFlags = { routeA: false, routeB: false, routeM: false, secretRoute: false };
+window.currentLang = localStorage.getItem('vn_lang') || 'en';
 
 try {
     window.unlockedQuotes = JSON.parse(localStorage.getItem('vn_quotes')) || [];
@@ -18,6 +14,7 @@ try {
 function showNameInput() {
     hideAllScreens();
     document.getElementById('name-input-screen').classList.remove('hidden');
+    applyLanguageUI();
 }
 
 function startGameWithCustomName() {
@@ -26,10 +23,12 @@ function startGameWithCustomName() {
     hideAllScreens();
     document.getElementById('game-screen').classList.remove('hidden');
     loadScene('prolog_1');
+    applyLanguageUI();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     if (typeof checkContinueAvailability === 'function') {
         checkContinueAvailability();
     }
+    applyLanguageUI();
 });
