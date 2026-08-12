@@ -81,14 +81,16 @@ function applyLanguageUI() {
     if (settingsRes) settingsRes.innerText = t('settingsRes');
     if (settingsLangLabel) settingsLangLabel.innerText = t('settingsLang');
     if (settingsBackBtn) settingsBackBtn.innerText = t('settingsBack');
+
+    // PERBAIKAN PENTING: Sinkronkan nilai dropdown bahasa dengan bahasa yang sedang aktif
+    const langSelect = document.getElementById('lang-select');
+    if (langSelect) langSelect.value = window.currentLang;
 }
 
 function changeLanguage(lang) {
     localStorage.setItem('vn_lang', lang);
     window.currentLang = lang;
     applyLanguageUI();
-    const langSelect = document.getElementById('lang-select');
-    if (langSelect) langSelect.value = lang;
 }
 
 function updateVolume(type, val) {
@@ -137,6 +139,7 @@ function showSettingsModal() {
     document.getElementById('sfx-volume').value = window.sfxVolume;
     document.getElementById('sfx-volume-label').innerText = window.sfxVolume + '%';
     document.getElementById('resolution-select').value = window.resolution;
+    // PERBAIKAN PENTING: Sinkronkan dropdown bahasa saat modal Settings dibuka
     document.getElementById('lang-select').value = window.currentLang;
     document.getElementById('settings-overlay').classList.remove('hidden');
     applyLanguageUI();
