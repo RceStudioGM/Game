@@ -30,11 +30,13 @@ function applyLanguageUI() {
     if (titleEl) titleEl.innerText = t('gameTitle');
     if (subEl) subEl.innerText = t('gameSub');
 
+    // GUNAKAN ID UNTUK MENGHINDARI ERROR nth-child
     const btnContinue = document.getElementById('btn-continue');
-    const btnNewGame = document.querySelector('#main-menu .menu-buttons button:nth-child(2)');
-    const btnProfiles = document.querySelector('#main-menu .menu-buttons button:nth-child(3)');
-    const btnGallery = document.querySelector('#main-menu .menu-buttons button:nth-child(4)');
-    const btnSettings = document.querySelector('#main-menu .menu-buttons button:nth-child(5)');
+    const btnNewGame = document.getElementById('btn-new-game');
+    const btnProfiles = document.getElementById('btn-profiles');
+    const btnGallery = document.getElementById('btn-gallery');
+    const btnSettings = document.getElementById('btn-settings');
+
     if (btnContinue && !btnContinue.disabled) btnContinue.innerText = t('btnContinue');
     else if (btnContinue) btnContinue.innerText = t('btnContinue');
     if (btnNewGame) btnNewGame.innerText = t('btnNewGame');
@@ -82,7 +84,6 @@ function applyLanguageUI() {
     if (settingsLangLabel) settingsLangLabel.innerText = t('settingsLang');
     if (settingsBackBtn) settingsBackBtn.innerText = t('settingsBack');
 
-    // PERBAIKAN PENTING: Sinkronkan nilai dropdown bahasa dengan bahasa yang sedang aktif
     const langSelect = document.getElementById('lang-select');
     if (langSelect) langSelect.value = window.currentLang;
 }

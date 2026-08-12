@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Favorite Corrior</title>
+    <title>Persimpangan Hati</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
@@ -51,19 +51,20 @@
                 
                 <video id="line-video" class="absolute -top-[10px] left-0 w-full h-[80px] pointer-events-none z-30 object-cover object-bottom" src="assets/lobby/garis_animasi.webm" autoplay loop muted playsinline webkit-playsinline></video>
 
+                <!-- DITAMBAHKAN ID UNIK UNTUK SETIAP TOMBOL -->
                 <button id="btn-continue" onclick="openSaveLoad('load')" class="menu-btn text-white/80 hover:text-vn-gold transition-colors duration-300 bg-transparent border-none cursor-pointer outline-none focus:outline-none focus:text-vn-gold" tabindex="0">
                     ▶ LANJUTKAN
                 </button>
-                <button onclick="showNameInput()" class="menu-btn text-white/80 hover:text-vn-gold transition-colors duration-300 bg-transparent border-none cursor-pointer outline-none focus:outline-none focus:text-vn-gold" tabindex="0">
+                <button id="btn-new-game" onclick="showNameInput()" class="menu-btn text-white/80 hover:text-vn-gold transition-colors duration-300 bg-transparent border-none cursor-pointer outline-none focus:outline-none focus:text-vn-gold" tabindex="0">
                     MULAI BARU
                 </button>
-                <button onclick="showProfiles()" class="menu-btn text-white/80 hover:text-vn-gold transition-colors duration-300 bg-transparent border-none cursor-pointer outline-none focus:outline-none focus:text-vn-gold" tabindex="0">
+                <button id="btn-profiles" onclick="showProfiles()" class="menu-btn text-white/80 hover:text-vn-gold transition-colors duration-300 bg-transparent border-none cursor-pointer outline-none focus:outline-none focus:text-vn-gold" tabindex="0">
                     PROFIL
                 </button>
-                <button onclick="showGallery()" class="menu-btn text-white/80 hover:text-vn-gold transition-colors duration-300 bg-transparent border-none cursor-pointer outline-none focus:outline-none focus:text-vn-gold" tabindex="0">
+                <button id="btn-gallery" onclick="showGallery()" class="menu-btn text-white/80 hover:text-vn-gold transition-colors duration-300 bg-transparent border-none cursor-pointer outline-none focus:outline-none focus:text-vn-gold" tabindex="0">
                     QUOTES
                 </button>
-                <button onclick="showSettings()" class="menu-btn text-white/80 hover:text-vn-gold transition-colors duration-300 bg-transparent border-none cursor-pointer outline-none focus:outline-none focus:text-vn-gold" tabindex="0">
+                <button id="btn-settings" onclick="showSettings()" class="menu-btn text-white/80 hover:text-vn-gold transition-colors duration-300 bg-transparent border-none cursor-pointer outline-none focus:outline-none focus:text-vn-gold" tabindex="0">
                     PENGATURAN
                 </button>
             </div>
