@@ -47,30 +47,29 @@
             
             <div id="sakura-container" class="absolute inset-0 z-10 pointer-events-none"></div>
 
-            <div id="lobby-menu-bar" class="relative z-20 w-full bg-transparent py-8 flex justify-between items-center gap-0 text-sm sm:text-[15px] font-bold tracking-wider px-4">
+            <div id="lobby-menu-bar" class="relative z-20 w-full bg-transparent py-6 flex justify-between items-center gap-0 text-sm sm:text-[15px] font-bold tracking-wider px-4">
                 
                 <video id="line-video" class="absolute -top-[10px] left-0 w-full h-[80px] pointer-events-none z-30 object-cover object-bottom" src="assets/lobby/garis_animasi.webm" autoplay loop muted playsinline webkit-playsinline></video>
 
-                <!-- Tambahkan transition-all dan border-b-2 transparan agar penanda animasi terlihat mulus -->
-                <button id="btn-continue" onclick="openSaveLoad('load')" class="flex-1 text-center menu-btn border-b-2 border-transparent transition-all duration-300 text-white/80 hover:text-vn-gold hover:scale-105 hover:border-vn-gold" tabindex="0">
+                <button id="btn-continue" onclick="openSaveLoad('load')" class="flex-1 text-center whitespace-nowrap menu-btn text-vn-gold hover:text-white transition-colors duration-300 bg-transparent border-none cursor-pointer outline-none focus:outline-none" tabindex="0">
                     ▶ CONTINUE
                 </button>
-                <button id="btn-new-game" onclick="showNameInput()" class="flex-1 text-center menu-btn border-b-2 border-transparent transition-all duration-300 text-white/80 hover:text-vn-gold hover:scale-105 hover:border-vn-gold" tabindex="0">
+                <button id="btn-new-game" onclick="showNameInput()" class="flex-1 text-center whitespace-nowrap menu-btn text-white/80 hover:text-vn-gold transition-colors duration-300 bg-transparent border-none cursor-pointer outline-none focus:outline-none" tabindex="0">
                     ▶ NEW GAME
                 </button>
-                <button id="btn-profiles" onclick="showProfiles()" class="flex-1 text-center menu-btn border-b-2 border-transparent transition-all duration-300 text-white/80 hover:text-vn-gold hover:scale-105 hover:border-vn-gold" tabindex="0">
+                <button id="btn-profiles" onclick="showProfiles()" class="flex-1 text-center whitespace-nowrap menu-btn text-white/80 hover:text-vn-gold transition-colors duration-300 bg-transparent border-none cursor-pointer outline-none focus:outline-none" tabindex="0">
                     📖 CHARACTER PROFILES
                 </button>
-                <button id="btn-gallery" onclick="showGallery()" class="flex-1 text-center menu-btn border-b-2 border-transparent transition-all duration-300 text-white/80 hover:text-vn-gold hover:scale-105 hover:border-vn-gold" tabindex="0">
+                <button id="btn-gallery" onclick="showGallery()" class="flex-1 text-center whitespace-nowrap menu-btn text-white/80 hover:text-vn-gold transition-colors duration-300 bg-transparent border-none cursor-pointer outline-none focus:outline-none" tabindex="0">
                     📖 QUOTE GALLERY
                 </button>
-                <button id="btn-settings" onclick="showSettings()" class="flex-1 text-center menu-btn border-b-2 border-transparent transition-all duration-300 text-white/80 hover:text-vn-gold hover:scale-105 hover:border-vn-gold" tabindex="0">
+                <button id="btn-settings" onclick="showSettings()" class="flex-1 text-center whitespace-nowrap menu-btn text-white/80 hover:text-vn-gold transition-colors duration-300 bg-transparent border-none cursor-pointer outline-none focus:outline-none" tabindex="0">
                     ⚙️ SETTINGS
                 </button>
             </div>
         </div>
 
-        <!-- ===== NAME INPUT ===== -->
+        <!-- NAME INPUT -->
         <div id="name-input-screen" class="screen hidden flex items-center justify-center w-full h-full bg-black/70 backdrop-blur-md z-20">
             <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl px-10 py-12 text-center max-w-md">
                 <h2 class="font-display text-3xl text-white">WHO ARE YOU?</h2>
@@ -83,7 +82,7 @@
             </div>
         </div>
 
-        <!-- ===== GAME SCREEN ===== -->
+        <!-- GAME SCREEN -->
         <div id="game-screen" class="screen hidden relative w-full h-full">
             <button id="btn-pause" onclick="openPauseMenu()" class="absolute top-4 left-4 z-20 bg-black/50 hover:bg-black/70 text-white px-4 py-2 rounded-full backdrop-blur-sm border border-white/20 transition-all">⏸️</button>
             <div id="background-image" class="absolute inset-0 bg-cover bg-center z-0"></div>
@@ -100,21 +99,21 @@
             </div>
         </div>
 
-        <!-- ===== SUB MENU ===== -->
+        <!-- SUB MENU -->
         <div id="sub-menu-screen" class="screen hidden flex flex-col items-center justify-center w-full h-full bg-black/80 backdrop-blur-md z-30">
             <h2 id="sub-menu-title" class="font-display text-4xl text-vn-gold mb-6">Judul Menu</h2>
             <div id="sub-menu-content" class="w-[80%] max-h-[400px] overflow-y-auto bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10"></div>
             <button onclick="backToMenu()" class="mt-8 px-8 py-3 bg-white/20 hover:bg-white/30 text-white rounded-xl transition-all">Kembali ke Menu</button>
         </div>
 
-        <!-- ===== PROFIL KARAKTER ===== -->
+        <!-- PROFIL KARAKTER -->
         <div id="profile-screen" class="screen hidden flex flex-col items-center justify-center w-full h-full bg-black/80 backdrop-blur-md z-30 overflow-y-auto">
             <h2 id="profile-title" class="font-display text-4xl text-vn-gold mt-6">📖 Character Profiles</h2>
             <div id="profile-container" class="grid grid-cols-1 md:grid-cols-2 gap-4 w-[90%] max-w-4xl mt-6"></div>
             <button onclick="backToMenu()" class="mt-8 px-8 py-3 bg-white/20 hover:bg-white/30 text-white rounded-xl transition-all">Kembali ke Menu</button>
         </div>
 
-        <!-- ===== PAUSE MENU ===== -->
+        <!-- PAUSE MENU -->
         <div id="pause-overlay" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-md flex items-center justify-center">
             <div id="pause-modal" class="bg-[#1e2a3a] border border-white/20 rounded-2xl p-8 max-w-md w-full shadow-2xl transform scale-95 transition-all duration-300">
                 <h2 class="font-display text-3xl text-white text-center mb-6">⏸️ Pause</h2>
@@ -128,7 +127,7 @@
             </div>
         </div>
 
-        <!-- ===== SETTINGS MODAL ===== -->
+        <!-- SETTINGS MODAL -->
         <div id="settings-overlay" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-md flex items-center justify-center">
             <div id="settings-modal" class="bg-[#1e2a3a] border border-white/20 rounded-2xl p-8 max-w-md w-full shadow-2xl">
                 <h2 class="font-display text-3xl text-white text-center mb-6">⚙️ Settings</h2>
@@ -144,13 +143,27 @@
                             <option value="id">Indonesia</option>
                         </select>
                     </div>
+
+                    <!-- TOMBOL HOW TO PLAY -->
+                    <button id="btn-how-to-play" onclick="openHowToPlay()" class="w-full py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-all mt-2">🕹️ How to Play</button>
                     
                     <button onclick="closeSettingsModal()" class="w-full py-3 bg-vn-gold text-black font-bold rounded-xl hover:scale-105 transition-all mt-2">Back</button>
                 </div>
             </div>
         </div>
 
-        <!-- ===== SAVE / LOAD ===== -->
+        <!-- HOW TO PLAY OVERLAY (POP-UP) -->
+        <div id="howtoplay-overlay" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-md flex items-center justify-center">
+            <div id="howtoplay-modal" class="bg-[#1e2a3a] border border-white/20 rounded-2xl p-8 max-w-md w-full shadow-2xl">
+                <h2 id="howtoplay-title" class="font-display text-3xl text-white text-center mb-6">🕹️ How to Play</h2>
+                <div id="howtoplay-content" class="space-y-4 text-gray-300 text-sm leading-relaxed text-center">
+                    <!-- Isi instruksi akan diisi oleh JS applyLanguageUI -->
+                </div>
+                <button onclick="closeHowToPlay()" class="w-full py-3 bg-vn-gold text-black font-bold rounded-xl hover:scale-105 transition-all mt-6">Close</button>
+            </div>
+        </div>
+
+        <!-- SAVE / LOAD -->
         <div id="saveload-overlay" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-md flex items-center justify-center p-6">
             <div class="bg-[#1e2a3a] border border-white/20 rounded-2xl p-6 sm:p-8 max-w-3xl w-full shadow-2xl max-h-[85vh] flex flex-col">
                 <h2 id="saveload-title" class="font-display text-3xl text-vn-gold text-center mb-1">💾 Save Game</h2>
@@ -160,7 +173,7 @@
             </div>
         </div>
 
-        <!-- ===== KONFIRMASI ===== -->
+        <!-- CONFIRM -->
         <div id="confirm-overlay" class="fixed inset-0 z-[60] hidden bg-black/70 backdrop-blur-sm flex items-center justify-center">
             <div id="confirm-modal" class="bg-[#1e2a3a] border border-white/20 rounded-2xl p-8 max-w-sm w-full shadow-2xl text-center">
                 <h3 id="confirm-title" class="text-2xl font-bold text-white mb-2">Are You Sure?</h3>

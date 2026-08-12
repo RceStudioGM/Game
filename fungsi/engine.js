@@ -83,6 +83,23 @@ function applyLanguageUI() {
     if (settingsLangLabel) settingsLangLabel.innerText = t('settingsLang');
     if (settingsBackBtn) settingsBackBtn.innerText = t('settingsBack');
 
+    // --- UPDATE HOW TO PLAY BUTTON & POPUP ---
+    const btnHowToPlay = document.getElementById('btn-how-to-play');
+    if (btnHowToPlay) btnHowToPlay.innerText = t('btnHowToPlay');
+
+    const htpTitle = document.getElementById('howtoplay-title');
+    const htpContent = document.getElementById('howtoplay-content');
+    const htpClose = document.querySelector('#howtoplay-modal button:last-child');
+    if (htpTitle) htpTitle.innerText = t('howToPlayTitle');
+    if (htpContent) {
+        htpContent.innerHTML = `
+            <p>${t('howToPlayDesc1')}</p>
+            <p>${t('howToPlayDesc2')}</p>
+            <p>${t('howToPlayDesc3')}</p>
+        `;
+    }
+    if (htpClose) htpClose.innerText = t('howToPlayClose');
+
     const langSelect = document.getElementById('lang-select');
     if (langSelect) langSelect.value = window.currentLang;
 }
@@ -152,6 +169,16 @@ function closeSettingsModal() {
     if (!document.getElementById('pause-overlay').classList.contains('hidden')) {
         openPauseMenu();
     }
+}
+
+// --- FUNGSI HOW TO PLAY ---
+function openHowToPlay() {
+    document.getElementById('howtoplay-overlay').classList.remove('hidden');
+    applyLanguageUI();
+}
+
+function closeHowToPlay() {
+    document.getElementById('howtoplay-overlay').classList.add('hidden');
 }
 
 let _pendingConfirmAction = null;
@@ -468,53 +495,24 @@ function triggerLobbyAnimations() {
 
 let _lobbyNavHandler = null;
 
-/* ============================================================
-   FUNGSI NAVIGASI PANAH (HANYA WARNA & GARIS BAWAH)
-   ============================================================ */
 function attachLobbyKeyboardNav() {
     if (_lobbyNavHandler) { document.removeEventListener('keydown', _lobbyNavHandler); _lobbyNavHandler = null; }
-    
     const menuBtns = Array.from(document.querySelectorAll('#lobby-menu-bar .menu-btn'));
     if (menuBtns.length === 0) return;
-
-    // Reset class keyboard dari semua tombol
-    menuBtns.forEach(btn => {
-        btn.classList.remove('keyboard-selected');
-    });
-
+    menuBtns.forEach(btn => btn.classList.remove('keyboard-selected'));
     let currentFocusIndex = 0;
-    // Beri penanda active via class keyboard-selected (tanpa scale)
     menuBtns[currentFocusIndex].classList.add('keyboard-selected');
     menuBtns[currentFocusIndex].focus();
-
     const handler = (e) => {
         if (document.getElementById('main-menu').classList.contains('hidden')) return;
-        
-        // Hapus penanda keyboard dari tombol sebelumnya
-        menuBtns.forEach(btn => {
-            btn.classList.remove('keyboard-selected');
-        });
-
-        if (e.key === 'ArrowRight') {
-            e.preventDefault();
-            currentFocusIndex = (currentFocusIndex + 1) % menuBtns.length;
-        } else if (e.key === 'ArrowLeft') {
-            e.preventDefault();
-            currentFocusIndex = (currentFocusIndex - 1 + menuBtns.length) % menuBtns.length;
-        } else if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            const activeBtn = menuBtns[currentFocusIndex];
-            if (activeBtn) activeBtn.click();
-            return;
-        } else {
-            return;
-        }
-
-        // Beri penanda keyboard ke tombol baru (tidak ada scale)
+        menuBtns.forEach(btn => btn.classList.remove('keyboard-selected'));
+        if (e.key === 'ArrowRight') { e.preventDefault(); currentFocusIndex = (currentFocusIndex + 1) % menuBtns.length; }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); currentFocusIndex = (currentFocusIndex - 1 + menuBtns.length) % menuBtns.length; }
+        else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); const activeBtn = menuBtns[currentFocusIndex]; if (activeBtn) activeBtn.click(); return; }
+        else { return; }
         menuBtns[currentFocusIndex].classList.add('keyboard-selected');
         menuBtns[currentFocusIndex].focus();
     };
-
     document.addEventListener('keydown', handler);
     _lobbyNavHandler = handler;
 }
