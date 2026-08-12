@@ -30,7 +30,6 @@ function applyLanguageUI() {
     if (titleEl) titleEl.innerText = t('gameTitle');
     if (subEl) subEl.innerText = t('gameSub');
 
-    // GUNAKAN ID UNTUK MENGHINDARI ERROR nth-child
     const btnContinue = document.getElementById('btn-continue');
     const btnNewGame = document.getElementById('btn-new-game');
     const btnProfiles = document.getElementById('btn-profiles');
@@ -223,7 +222,7 @@ function backToMenu() {
     document.getElementById('main-menu').classList.remove('hidden');
     checkContinueAvailability();
     if (bgmAudio) bgmAudio.pause();
-    attachLobbyKeyboardNav();
+    attachLobbyKeyboardNav(); // Fungsi Panah Lobby dipanggil di sini
     triggerLobbyAnimations();
     applyLanguageUI();
 }
@@ -469,24 +468,45 @@ function triggerLobbyAnimations() {
 
 let _lobbyNavHandler = null;
 
+/* ============================================================
+   FUNGSI NAVIGASI PANAH KIRI/KANAN DI LOBBY
+   ============================================================ */
 function attachLobbyKeyboardNav() {
     if (_lobbyNavHandler) { document.removeEventListener('keydown', _lobbyNavHandler); _lobbyNavHandler = null; }
+    
+    // Ambil semua tombol yang punya class .menu-btn di dalam lobby-menu-bar
     const menuBtns = Array.from(document.querySelectorAll('#lobby-menu-bar .menu-btn'));
     if (menuBtns.length === 0) return;
+
     menuBtns.forEach(btn => btn.classList.remove('text-vn-gold'));
     let currentFocusIndex = 0;
-    menuBtns[currentFocusIndex].classList.add('text-vn-gold');
+    menuBtns[currentFocusIndex].classList.add('text-vn-gold'); // Highlight tombol pertama
     menuBtns[currentFocusIndex].focus();
+
     const handler = (e) => {
         if (document.getElementById('main-menu').classList.contains('hidden')) return;
+        
         menuBtns.forEach(btn => btn.classList.remove('text-vn-gold'));
-        if (e.key === 'ArrowRight') { e.preventDefault(); currentFocusIndex = (currentFocusIndex + 1) % menuBtns.length; }
-        else if (e.key === 'ArrowLeft') { e.preventDefault(); currentFocusIndex = (currentFocusIndex - 1 + menuBtns.length) % menuBtns.length; }
-        else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); const activeBtn = menuBtns[currentFocusIndex]; if (activeBtn) activeBtn.click(); return; }
-        else { return; }
+
+        if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            currentFocusIndex = (currentFocusIndex + 1) % menuBtns.length;
+        } else if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            currentFocusIndex = (currentFocusIndex - 1 + menuBtns.length) % menuBtns.length;
+        } else if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            const activeBtn = menuBtns[currentFocusIndex];
+            if (activeBtn) activeBtn.click();
+            return;
+        } else {
+            return; // Tombol lain diabaikan
+        }
+
         menuBtns[currentFocusIndex].classList.add('text-vn-gold');
         menuBtns[currentFocusIndex].focus();
     };
+
     document.addEventListener('keydown', handler);
     _lobbyNavHandler = handler;
 }
