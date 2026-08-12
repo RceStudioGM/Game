@@ -25,7 +25,7 @@ function t(key) {
 }
 
 /* ============================================================
-   FUNGSI NAVIGASI KEYBOARD UNTUK SUB-MENU (SETTINGS, PAUSE, DLL)
+   FUNGSI NAVIGASI KEYBOARD UNTUK SUB-MENU (FIXED!)
    ============================================================ */
 let _subMenuNavHandler = null;
 
@@ -42,10 +42,12 @@ function attachSubMenuKeyboardNav() {
     );
     if (!activeModal) return;
 
-    // Ambil semua tombol yang bisa difokuskan di dalam popup tersebut
-    const focusable = Array.from(activeModal.querySelectorAll('button, select, [tabindex="0"]'));
+    // HANYA targetkan tombol (button) yang bisa diklik!
+    // Slider <input> dan dropdown <select> tidak akan ikut dipilih panah
+    const focusable = Array.from(activeModal.querySelectorAll('button:not([disabled])'));
     if (focusable.length === 0) return;
 
+    // Set fokus awal jika belum ada yang fokus
     let currentFocusIndex = 0;
     const activeEl = document.activeElement;
     if (activeEl && focusable.includes(activeEl)) {
@@ -55,13 +57,13 @@ function attachSubMenuKeyboardNav() {
     }
 
     const handler = (e) => {
-        // Jika popup tiba-tiba ditutup saat tombol ditekan, hentikan
+        // Jika modal tiba-tiba ditutup saat tombol ditekan, hentikan
         if (activeModal.classList.contains('hidden')) {
             document.removeEventListener('keydown', handler);
             return;
         }
 
-        // Gunakan Up/Down atau Left/Right untuk menavigasi tombol vertikal/horizontal
+        // Gunakan Up/Down atau Left/Right untuk menavigasi tombol
         if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
             e.preventDefault();
             currentFocusIndex = (currentFocusIndex + 1) % focusable.length;
@@ -72,8 +74,11 @@ function attachSubMenuKeyboardNav() {
             focusable[currentFocusIndex].focus();
         } else if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
+            // Pastikan elemen yang difokuskan adalah tombol yang valid, lalu klik
             const activeBtn = focusable[currentFocusIndex];
-            if (activeBtn) activeBtn.click();
+            if (activeBtn && activeBtn.tagName === 'BUTTON') {
+                activeBtn.click();
+            }
         }
     };
 
