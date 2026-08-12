@@ -25,29 +25,24 @@ function t(key) {
 }
 
 /* ============================================================
-   FUNGSI NAVIGASI KEYBOARD UNTUK SUB-MENU (FIXED!)
+   FUNGSI NAVIGASI KEYBOARD UNTUK SUB-MENU (FIXED SPACE & ENTER!)
    ============================================================ */
 let _subMenuNavHandler = null;
 
 function attachSubMenuKeyboardNav() {
-    // Hapus handler lama agar tidak terjadi konflik ganda
     if (_subMenuNavHandler) {
         document.removeEventListener('keydown', _subMenuNavHandler);
         _subMenuNavHandler = null;
     }
 
-    // Cek apakah ada popup yang sedang terbuka (tidak hidden)
     const activeModal = document.querySelector(
-        '#pause-overlay:not(.hidden), #settings-overlay:not(.hidden), #saveload-overlay:not(.hidden), #howtoplay-overlay:not(.hidden), #name-input-screen:not(.hidden)'
+        '#pause-overlay:not(.hidden), #settings-overlay:not(.hidden), #saveload-overlay:not(.hidden), #howtoplay-overlay:not(.hidden), #name-input-screen:not(.hidden), #profile-screen:not(.hidden)'
     );
     if (!activeModal) return;
 
-    // HANYA targetkan tombol (button) yang bisa diklik!
-    // Slider <input> dan dropdown <select> tidak akan ikut dipilih panah
     const focusable = Array.from(activeModal.querySelectorAll('button:not([disabled])'));
     if (focusable.length === 0) return;
 
-    // Set fokus awal jika belum ada yang fokus
     let currentFocusIndex = 0;
     const activeEl = document.activeElement;
     if (activeEl && focusable.includes(activeEl)) {
@@ -57,13 +52,11 @@ function attachSubMenuKeyboardNav() {
     }
 
     const handler = (e) => {
-        // Jika modal tiba-tiba ditutup saat tombol ditekan, hentikan
         if (activeModal.classList.contains('hidden')) {
             document.removeEventListener('keydown', handler);
             return;
         }
 
-        // Gunakan Up/Down atau Left/Right untuk menavigasi tombol
         if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
             e.preventDefault();
             currentFocusIndex = (currentFocusIndex + 1) % focusable.length;
@@ -73,10 +66,10 @@ function attachSubMenuKeyboardNav() {
             currentFocusIndex = (currentFocusIndex - 1 + focusable.length) % focusable.length;
             focusable[currentFocusIndex].focus();
         } else if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            // Pastikan elemen yang difokuskan adalah tombol yang valid, lalu klik
+            e.preventDefault(); // CEK: Mencegah scroll ke bawah dan mencegah klik ganda pada input
             const activeBtn = focusable[currentFocusIndex];
             if (activeBtn && activeBtn.tagName === 'BUTTON') {
+                playSFX(); // Tambahkan efek suara klik
                 activeBtn.click();
             }
         }
@@ -204,7 +197,7 @@ function openPauseMenu() {
     document.getElementById('pause-modal').classList.remove('scale-95');
     document.getElementById('pause-modal').classList.add('scale-100');
     applyLanguageUI();
-    attachSubMenuKeyboardNav(); // Aktifkan arrow untuk Pause Menu
+    attachSubMenuKeyboardNav();
 }
 
 function closePauseMenu() {
@@ -227,7 +220,7 @@ function showSettingsModal() {
     document.getElementById('lang-select').value = window.currentLang;
     document.getElementById('settings-overlay').classList.remove('hidden');
     applyLanguageUI();
-    attachSubMenuKeyboardNav(); // Aktifkan arrow untuk Settings
+    attachSubMenuKeyboardNav();
 }
 
 function closeSettingsModal() {
@@ -240,7 +233,7 @@ function closeSettingsModal() {
 function openHowToPlay() {
     document.getElementById('howtoplay-overlay').classList.remove('hidden');
     applyLanguageUI();
-    attachSubMenuKeyboardNav(); // Aktifkan arrow untuk How to Play
+    attachSubMenuKeyboardNav();
 }
 
 function closeHowToPlay() {
@@ -316,8 +309,9 @@ function backToMenu() {
     document.getElementById('main-menu').classList.remove('hidden');
     checkContinueAvailability();
     if (bgmAudio) bgmAudio.pause();
+    // Urutan: Navigasi -> Animasi Sakura -> Terjemahkan UI
     attachLobbyKeyboardNav();
-    triggerLobbyAnimations();
+    triggerLobbyAnimations(); // Reset sakura jika sebelumnya terganggu
     applyLanguageUI();
 }
 
@@ -384,6 +378,7 @@ function showProfiles() {
         }
         container.appendChild(card);
     }
+    // SAKURA TIDAK TERGANGGU KARENA PROFIL MEMILIKI LAYAR TERPISAH.
 }
 
 function saveQuote(quoteId) {
@@ -609,7 +604,7 @@ function openSaveLoad(mode) {
     document.getElementById('saveload-subtitle').innerText = mode === 'save' ? t('saveLoadSubSave') : t('saveLoadSubLoad');
     renderSaveSlots();
     document.getElementById('saveload-overlay').classList.remove('hidden');
-    attachSubMenuKeyboardNav(); // Aktifkan arrow untuk Save/Load
+    attachSubMenuKeyboardNav();
 }
 
 function closeSaveLoad() {

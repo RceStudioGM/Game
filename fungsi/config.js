@@ -57,8 +57,8 @@ const allQuotes = {
 const locales = {
     en: {
         langName: "English",
-        gameTitle: "Crossroads of Hearts",
-        gameSub: "A School Romance Visual Novel",
+        gameTitle: "My Favorite Corridor",
+        gameSub: "A Romantic Visual Novel",
         btnContinue: "▶ CONTINUE",
         btnNewGame: "▶ NEW GAME",
         btnProfiles: "📖 CHARACTER PROFILES",
@@ -81,7 +81,6 @@ const locales = {
         settingsRes: "🖥️ Resolution",
         settingsLang: "🌐 Language",
         settingsBack: "Back",
-        // --- HOW TO PLAY ---
         btnHowToPlay: "🕹️ How to Play",
         howToPlayTitle: "🕹️ How to Play",
         howToPlayDesc1: "In the Main Lobby: Use the <b>LEFT</b> and <b>RIGHT</b> Arrow keys to select menus. Press <b>SPACE</b> or <b>ENTER</b> to confirm.",
@@ -125,8 +124,8 @@ const locales = {
     },
     id: {
         langName: "Indonesia",
-        gameTitle: "Persimpangan Hati",
-        gameSub: "Visual Novel Romansa Sekolah",
+        gameTitle: "My Favorite Corridor",
+        gameSub: "Romansa Sekolah Visual Novel",
         btnContinue: "▶ LANJUTKAN",
         btnNewGame: "▶ MULAI BARU",
         btnProfiles: "📖 PROFIL KARAKTER",
@@ -149,7 +148,6 @@ const locales = {
         settingsRes: "🖥️ Resolusi Layar",
         settingsLang: "🌐 Bahasa",
         settingsBack: "Kembali",
-        // --- HOW TO PLAY ---
         btnHowToPlay: "🕹️ Cara Bermain",
         howToPlayTitle: "🕹️ Cara Bermain",
         howToPlayDesc1: "Di Lobby Utama: Gunakan tombol Panah <b>KIRI</b> dan <b>KANAN</b> untuk memilih menu. Tekan <b>SPASI</b> atau <b>ENTER</b> untuk konfirmasi.",
