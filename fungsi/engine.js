@@ -222,7 +222,7 @@ function backToMenu() {
     document.getElementById('main-menu').classList.remove('hidden');
     checkContinueAvailability();
     if (bgmAudio) bgmAudio.pause();
-    attachLobbyKeyboardNav(); // Fungsi Panah Lobby dipanggil di sini
+    attachLobbyKeyboardNav();
     triggerLobbyAnimations();
     applyLanguageUI();
 }
@@ -469,24 +469,31 @@ function triggerLobbyAnimations() {
 let _lobbyNavHandler = null;
 
 /* ============================================================
-   FUNGSI NAVIGASI PANAH KIRI/KANAN DI LOBBY
+   FUNGSI NAVIGASI PANAH KIRI/KANAN DI LOBBY (DENGAN PENANDA)
    ============================================================ */
 function attachLobbyKeyboardNav() {
     if (_lobbyNavHandler) { document.removeEventListener('keydown', _lobbyNavHandler); _lobbyNavHandler = null; }
     
-    // Ambil semua tombol yang punya class .menu-btn di dalam lobby-menu-bar
     const menuBtns = Array.from(document.querySelectorAll('#lobby-menu-bar .menu-btn'));
     if (menuBtns.length === 0) return;
 
-    menuBtns.forEach(btn => btn.classList.remove('text-vn-gold'));
+    // Reset semua penanda
+    menuBtns.forEach(btn => {
+        btn.classList.remove('text-vn-gold', 'scale-105', 'border-vn-gold', 'keyboard-selected');
+    });
+
     let currentFocusIndex = 0;
-    menuBtns[currentFocusIndex].classList.add('text-vn-gold'); // Highlight tombol pertama
+    // Terapkan penanda ke tombol pertama
+    menuBtns[currentFocusIndex].classList.add('text-vn-gold', 'scale-105', 'border-vn-gold', 'keyboard-selected');
     menuBtns[currentFocusIndex].focus();
 
     const handler = (e) => {
         if (document.getElementById('main-menu').classList.contains('hidden')) return;
         
-        menuBtns.forEach(btn => btn.classList.remove('text-vn-gold'));
+        // Hapus penanda dari semua tombol
+        menuBtns.forEach(btn => {
+            btn.classList.remove('text-vn-gold', 'scale-105', 'border-vn-gold', 'keyboard-selected');
+        });
 
         if (e.key === 'ArrowRight') {
             e.preventDefault();
@@ -500,10 +507,12 @@ function attachLobbyKeyboardNav() {
             if (activeBtn) activeBtn.click();
             return;
         } else {
-            return; // Tombol lain diabaikan
+            // Tombol lain, batalkan highlight
+            return;
         }
 
-        menuBtns[currentFocusIndex].classList.add('text-vn-gold');
+        // Terapkan penanda (Garis bawah emas, perbesaran, & teks emas)
+        menuBtns[currentFocusIndex].classList.add('text-vn-gold', 'scale-105', 'border-vn-gold', 'keyboard-selected');
         menuBtns[currentFocusIndex].focus();
     };
 
