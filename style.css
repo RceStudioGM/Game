@@ -27,13 +27,17 @@ body { background-color: #111; display: flex; justify-content: center; align-ite
 .profile-desc { font-size: 13px; line-height: 1.5; color: #bdc3c7; margin-top: 8px; }
 #toast-notif { position: fixed; top: 20px; right: -350px; background: rgba(41, 128, 185, 0.95); color: white; padding: 15px 20px; border-radius: 8px; border-left: 5px solid #f1c40f; box-shadow: 0 4px 10px rgba(0,0,0,0.5); display: flex; align-items: center; gap: 15px; z-index: 100; transition: right 0.5s ease-in-out; }
 #toast-notif.show { right: 20px; }
-#lobby-menu-bar .menu-btn {     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
- }
-#lobby-menu-bar .menu-btn:focus-visible { outline: none; }
-.menu-btn.keyboard-selected {
-    color: #facc15; /* vn-gold */
-    transform: scale(1.05);
-    border-bottom-color: #facc15;
+/* --- PERBAIKAN ANTAR MUKA MOUSE & KEYBOARD --- */
+#lobby-menu-bar .menu-btn.keyboard-selected {
+    color: #facc15 !important; /* Warna Emas */
+    transform: scale(1.05) !important;
+    border-bottom-color: #facc15 !important;
+}
+
+/* KECUALIKAN SAAT MOUSE DI-HOVER, JANGAN TIMPA CLASS KEYBOARD */
+#lobby-menu-bar .menu-btn:hover {
+    /* Jika class keyboard-selected aktif, efek hover ditiadakan (dicegah oleh !important di atas) */
+    transition: all 0.2s ease-in-out;
 }
 /* --- SAKURA PNG REALISTIS --- */
 .petal {

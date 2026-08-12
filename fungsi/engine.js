@@ -469,7 +469,7 @@ function triggerLobbyAnimations() {
 let _lobbyNavHandler = null;
 
 /* ============================================================
-   FUNGSI NAVIGASI PANAH KIRI/KANAN DI LOBBY (DENGAN PENANDA)
+   FUNGSI NAVIGASI PANAH (DENGAN PERBAIKAN DOUBLE HOVER)
    ============================================================ */
 function attachLobbyKeyboardNav() {
     if (_lobbyNavHandler) { document.removeEventListener('keydown', _lobbyNavHandler); _lobbyNavHandler = null; }
@@ -477,22 +477,22 @@ function attachLobbyKeyboardNav() {
     const menuBtns = Array.from(document.querySelectorAll('#lobby-menu-bar .menu-btn'));
     if (menuBtns.length === 0) return;
 
-    // Reset semua penanda
+    // Reset class dari keyboard (agar tidak mengunci hover mouse)
     menuBtns.forEach(btn => {
-        btn.classList.remove('text-vn-gold', 'scale-105', 'border-vn-gold', 'keyboard-selected');
+        btn.classList.remove('keyboard-selected');
     });
 
     let currentFocusIndex = 0;
-    // Terapkan penanda ke tombol pertama
-    menuBtns[currentFocusIndex].classList.add('text-vn-gold', 'scale-105', 'border-vn-gold', 'keyboard-selected');
+    // Beri penanda active via class keyboard-selected
+    menuBtns[currentFocusIndex].classList.add('keyboard-selected');
     menuBtns[currentFocusIndex].focus();
 
     const handler = (e) => {
         if (document.getElementById('main-menu').classList.contains('hidden')) return;
         
-        // Hapus penanda dari semua tombol
+        // Hapus penanda keyboard dari tombol sebelumnya
         menuBtns.forEach(btn => {
-            btn.classList.remove('text-vn-gold', 'scale-105', 'border-vn-gold', 'keyboard-selected');
+            btn.classList.remove('keyboard-selected');
         });
 
         if (e.key === 'ArrowRight') {
@@ -507,12 +507,11 @@ function attachLobbyKeyboardNav() {
             if (activeBtn) activeBtn.click();
             return;
         } else {
-            // Tombol lain, batalkan highlight
             return;
         }
 
-        // Terapkan penanda (Garis bawah emas, perbesaran, & teks emas)
-        menuBtns[currentFocusIndex].classList.add('text-vn-gold', 'scale-105', 'border-vn-gold', 'keyboard-selected');
+        // Beri penanda keyboard ke tombol baru
+        menuBtns[currentFocusIndex].classList.add('keyboard-selected');
         menuBtns[currentFocusIndex].focus();
     };
 
