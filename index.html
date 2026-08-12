@@ -47,25 +47,25 @@
             
             <div id="sakura-container" class="absolute inset-0 z-10 pointer-events-none"></div>
 
-            <!-- Menu Bar (Gap diperkecil, posisi tetap rapi) -->
-            <div id="lobby-menu-bar" class="relative z-20 w-full bg-transparent py-6 flex justify-center items-center gap-4 text-base font-bold tracking-wider px-4">
+            <!-- Menu Bar: Bagi 5 merata ke seluruh lebar -->
+            <div id="lobby-menu-bar" class="relative z-20 w-full bg-transparent py-6 flex justify-between items-center gap-0 text-sm sm:text-[15px] font-bold tracking-wider px-4">
                 
                 <video id="line-video" class="absolute -top-[10px] left-0 w-full h-[80px] pointer-events-none z-30 object-cover object-bottom" src="assets/lobby/garis_animasi.webm" autoplay loop muted playsinline webkit-playsinline></video>
 
-                <!-- whitespace-nowrap mencegah teks turun ke baris baru -->
-                <button id="btn-continue" onclick="openSaveLoad('load')" class="menu-btn whitespace-nowrap text-vn-gold hover:text-white transition-colors duration-300 bg-transparent border-none cursor-pointer outline-none focus:outline-none" tabindex="0">
+                <!-- flex-1 membuat kelima tombol mengambil lebar yang sama persis -->
+                <button id="btn-continue" onclick="openSaveLoad('load')" class="flex-1 text-center whitespace-nowrap text-vn-gold hover:text-white transition-colors duration-300 bg-transparent border-none cursor-pointer outline-none focus:outline-none" tabindex="0">
                     ▶ CONTINUE
                 </button>
-                <button id="btn-new-game" onclick="showNameInput()" class="menu-btn whitespace-nowrap text-white/80 hover:text-vn-gold transition-colors duration-300 bg-transparent border-none cursor-pointer outline-none focus:outline-none" tabindex="0">
+                <button id="btn-new-game" onclick="showNameInput()" class="flex-1 text-center whitespace-nowrap text-white/80 hover:text-vn-gold transition-colors duration-300 bg-transparent border-none cursor-pointer outline-none focus:outline-none" tabindex="0">
                     ▶ NEW GAME
                 </button>
-                <button id="btn-profiles" onclick="showProfiles()" class="menu-btn whitespace-nowrap text-white/80 hover:text-vn-gold transition-colors duration-300 bg-transparent border-none cursor-pointer outline-none focus:outline-none" tabindex="0">
+                <button id="btn-profiles" onclick="showProfiles()" class="flex-1 text-center whitespace-nowrap text-white/80 hover:text-vn-gold transition-colors duration-300 bg-transparent border-none cursor-pointer outline-none focus:outline-none" tabindex="0">
                     📖 CHARACTER PROFILES
                 </button>
-                <button id="btn-gallery" onclick="showGallery()" class="menu-btn whitespace-nowrap text-white/80 hover:text-vn-gold transition-colors duration-300 bg-transparent border-none cursor-pointer outline-none focus:outline-none" tabindex="0">
+                <button id="btn-gallery" onclick="showGallery()" class="flex-1 text-center whitespace-nowrap text-white/80 hover:text-vn-gold transition-colors duration-300 bg-transparent border-none cursor-pointer outline-none focus:outline-none" tabindex="0">
                     📖 QUOTE GALLERY
                 </button>
-                <button id="btn-settings" onclick="showSettings()" class="menu-btn whitespace-nowrap text-white/80 hover:text-vn-gold transition-colors duration-300 bg-transparent border-none cursor-pointer outline-none focus:outline-none" tabindex="0">
+                <button id="btn-settings" onclick="showSettings()" class="flex-1 text-center whitespace-nowrap text-white/80 hover:text-vn-gold transition-colors duration-300 bg-transparent border-none cursor-pointer outline-none focus:outline-none" tabindex="0">
                     ⚙️ SETTINGS
                 </button>
             </div>
