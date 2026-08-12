@@ -47,25 +47,26 @@
             
             <div id="sakura-container" class="absolute inset-0 z-10 pointer-events-none"></div>
 
-            <div id="lobby-menu-bar" class="relative z-20 w-full bg-transparent py-6 flex justify-center items-center gap-10 text-lg font-bold tracking-wider">
+            <!-- Menu Bar (Gap diperkecil, posisi tetap rapi) -->
+            <div id="lobby-menu-bar" class="relative z-20 w-full bg-transparent py-6 flex justify-center items-center gap-4 text-base font-bold tracking-wider px-4">
                 
                 <video id="line-video" class="absolute -top-[10px] left-0 w-full h-[80px] pointer-events-none z-30 object-cover object-bottom" src="assets/lobby/garis_animasi.webm" autoplay loop muted playsinline webkit-playsinline></video>
 
-                <!-- DITAMBAHKAN ID UNIK UNTUK SETIAP TOMBOL -->
-                <button id="btn-continue" onclick="openSaveLoad('load')" class="menu-btn text-white/80 hover:text-vn-gold transition-colors duration-300 bg-transparent border-none cursor-pointer outline-none focus:outline-none focus:text-vn-gold" tabindex="0">
-                    ▶ LANJUTKAN
+                <!-- whitespace-nowrap mencegah teks turun ke baris baru -->
+                <button id="btn-continue" onclick="openSaveLoad('load')" class="menu-btn whitespace-nowrap text-vn-gold hover:text-white transition-colors duration-300 bg-transparent border-none cursor-pointer outline-none focus:outline-none" tabindex="0">
+                    ▶ CONTINUE
                 </button>
-                <button id="btn-new-game" onclick="showNameInput()" class="menu-btn text-white/80 hover:text-vn-gold transition-colors duration-300 bg-transparent border-none cursor-pointer outline-none focus:outline-none focus:text-vn-gold" tabindex="0">
-                    MULAI BARU
+                <button id="btn-new-game" onclick="showNameInput()" class="menu-btn whitespace-nowrap text-white/80 hover:text-vn-gold transition-colors duration-300 bg-transparent border-none cursor-pointer outline-none focus:outline-none" tabindex="0">
+                    ▶ NEW GAME
                 </button>
-                <button id="btn-profiles" onclick="showProfiles()" class="menu-btn text-white/80 hover:text-vn-gold transition-colors duration-300 bg-transparent border-none cursor-pointer outline-none focus:outline-none focus:text-vn-gold" tabindex="0">
-                    PROFIL
+                <button id="btn-profiles" onclick="showProfiles()" class="menu-btn whitespace-nowrap text-white/80 hover:text-vn-gold transition-colors duration-300 bg-transparent border-none cursor-pointer outline-none focus:outline-none" tabindex="0">
+                    📖 CHARACTER PROFILES
                 </button>
-                <button id="btn-gallery" onclick="showGallery()" class="menu-btn text-white/80 hover:text-vn-gold transition-colors duration-300 bg-transparent border-none cursor-pointer outline-none focus:outline-none focus:text-vn-gold" tabindex="0">
-                    QUOTES
+                <button id="btn-gallery" onclick="showGallery()" class="menu-btn whitespace-nowrap text-white/80 hover:text-vn-gold transition-colors duration-300 bg-transparent border-none cursor-pointer outline-none focus:outline-none" tabindex="0">
+                    📖 QUOTE GALLERY
                 </button>
-                <button id="btn-settings" onclick="showSettings()" class="menu-btn text-white/80 hover:text-vn-gold transition-colors duration-300 bg-transparent border-none cursor-pointer outline-none focus:outline-none focus:text-vn-gold" tabindex="0">
-                    PENGATURAN
+                <button id="btn-settings" onclick="showSettings()" class="menu-btn whitespace-nowrap text-white/80 hover:text-vn-gold transition-colors duration-300 bg-transparent border-none cursor-pointer outline-none focus:outline-none" tabindex="0">
+                    ⚙️ SETTINGS
                 </button>
             </div>
         </div>
@@ -73,12 +74,12 @@
         <!-- ===== NAME INPUT ===== -->
         <div id="name-input-screen" class="screen hidden flex items-center justify-center w-full h-full bg-black/70 backdrop-blur-md z-20">
             <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl px-10 py-12 text-center max-w-md">
-                <h2 class="font-display text-3xl text-white">SIAPA NAMA KAMU?</h2>
-                <p class="font-body text-gray-300 mt-1 text-sm">Masukkan nama panggilan karakter utama</p>
-                <input type="text" id="player-name-input" placeholder="Contoh: Adi" value="Adi" maxlength="15" class="mt-6 w-full px-4 py-3 rounded-xl bg-white/90 text-black font-bold text-center border-2 border-vn-gold focus:outline-none focus:ring-2 focus:ring-vn-gold/50">
+                <h2 class="font-display text-3xl text-white">WHO ARE YOU?</h2>
+                <p class="font-body text-gray-300 mt-1 text-sm">Enter the protagonist's nickname</p>
+                <input type="text" id="player-name-input" placeholder="Example: Adi" value="Adi" maxlength="15" class="mt-6 w-full px-4 py-3 rounded-xl bg-white/90 text-black font-bold text-center border-2 border-vn-gold focus:outline-none focus:ring-2 focus:ring-vn-gold/50">
                 <div class="mt-6 flex gap-3">
-                    <button onclick="startGameWithCustomName()" class="flex-1 py-3 bg-vn-gold text-black font-bold rounded-xl hover:scale-105 transition-all">Mulai Masuk Cerita</button>
-                    <button onclick="backToMenu()" class="flex-1 py-3 bg-red-500/80 text-white font-bold rounded-xl hover:scale-105 transition-all">Batal</button>
+                    <button onclick="startGameWithCustomName()" class="flex-1 py-3 bg-vn-gold text-black font-bold rounded-xl hover:scale-105 transition-all">Start the Story</button>
+                    <button onclick="backToMenu()" class="flex-1 py-3 bg-red-500/80 text-white font-bold rounded-xl hover:scale-105 transition-all">Cancel</button>
                 </div>
             </div>
         </div>
@@ -109,7 +110,7 @@
 
         <!-- ===== PROFIL KARAKTER ===== -->
         <div id="profile-screen" class="screen hidden flex flex-col items-center justify-center w-full h-full bg-black/80 backdrop-blur-md z-30 overflow-y-auto">
-            <h2 id="profile-title" class="font-display text-4xl text-vn-gold mt-6">📖 Profil Karakter</h2>
+            <h2 id="profile-title" class="font-display text-4xl text-vn-gold mt-6">📖 Character Profiles</h2>
             <div id="profile-container" class="grid grid-cols-1 md:grid-cols-2 gap-4 w-[90%] max-w-4xl mt-6"></div>
             <button onclick="backToMenu()" class="mt-8 px-8 py-3 bg-white/20 hover:bg-white/30 text-white rounded-xl transition-all">Kembali ke Menu</button>
         </div>
@@ -117,13 +118,13 @@
         <!-- ===== PAUSE MENU ===== -->
         <div id="pause-overlay" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-md flex items-center justify-center">
             <div id="pause-modal" class="bg-[#1e2a3a] border border-white/20 rounded-2xl p-8 max-w-md w-full shadow-2xl transform scale-95 transition-all duration-300">
-                <h2 class="font-display text-3xl text-white text-center mb-6">⏸️ Jeda</h2>
+                <h2 class="font-display text-3xl text-white text-center mb-6">⏸️ Pause</h2>
                 <div class="space-y-3">
-                    <button onclick="openSaveLoad('save')" class="w-full py-3 bg-vn-gold text-black font-bold rounded-xl hover:scale-105 transition-all">💾 Simpan</button>
-                    <button onclick="openSaveLoad('load')" class="w-full py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-all">📂 Lanjutkan (Muat Slot)</button>
-                    <button onclick="openSettingsFromPause()" class="w-full py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-all">⚙️ Pengaturan</button>
-                    <button onclick="confirmQuit()" class="w-full py-3 bg-red-600/80 hover:bg-red-600 text-white rounded-xl transition-all">🚪 Keluar Game</button>
-                    <button onclick="closePauseMenu()" class="w-full py-3 bg-gray-700/50 hover:bg-gray-700 text-white rounded-xl transition-all">Kembali</button>
+                    <button onclick="openSaveLoad('save')" class="w-full py-3 bg-vn-gold text-black font-bold rounded-xl hover:scale-105 transition-all">💾 Save Game</button>
+                    <button onclick="openSaveLoad('load')" class="w-full py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-all">📂 Load Game</button>
+                    <button onclick="openSettingsFromPause()" class="w-full py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-all">⚙️ Settings</button>
+                    <button onclick="confirmQuit()" class="w-full py-3 bg-red-600/80 hover:bg-red-600 text-white rounded-xl transition-all">🚪 Quit Game</button>
+                    <button onclick="closePauseMenu()" class="w-full py-3 bg-gray-700/50 hover:bg-gray-700 text-white rounded-xl transition-all">Back</button>
                 </div>
             </div>
         </div>
@@ -131,21 +132,21 @@
         <!-- ===== SETTINGS MODAL ===== -->
         <div id="settings-overlay" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-md flex items-center justify-center">
             <div id="settings-modal" class="bg-[#1e2a3a] border border-white/20 rounded-2xl p-8 max-w-md w-full shadow-2xl">
-                <h2 class="font-display text-3xl text-white text-center mb-6">⚙️ Pengaturan</h2>
+                <h2 class="font-display text-3xl text-white text-center mb-6">⚙️ Settings</h2>
                 <div class="space-y-5">
-                    <div><label class="text-white block mb-1">🎵 Musik Latar (BGM)</label><input type="range" id="bgm-volume" min="0" max="100" value="70" class="w-full accent-vn-gold cursor-pointer" oninput="updateVolume('bgm', this.value)"><span id="bgm-volume-label" class="text-sm text-gray-400">70%</span></div>
-                    <div><label class="text-white block mb-1">🔊 Efek Suara (SFX)</label><input type="range" id="sfx-volume" min="0" max="100" value="80" class="w-full accent-vn-gold cursor-pointer" oninput="updateVolume('sfx', this.value)"><span id="sfx-volume-label" class="text-sm text-gray-400">80%</span></div>
-                    <div><label class="text-white block mb-1">🖥️ Resolusi Layar</label><select id="resolution-select" onchange="changeResolution(this.value)" class="w-full px-3 py-2 rounded-lg bg-white/10 text-white border border-white/20 focus:outline-none focus:ring-2 focus:ring-vn-gold/50"><option value="960x600">960 × 600 (Standar)</option><option value="1152x720">1152 × 720</option><option value="1280x800">1280 × 800</option></select></div>
+                    <div><label class="text-white block mb-1">🎵 BGM Volume</label><input type="range" id="bgm-volume" min="0" max="100" value="70" class="w-full accent-vn-gold cursor-pointer" oninput="updateVolume('bgm', this.value)"><span id="bgm-volume-label" class="text-sm text-gray-400">70%</span></div>
+                    <div><label class="text-white block mb-1">🔊 SFX Volume</label><input type="range" id="sfx-volume" min="0" max="100" value="80" class="w-full accent-vn-gold cursor-pointer" oninput="updateVolume('sfx', this.value)"><span id="sfx-volume-label" class="text-sm text-gray-400">80%</span></div>
+                    <div><label class="text-white block mb-1">🖥️ Resolution</label><select id="resolution-select" onchange="changeResolution(this.value)" class="w-full px-3 py-2 rounded-lg bg-white/10 text-white border border-white/20 focus:outline-none focus:ring-2 focus:ring-vn-gold/50"><option value="960x600">960 × 600 (Standard)</option><option value="1152x720">1152 × 720</option><option value="1280x800">1280 × 800</option></select></div>
                     
                     <div>
-                        <label id="settings-lang-label" class="text-white block mb-1">🌐 Bahasa</label>
+                        <label id="settings-lang-label" class="text-white block mb-1">🌐 Language</label>
                         <select id="lang-select" onchange="changeLanguage(this.value)" class="w-full px-3 py-2 rounded-lg bg-white/10 text-white border border-white/20 focus:outline-none focus:ring-2 focus:ring-vn-gold/50">
                             <option value="en">English</option>
                             <option value="id">Indonesia</option>
                         </select>
                     </div>
                     
-                    <button onclick="closeSettingsModal()" class="w-full py-3 bg-vn-gold text-black font-bold rounded-xl hover:scale-105 transition-all mt-2">Kembali</button>
+                    <button onclick="closeSettingsModal()" class="w-full py-3 bg-vn-gold text-black font-bold rounded-xl hover:scale-105 transition-all mt-2">Back</button>
                 </div>
             </div>
         </div>
@@ -153,19 +154,19 @@
         <!-- ===== SAVE / LOAD ===== -->
         <div id="saveload-overlay" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-md flex items-center justify-center p-6">
             <div class="bg-[#1e2a3a] border border-white/20 rounded-2xl p-6 sm:p-8 max-w-3xl w-full shadow-2xl max-h-[85vh] flex flex-col">
-                <h2 id="saveload-title" class="font-display text-3xl text-vn-gold text-center mb-1">💾 Simpan Permainan</h2>
-                <p id="saveload-subtitle" class="text-center text-gray-400 text-sm mb-6">Pilih slot untuk menyimpan progress kamu</p>
+                <h2 id="saveload-title" class="font-display text-3xl text-vn-gold text-center mb-1">💾 Save Game</h2>
+                <p id="saveload-subtitle" class="text-center text-gray-400 text-sm mb-6">Select a slot to save your progress</p>
                 <div id="saveload-grid" class="grid grid-cols-1 sm:grid-cols-3 gap-4 overflow-y-auto pr-1 flex-1"></div>
-                <button onclick="closeSaveLoad()" class="mt-6 w-full py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-all">Kembali</button>
+                <button onclick="closeSaveLoad()" class="mt-6 w-full py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-all">Back</button>
             </div>
         </div>
 
         <!-- ===== KONFIRMASI ===== -->
         <div id="confirm-overlay" class="fixed inset-0 z-[60] hidden bg-black/70 backdrop-blur-sm flex items-center justify-center">
             <div id="confirm-modal" class="bg-[#1e2a3a] border border-white/20 rounded-2xl p-8 max-w-sm w-full shadow-2xl text-center">
-                <h3 id="confirm-title" class="text-2xl font-bold text-white mb-2">Apakah Anda Yakin?</h3>
-                <p id="confirm-message" class="text-gray-300 mb-6">Tindakan ini tidak bisa dibatalkan.</p>
-                <div class="flex gap-3"><button onclick="runConfirmedAction()" class="flex-1 py-3 bg-vn-gold text-black font-bold rounded-xl hover:scale-105 transition-all">Ya, Lanjutkan</button><button onclick="closeConfirm()" class="flex-1 py-3 bg-gray-600 text-white rounded-xl hover:scale-105 transition-all">Batal</button></div>
+                <h3 id="confirm-title" class="text-2xl font-bold text-white mb-2">Are You Sure?</h3>
+                <p id="confirm-message" class="text-gray-300 mb-6">This action cannot be undone.</p>
+                <div class="flex gap-3"><button onclick="runConfirmedAction()" class="flex-1 py-3 bg-vn-gold text-black font-bold rounded-xl hover:scale-105 transition-all">Yes, Proceed</button><button onclick="closeConfirm()" class="flex-1 py-3 bg-gray-600 text-white rounded-xl hover:scale-105 transition-all">Cancel</button></div>
             </div>
         </div>
     </div>
@@ -174,6 +175,6 @@
     <script src="./fungsi/main.js"></script>
     <script src="./fungsi/engine.js"></script>
     <script src="./fungsi/config.js"></script>
-    
+    <script src="./fungsi/story.js"></script>
 </body>
 </html>
