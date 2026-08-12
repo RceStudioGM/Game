@@ -25,7 +25,7 @@ function t(key) {
 }
 
 /* ============================================================
-   FUNGSI NAVIGASI KEYBOARD (FIX: BISA KE SLIDER DAN DROPDOWN)
+   FUNGSI NAVIGASI KEYBOARD (FIX ENTER MACET DI DROPDOWN/SLIDER)
    ============================================================ */
 let _subMenuNavHandler = null;
 
@@ -40,7 +40,7 @@ function attachSubMenuKeyboardNav() {
     );
     if (!activeModal) return;
 
-    // SEKARANG: Ambil semua tombol, slider volume, dan dropdown bahasa
+    // Ambil semua elemen interaktif: Tombol, Slider, Dropdown
     const focusable = Array.from(activeModal.querySelectorAll('button:not([disabled]), input[type="range"], select'));
     if (focusable.length === 0) return;
 
@@ -55,10 +55,11 @@ function attachSubMenuKeyboardNav() {
     const handler = (e) => {
         if (activeModal.classList.contains('hidden')) {
             document.removeEventListener('keydown', handler);
+            _subMenuNavHandler = null;
             return;
         }
 
-        // Navigasi antar elemen (Tombol, Slider, Dropdown)
+        // Navigasi antar elemen
         if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
             e.preventDefault();
             currentFocusIndex = (currentFocusIndex + 1) % focusable.length;
@@ -68,16 +69,17 @@ function attachSubMenuKeyboardNav() {
             currentFocusIndex = (currentFocusIndex - 1 + focusable.length) % focusable.length;
             focusable[currentFocusIndex].focus();
         } 
-        // Enter dan Spasi (Hanya mengeksekusi klik jika elemennya TOMBOL)
+        // Logika Enter dan Spasi: Hanya eksekusi jika fokus ada di BUTTON
         else if (e.key === 'Enter' || e.key === ' ') {
             const activeElm = focusable[currentFocusIndex];
             // Jika elemen yang sedang difokus adalah BUTTON, jalankan klik
             if (activeElm && activeElm.tagName === 'BUTTON') {
-                e.preventDefault(); // Cegah scroll ke bawah
+                e.preventDefault(); // Cegah scroll
                 playSFX();
                 activeElm.click();
             }
-            // Jika elemen adalah <select> atau <input>, biarkan browser menangani (misal: Spasi buka dropdown)
+            // Jika elemen adalah SELECT atau INPUT, kita TIDAK melakukan preventDefault
+            // agar dropdown bahasa dan slider bisa berfungsi normal (Spasi buka dropdown)
         }
     };
 
