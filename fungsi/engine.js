@@ -90,7 +90,12 @@ function applyLanguageUI() {
 function changeLanguage(lang) {
     localStorage.setItem('vn_lang', lang);
     window.currentLang = lang;
-    applyLanguageUI();
+    applyLanguageUI(); // Update tombol UI
+    
+    // Panggil fungsi pemuat cerita dari main.js
+    if (typeof loadStoryByLanguage === 'function') {
+        loadStoryByLanguage();
+    }
 }
 
 function updateVolume(type, val) {
