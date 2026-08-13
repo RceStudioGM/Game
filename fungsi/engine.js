@@ -27,6 +27,20 @@ function t(key) {
 /* ============================================================
    FUNGSI NAVIGASI KEYBOARD (FIX ENTER MACET DI DROPDOWN/SLIDER)
    ============================================================ */
+/** FIX: dipanggil setiap kali sebuah modal ditutup. Menentukan navigasi keyboard
+    mana yang seharusnya aktif berikutnya — modal lain yang masih terbuka di
+    baliknya, atau kembali ke navigasi lobi kalau tidak ada modal tersisa. */
+function restoreKeyboardNav() {
+    const anyModalStillOpen = document.querySelector(
+        '#pause-overlay:not(.hidden), #settings-overlay:not(.hidden), #saveload-overlay:not(.hidden), #howtoplay-overlay:not(.hidden), #confirm-overlay:not(.hidden), #name-input-screen:not(.hidden), #profile-screen:not(.hidden), #sub-menu-screen:not(.hidden)'
+    );
+    if (anyModalStillOpen) {
+        attachSubMenuKeyboardNav();
+    } else if (!document.getElementById('main-menu').classList.contains('hidden')) {
+        attachLobbyKeyboardNav();
+    }
+}
+
 let _subMenuNavHandler = null;
 
 function attachSubMenuKeyboardNav() {
@@ -35,9 +49,13 @@ function attachSubMenuKeyboardNav() {
         _subMenuNavHandler = null;
     }
 
-    const activeModal = document.querySelector(
-        '#pause-overlay:not(.hidden), #settings-overlay:not(.hidden), #saveload-overlay:not(.hidden), #howtoplay-overlay:not(.hidden), #name-input-screen:not(.hidden), #profile-screen:not(.hidden)'
-    );
+    // FIX: kalau ada beberapa overlay terbuka bertumpuk (mis. How to Play di atas
+    // Settings), ambil yang PALING TERAKHIR di urutan DOM — itu yang paling baru
+    // dibuka / paling atas — bukan yang pertama ditemukan.
+    const activeModals = Array.from(document.querySelectorAll(
+        '#pause-overlay:not(.hidden), #settings-overlay:not(.hidden), #saveload-overlay:not(.hidden), #howtoplay-overlay:not(.hidden), #confirm-overlay:not(.hidden), #name-input-screen:not(.hidden), #profile-screen:not(.hidden), #sub-menu-screen:not(.hidden)'
+    ));
+    const activeModal = activeModals[activeModals.length - 1];
     if (!activeModal) return;
 
     // Ambil semua elemen interaktif: Tombol, Slider, Dropdown
@@ -201,6 +219,7 @@ function changeResolution(res) {
 }
 
 function openPauseMenu() {
+    detachLobbyKeyboardNav();
     document.getElementById('pause-overlay').classList.remove('hidden');
     document.getElementById('pause-modal').classList.remove('scale-95');
     document.getElementById('pause-modal').classList.add('scale-100');
@@ -212,6 +231,7 @@ function closePauseMenu() {
     document.getElementById('pause-overlay').classList.add('hidden');
     document.getElementById('pause-modal').classList.remove('scale-100');
     document.getElementById('pause-modal').classList.add('scale-95');
+    restoreKeyboardNav();
 }
 
 function openSettingsFromPause() {
@@ -220,6 +240,7 @@ function openSettingsFromPause() {
 }
 
 function showSettingsModal() {
+    detachLobbyKeyboardNav();
     document.getElementById('bgm-volume').value = window.bgmVolume;
     document.getElementById('bgm-volume-label').innerText = window.bgmVolume + '%';
     document.getElementById('sfx-volume').value = window.sfxVolume;
@@ -235,10 +256,13 @@ function closeSettingsModal() {
     document.getElementById('settings-overlay').classList.add('hidden');
     if (!document.getElementById('pause-overlay').classList.contains('hidden')) {
         openPauseMenu();
+    } else {
+        restoreKeyboardNav();
     }
 }
 
 function openHowToPlay() {
+    detachLobbyKeyboardNav();
     document.getElementById('howtoplay-overlay').classList.remove('hidden');
     applyLanguageUI();
     attachSubMenuKeyboardNav();
@@ -246,11 +270,13 @@ function openHowToPlay() {
 
 function closeHowToPlay() {
     document.getElementById('howtoplay-overlay').classList.add('hidden');
+    restoreKeyboardNav();
 }
 
 let _pendingConfirmAction = null;
 
 function showConfirm(title, message, onConfirm) {
+    detachLobbyKeyboardNav();
     document.getElementById('confirm-title').innerText = title;
     document.getElementById('confirm-message').innerText = message;
     _pendingConfirmAction = onConfirm;
@@ -267,6 +293,7 @@ function runConfirmedAction() {
 function closeConfirm() {
     document.getElementById('confirm-overlay').classList.add('hidden');
     _pendingConfirmAction = null;
+    restoreKeyboardNav();
 }
 
 function confirmQuit() {
@@ -275,11 +302,8 @@ function confirmQuit() {
 }
 
 function quitGame() {
-    hideAllScreens();
-    document.getElementById('main-menu').classList.remove('hidden');
     if (bgmAudio) bgmAudio.pause();
-    checkContinueAvailability();
-    applyLanguageUI();
+    backToMenu();
 }
 
 function img(charName, exprKey) {
@@ -344,6 +368,7 @@ function showGallery() {
             : `🔒 <em>(${t('lockRouteA')})</em>`;
         box.appendChild(item);
     }
+    attachSubMenuKeyboardNav();
 }
 
 function showProfiles() {
@@ -353,6 +378,7 @@ function showProfiles() {
     const container = document.getElementById('profile-container');
     container.innerHTML = '';
     applyLanguageUI();
+    attachSubMenuKeyboardNav();
 
     for (const [key, profile] of Object.entries(characterProfiles)) {
         const card = document.createElement('div');
@@ -573,6 +599,12 @@ function attachLobbyKeyboardNav() {
     menuBtns[currentFocusIndex].focus();
     const handler = (e) => {
         if (document.getElementById('main-menu').classList.contains('hidden')) return;
+        // FIX: kalau ada modal/overlay apa pun yang sedang terbuka di atas lobi,
+        // jangan proses input di sini — biarkan attachSubMenuKeyboardNav() yang menangani.
+        const anyOverlayOpen = document.querySelector(
+            '#pause-overlay:not(.hidden), #settings-overlay:not(.hidden), #saveload-overlay:not(.hidden), #howtoplay-overlay:not(.hidden), #confirm-overlay:not(.hidden), #name-input-screen:not(.hidden)'
+        );
+        if (anyOverlayOpen) return;
         menuBtns.forEach(btn => btn.classList.remove('keyboard-selected'));
         if (e.key === 'ArrowRight') { e.preventDefault(); currentFocusIndex = (currentFocusIndex + 1) % menuBtns.length; }
         else if (e.key === 'ArrowLeft') { e.preventDefault(); currentFocusIndex = (currentFocusIndex - 1 + menuBtns.length) % menuBtns.length; }
@@ -583,6 +615,16 @@ function attachLobbyKeyboardNav() {
     };
     document.addEventListener('keydown', handler);
     _lobbyNavHandler = handler;
+}
+
+/** FIX: lepas listener navigasi lobi. Dipanggil setiap kali modal/overlay dibuka
+    di atas lobi, supaya tidak ada dua handler keydown yang rebutan input. */
+function detachLobbyKeyboardNav() {
+    if (_lobbyNavHandler) {
+        document.removeEventListener('keydown', _lobbyNavHandler);
+        _lobbyNavHandler = null;
+    }
+    document.querySelectorAll('#lobby-menu-bar .menu-btn').forEach(btn => btn.classList.remove('keyboard-selected'));
 }
 
 const SAVE_SLOT_COUNT = 9;
@@ -605,6 +647,7 @@ function formatSaveDate(iso) {
 }
 
 function openSaveLoad(mode) {
+    detachLobbyKeyboardNav();
     saveLoadMode = mode;
     document.getElementById('saveload-title').innerText = mode === 'save' ? t('saveLoadTitleSave') : t('saveLoadTitleLoad');
     document.getElementById('saveload-subtitle').innerText = mode === 'save' ? t('saveLoadSubSave') : t('saveLoadSubLoad');
@@ -615,6 +658,7 @@ function openSaveLoad(mode) {
 
 function closeSaveLoad() {
     document.getElementById('saveload-overlay').classList.add('hidden');
+    restoreKeyboardNav();
 }
 
 function renderSaveSlots() {

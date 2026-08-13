@@ -36,6 +36,8 @@ function showNameInput() {
     hideAllScreens();
     document.getElementById('name-input-screen').classList.remove('hidden');
     applyLanguageUI();
+    if (typeof detachLobbyKeyboardNav === 'function') detachLobbyKeyboardNav();
+    if (typeof attachSubMenuKeyboardNav === 'function') attachSubMenuKeyboardNav();
 }
 
 function startGameWithCustomName() {
