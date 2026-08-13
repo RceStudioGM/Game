@@ -73,9 +73,9 @@ Game ini dibangun secara *custom web-based engine* dari nol tanpa menggunakan en
 - **Frontend Framework / Styling:** HTML5, CSS3, [Tailwind CSS](https://tailwindcss.com/)
 - **Animation Engine:** [GSAP (GreenSock)](https://greensock.com/gsap/) & MotionPathPlugin
 - **Core Engine & Logic:** Vanilla JavaScript (ES6+)
-- **Localization:** Dynamic Multi-Language System (`story.js` & `story_en.js`)
+- **Localization:** Dynamic Multi-Language System 
 - **Data Persistence:** Web Storage API (LocalStorage Multi-Slot)
-- **Typography:** Google Fonts (*Playfair Display* & *Nunito*)
+- **Typography:** Google Fonts 
 
 ---
 
@@ -88,7 +88,7 @@ Game ini dibangun secara *custom web-based engine* dari nol tanpa menggunakan en
 
 ---
 
-| RAIH ENDING MENARIK DARI TOTAL 17 ENDING YANG BERISI 6 ENDING UTAMA DAN RAIH JUGA 11 ENDING ALTERNATIF LAINNYA |
+| RAIH ENDING MENARIK DARI TOTAL 17 ENDING YANG BERISI 7 ENDING UTAMA DAN RAIH JUGA 10 ENDING ALTERNATIF LAINNYA |
 | :--- |
 | NANTIKAN KESERUANMU DISINI |
 | SAMPAI JUMPA DAN SELAMAT BERSENANG-SENANG |
