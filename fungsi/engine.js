@@ -59,7 +59,7 @@ function attachSubMenuKeyboardNav() {
     if (!activeModal) return;
 
     // Ambil semua elemen interaktif: Tombol, Slider, Dropdown
-    const focusable = Array.from(activeModal.querySelectorAll('button:not([disabled]), input[type="range"], select'));
+    const focusable = Array.from(activeModal.querySelectorAll('button:not([disabled]), input[type="range"], select, [data-kbnav]'));
     if (focusable.length === 0) return;
 
     let currentFocusIndex = 0;
@@ -91,7 +91,7 @@ function attachSubMenuKeyboardNav() {
         else if (e.key === 'Enter' || e.key === ' ') {
             const activeElm = focusable[currentFocusIndex];
             // Jika elemen yang sedang difokus adalah BUTTON, jalankan klik
-            if (activeElm && activeElm.tagName === 'BUTTON') {
+            if (activeElm && (activeElm.tagName === 'BUTTON' || activeElm.hasAttribute('data-kbnav'))) {
                 e.preventDefault(); // Cegah scroll
                 playSFX();
                 activeElm.click();
@@ -668,8 +668,12 @@ function renderSaveSlots() {
         const card = document.createElement('div');
         const isEmpty = !data;
         const clickable = saveLoadMode === 'save' || !isEmpty;
-        card.className = `relative rounded-xl border p-4 transition-all text-left ${isEmpty ? 'border-dashed border-white/20 bg-white/[0.02]' : 'border-white/20 bg-white/5 hover:border-vn-gold hover:bg-white/10'} ${clickable ? 'cursor-pointer' : 'opacity-40 cursor-not-allowed'}`;
-        if (clickable) card.onclick = () => handleSlotClick(n);
+        card.className = `relative rounded-xl border p-4 transition-all text-left ${isEmpty ? 'border-dashed border-white/20 bg-white/[0.02]' : 'border-white/20 bg-white/5 hover:border-vn-gold hover:bg-white/10'} ${clickable ? 'cursor-pointer focus:outline-none focus:ring-2 focus:ring-vn-gold' : 'opacity-40 cursor-not-allowed'}`;
+        if (clickable) {
+            card.setAttribute('tabindex', '0');
+            card.setAttribute('data-kbnav', 'slot');
+            card.onclick = () => handleSlotClick(n);
+        }
         if (isEmpty) {
             card.innerHTML = `<div class="text-vn-gold font-bold text-sm mb-2">${t('saveLoadTitleSave')} ${n}</div><div class="text-gray-500 text-sm py-4 text-center">${saveLoadMode === 'save' ? '+ ' + t('saveLoadSubSave') : t('lockText')}</div>`;
         } else {
