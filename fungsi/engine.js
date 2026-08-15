@@ -1,19 +1,83 @@
 let currentScene = 'prolog_1';
-let bgmAudio = null;
 let gsapTimeline = null;
 
 window.bgmVolume = parseInt(localStorage.getItem('vn_bgm_volume')) || 70;
 window.sfxVolume = parseInt(localStorage.getItem('vn_sfx_volume')) || 80;
 window.resolution = localStorage.getItem('vn_resolution') || '960x600';
 
+/* ============================================================
+   AUDIO MANAGER
+   - BGM: 2 slot audio (A/B) supaya bisa crossfade halus saat
+     suasana cerita berganti, bukan potong tiba-tiba.
+   - SFX: pool kecil per key supaya suara beruntun cepat
+     (misal klik cepat) tidak saling motong.
+   ============================================================ */
+let bgmSlots = { A: null, B: null };
+let activeBgmSlot = 'A';
+let currentBgmMood = null;
+let _bgmFadeInterval = null;
+const _sfxPool = {};
+
 function initAudio() {
-    bgmAudio = new Audio('assets/sound/bgm.mp3');
-    bgmAudio.loop = true;
-    bgmAudio.volume = window.bgmVolume / 100;
+    bgmSlots.A = new Audio();
+    bgmSlots.B = new Audio();
+    [bgmSlots.A, bgmSlots.B].forEach(a => { a.loop = true; a.volume = 0; });
 }
 
-function playSFX() {
-    const sfx = new Audio('assets/sound/click.mp3');
+function getActiveBgmAudio() { return bgmSlots[activeBgmSlot]; }
+
+/** Pindah BGM sesuai mood/suasana scene (lihat daftar key di config.js -> audioConfig.BGM).
+    Kalau mood-nya sama dengan yang sedang main, tidak diulang dari awal (supaya track
+    yang sama tidak "restart" tiap ganti dialog dalam suasana yang sama). */
+function playBGM(moodKey) {
+    if (!moodKey || !audioConfig.BGM[moodKey]) return;
+    if (moodKey === currentBgmMood) return;
+    currentBgmMood = moodKey;
+
+    const outKey = activeBgmSlot;
+    const inKey = activeBgmSlot === 'A' ? 'B' : 'A';
+    const outgoing = bgmSlots[outKey];
+    const incoming = bgmSlots[inKey];
+    activeBgmSlot = inKey;
+
+    incoming.src = audioConfig.BGM[moodKey];
+    incoming.currentTime = 0;
+    incoming.volume = 0;
+    incoming.play().catch(() => {});
+
+    if (_bgmFadeInterval) clearInterval(_bgmFadeInterval);
+    const targetVol = window.bgmVolume / 100;
+    const steps = 30;
+    let step = 0;
+    _bgmFadeInterval = setInterval(() => {
+        step++;
+        incoming.volume = Math.min(targetVol, (targetVol * step) / steps);
+        outgoing.volume = Math.max(0, targetVol * (1 - step / steps));
+        if (step >= steps) {
+            clearInterval(_bgmFadeInterval);
+            _bgmFadeInterval = null;
+            outgoing.pause();
+        }
+    }, 30);
+}
+
+function stopBGM() {
+    if (_bgmFadeInterval) { clearInterval(_bgmFadeInterval); _bgmFadeInterval = null; }
+    [bgmSlots.A, bgmSlots.B].forEach(a => { if (a) a.pause(); });
+    currentBgmMood = null;
+}
+
+/** Mainkan efek suara generik. key merujuk ke audioConfig.SFX (default 'click'). */
+function playSFX(key) {
+    const sfxKey = key || 'click';
+    const path = audioConfig.SFX[sfxKey] || audioConfig.SFX.click;
+    if (!_sfxPool[path]) _sfxPool[path] = [];
+    let sfx = _sfxPool[path].find(a => a.paused);
+    if (!sfx) {
+        sfx = new Audio(path);
+        _sfxPool[path].push(sfx);
+    }
+    sfx.currentTime = 0;
     sfx.volume = window.sfxVolume / 100;
     sfx.play().catch(() => {});
 }
@@ -201,7 +265,7 @@ function updateVolume(type, val) {
         window.bgmVolume = parseInt(val);
         localStorage.setItem('vn_bgm_volume', val);
         document.getElementById('bgm-volume-label').innerText = val + '%';
-        if (bgmAudio) bgmAudio.volume = val / 100;
+        if (getActiveBgmAudio()) getActiveBgmAudio().volume = val / 100;
     } else {
         window.sfxVolume = parseInt(val);
         localStorage.setItem('vn_sfx_volume', val);
@@ -286,6 +350,7 @@ function showConfirm(title, message, onConfirm) {
 
 function runConfirmedAction() {
     const action = _pendingConfirmAction;
+    playSFX('confirm');
     closeConfirm();
     if (typeof action === 'function') action();
 }
@@ -302,7 +367,6 @@ function confirmQuit() {
 }
 
 function quitGame() {
-    if (bgmAudio) bgmAudio.pause();
     backToMenu();
 }
 
@@ -340,7 +404,7 @@ function backToMenu() {
     hideAllScreens();
     document.getElementById('main-menu').classList.remove('hidden');
     checkContinueAvailability();
-    if (bgmAudio) bgmAudio.pause();
+    playBGM('lobby');
     attachLobbyKeyboardNav();
     triggerLobbyAnimations();
     applyLanguageUI();
@@ -417,6 +481,7 @@ function saveQuote(quoteId) {
     if (window.unlockedQuotes.includes(quoteId)) return;
     window.unlockedQuotes.push(quoteId);
     try { localStorage.setItem('vn_quotes', JSON.stringify(window.unlockedQuotes)); } catch (e) {}
+    playSFX('unlock');
     const toast = document.getElementById('toast-notif');
     toast.classList.remove('hidden');
     setTimeout(() => toast.classList.add('show'), 100);
@@ -441,6 +506,9 @@ function loadScene(sceneKey) {
     currentScene = sceneKey;
     const scene = storyData[sceneKey];
     if (!scene) { console.error('Scene tidak ditemukan:', sceneKey); return; }
+
+    // Ganti BGM sesuai suasana scene (kalau scene tidak set 'bgm', fallback ke suasana netral)
+    playBGM(scene.bgm || 'daily_common');
 
     if (window._vn_advance_handler) { document.removeEventListener('keydown', window._vn_advance_handler); window._vn_advance_handler = null; }
     if (window._vn_choice_handler) { document.removeEventListener('keydown', window._vn_choice_handler); window._vn_choice_handler = null; }
@@ -469,6 +537,9 @@ function loadScene(sceneKey) {
     }
     if (['rute_r_ending_1', 'rute_r_ending_2_a', 'rute_r_ending_2_b'].includes(sceneKey)) {
         if (!window.gameFlags.secretRoute) { window.gameFlags.secretRoute = true; saveFlags(); }
+    }
+    if (['bad_end_a_x', 'bad_end_b_x'].includes(sceneKey)) {
+        playSFX('error');
     }
 
     const replaceTags = (str) => str.replace(/{alexandra}/g, 'Alexandra').replace(/{kirana}/g, 'Kirana').replace(/{mira}/g, 'Mira').replace(/{player}/g, window.playerName);
@@ -701,7 +772,7 @@ function handleSlotClick(n) {
 function doSaveToSlot(n) {
     const dialogueEl = document.getElementById('dialogue-text');
     const data = { playerName: window.playerName, currentScene: currentScene, gameFlags: window.gameFlags, unlockedQuotes: window.unlockedQuotes, dialoguePreview: dialogueEl ? dialogueEl.innerText : '', savedAt: new Date().toISOString() };
-    try { localStorage.setItem(slotKey(n), JSON.stringify(data)); renderSaveSlots(); checkContinueAvailability(); showToast(t('toastSave'), t('toastSaveMsg', n)); } catch (e) { console.error('Gagal menyimpan game:', e); }
+    try { localStorage.setItem(slotKey(n), JSON.stringify(data)); renderSaveSlots(); checkContinueAvailability(); playSFX('save'); showToast(t('toastSave'), t('toastSaveMsg', n)); } catch (e) { console.error('Gagal menyimpan game:', e); }
 }
 
 function doLoadFromSlot(n) {
@@ -717,7 +788,6 @@ function doLoadFromSlot(n) {
         hideAllScreens();
         document.getElementById('game-screen').classList.remove('hidden');
         loadScene(data.currentScene || 'prolog_1');
-        if (bgmAudio) bgmAudio.play().catch(() => {});
     } catch (e) { console.error('Gagal memuat game:', e); }
 }
 
@@ -761,5 +831,6 @@ window.addEventListener('load', () => {
         attachLobbyKeyboardNav();
         triggerLobbyAnimations();
         applyLanguageUI();
+        playBGM('lobby');
     }
 });

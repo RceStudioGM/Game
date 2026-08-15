@@ -1,3 +1,45 @@
+/* ============================================================
+   KONFIGURASI AUDIO — BGM per suasana cerita + SFX
+   Taruh file musik kamu di:
+     assets/music/bgm/<nama>.mp3   (BGM, disesuaikan mood tiap scene)
+     assets/music/sfx/<nama>.mp3   (SFX, generik — tidak terikat scene)
+   Kalau nama file kamu beda, tinggal ganti path di bawah ini saja,
+   tidak perlu ubah kode lain.
+   ============================================================ */
+const audioConfig = {
+    BGM: {
+        // Menu & transisi umum
+        lobby:               'assets/music/bgm/lobby.mp3',
+        daily_common:        'assets/music/bgm/daily_common.mp3',   // hari-hari biasa, koridor, netral
+        comedy:              'assets/music/bgm/comedy.mp3',          // godaan Bima, momen ringan/lucu
+
+        // Nuansa per "dunia" heroine
+        council_focus:       'assets/music/bgm/council_focus.mp3',   // OSIS, Alexandra — disiplin & serius
+        art_whimsy:          'assets/music/bgm/art_whimsy.mp3',      // Ruang Seni, Kirana — ceria & bebas
+        mystery:             'assets/music/bgm/mystery.mp3',         // Mira, loteng arsip — tenang & misterius
+
+        // Nuansa emosional lintas rute
+        tender:              'assets/music/bgm/tender.mp3',          // momen hangat/lembut membangun kedekatan
+        tension:              'assets/music/bgm/tension.mp3',         // konflik, ujian kepercayaan, krisis
+        melancholy:           'assets/music/bgm/melancholy.mp3',      // sedih, ragu, kehilangan
+        night_calm:            'assets/music/bgm/night_calm.mp3',      // adegan malam yang tenang (opsional dipakai manual)
+        festival:              'assets/music/bgm/festival.mp3',        // Aula Festival, perayaan, upbeat
+
+        // Ending
+        ending_good:           'assets/music/bgm/ending_good.mp3',
+        ending_bittersweet:    'assets/music/bgm/ending_bittersweet.mp3',
+        ending_bad:             'assets/music/bgm/ending_bad.mp3',
+        true_ending:            'assets/music/bgm/true_ending.mp3',
+    },
+    SFX: {
+        click:    'assets/music/sfx/click.mp3',     // klik tombol/lanjut dialog (default)
+        confirm:  'assets/music/sfx/confirm.mp3',   // konfirmasi pilihan penting
+        save:     'assets/music/sfx/save.mp3',      // berhasil menyimpan
+        unlock:   'assets/music/sfx/unlock.mp3',    // quote/karakter baru terbuka
+        error:    'assets/music/sfx/error.mp3',     // aksi tidak valid / bad end
+    }
+};
+
 const assets = {
     BACKGROUNDS: {
         sekolahUmum: {
@@ -203,3 +245,121 @@ const characterProfiles = {
     buSari: { id: 'buSari', name: 'Bu Sari', role: 'Guru Seni', desc: 'Tenang dan sabar. Mentor Kirana. Dia sengaja "meminjam" MC untuk membantu Kirana agar mereka berdua bisa saling mengenal lebih dalam.', unlockKey: 'secretRoute' },
     alvin: { id: 'alvin', name: 'Alvin Pradana', role: 'Sahabat Masa Kecil', desc: 'Sahabat Mira sejak SD. Sudah lama menyukainya tapi takut mengungkapkan. Baik hati, tapi bisa menjadi rival yang serius.', unlockKey: null }
 };
+/* ============================================================
+   AUDIO — BGM per suasana (mood) & SFX generik
+   ============================================================
+   Taruh file lagu kamu di:
+     assets/music/bgm/<nama-file>.mp3   (musik latar, per mood)
+     assets/music/sfx/<nama-file>.mp3   (efek suara, generik — TIDAK per mood)
+
+   Kenapa berbasis MOOD, bukan 1 lagu per scene?
+   Karena ada 90+ scene — kalau harus assign 1 file per scene,
+   itu 90+ file yang harus kamu buat & maintain. Dengan sistem
+   mood, kamu cukup siapkan ~16 track suasana, dan tiap scene
+   otomatis "tahu" pakai yang mana lewat sceneBgmMap di bawah.
+   Kalau nanti mau override 1 scene spesifik pakai lagu unik,
+   tinggal tambahkan entry-nya di sceneBgmMap seperti biasa. */
+
+const audio = {
+    BGM: {
+        // --- Netral / umum ---
+        lobby:          'assets/music/bgm/lobby_theme.mp3',
+        dailyLife:      'assets/music/bgm/daily_life.mp3',
+        comedic:        'assets/music/bgm/comedic.mp3',
+
+        // --- Dunia Alexandra (OSIS) ---
+        disciplined:    'assets/music/bgm/disciplined.mp3',
+        tender:         'assets/music/bgm/tender.mp3',
+
+        // --- Dunia Kirana (Seni) ---
+        whimsicalArt:   'assets/music/bgm/whimsical_art.mp3',
+        warmKirana:     'assets/music/bgm/warm_kirana.mp3',
+
+        // --- Dunia Mira ---
+        melancholic:    'assets/music/bgm/melancholic.mp3',
+        mysterious:     'assets/music/bgm/mysterious.mp3',
+
+        // --- Emosi umum lintas rute ---
+        tense:          'assets/music/bgm/tense.mp3',
+        dramatic:       'assets/music/bgm/dramatic.mp3',
+        sad:            'assets/music/bgm/sad.mp3',
+        bittersweet:    'assets/music/bgm/bittersweet.mp3',
+        romantic:       'assets/music/bgm/romantic.mp3',
+        triumphant:     'assets/music/bgm/triumphant.mp3',
+        festival:       'assets/music/bgm/festival.mp3',
+    },
+    SFX: {
+        // Generik — sama untuk semua scene/mood, sesuai permintaan
+        click:   'assets/music/sfx/click.mp3',
+        hover:   'assets/music/sfx/hover.mp3',
+        unlock:  'assets/music/sfx/unlock.mp3',
+        save:    'assets/music/sfx/save.mp3',
+        select:  'assets/music/sfx/select.mp3',
+    }
+};
+
+/* Peta scene -> mood BGM. Key harus persis sama dengan key di
+   storyData (story.js / story_en.js) — berlaku untuk KEDUA bahasa
+   sekaligus karena cuma bergantung pada scene key, bukan teksnya. */
+const sceneBgmMap = {
+    // === COMMON ROUTE ===
+    prolog_1: 'dailyLife', prolog_2: 'dailyLife',
+    common_hari1_3a: 'dailyLife', common_hari1_3b: 'dailyLife',
+    common_hari1_4: 'whimsicalArt',
+    common_hari2: 'comedic', common_hari2_curhat: 'comedic', common_hari2_diam: 'comedic',
+    common_hari2_pakhendra: 'disciplined', common_hari2_akhir: 'disciplined',
+    common_hari3: 'dailyLife', common_hari3_osis: 'disciplined', common_hari3_seni: 'whimsicalArt',
+    common_hari4: 'comedic',
+    bab1_pilihan: 'dailyLife',
+
+    // === RUTE ALEXANDRA ===
+    rute_a2a: 'disciplined', rute_a2b: 'disciplined', rute_a2c: 'disciplined',
+    rute_a3_tenang: 'disciplined', rute_a3_cair: 'tender',
+    rute_a3_momen: 'tender', rute_a3_bangun: 'tender',
+    rute_a4_taman: 'tender', rute_a4_perpus: 'tender',
+    rute_a3_ujian: 'tense', bad_end_a_x: 'sad',
+    rute_a5_rangga: 'tense', rute_a5_percaya: 'disciplined', rute_a5_ragu: 'sad',
+    rute_a6_malam: 'dramatic', rute_a6_ending_bonus: 'triumphant', rute_a6_ending_normal: 'dailyLife',
+    rute_a6_ending1: 'romantic', rute_a6_ending2: 'bittersweet', rute_a6_ending_sahabat: 'bittersweet',
+
+    // === RUTE KIRANA ===
+    rute_b2b: 'whimsicalArt', rute_b3_mengalir: 'whimsicalArt', rute_b3_berani: 'whimsicalArt',
+    rute_b3_sanggar: 'whimsicalArt', rute_b4_terbuka: 'whimsicalArt', rute_b4_terpendam: 'tense',
+    rute_b4_taman: 'melancholic', rute_b4_kesabaran: 'tense', bad_end_b_x: 'sad',
+    rute_b5_dewi: 'dramatic', rute_b6_klarifikasi: 'tender', rute_b6_diam: 'sad',
+    rute_b6_hujan: 'warmKirana', rute_b7_ending1: 'romantic', rute_b7_ending2: 'festival',
+    rute_b7_ending_sahabat: 'bittersweet',
+
+    // === RUTE DILEMA ===
+    rute_c2c: 'comedic', rute_c3_bertahan: 'tense', rute_c3_ragu: 'tense',
+    rute_c3_panggil_hendra: 'disciplined', rute_c3_titik_jenuh: 'tense',
+    rute_c3_saran_hendra: 'disciplined', rute_c4_memilih: 'tense', rute_c4_jujur: 'tender',
+    rute_c5_ending: 'triumphant',
+
+    // === RUTE MIRA ===
+    rute_m1: 'disciplined', rute_m1_find: 'mysterious',
+    rute_m2_sabar: 'melancholic', rute_m2_penasaran: 'mysterious', rute_m2_bima: 'comedic',
+    rute_m2_gosip: 'dramatic', rute_m3: 'mysterious', rute_m3_loteng: 'mysterious',
+    rute_m4_hormat: 'tender', rute_m4_ingin_tahu: 'melancholic',
+    rute_m5_dewi: 'dailyLife', rute_m5_cemburu: 'tense',
+    rute_m6: 'melancholic', rute_m7_percaya: 'tender', rute_m7_tanya: 'tender',
+    rute_m8_alvin: 'tense', rute_m9_tenang: 'tender', rute_m9_defensif: 'dramatic',
+    rute_m10_bayangan: 'sad', rute_m10_upaya: 'tender',
+    rute_m11_berani: 'romantic', rute_m11_takut: 'sad',
+    rute_m12: 'melancholic', rute_m13: 'bittersweet',
+    rute_m13_ending1: 'romantic', rute_m13_ending2: 'bittersweet', rute_m13_ending3: 'sad',
+    rute_m13_ending_sahabat: 'bittersweet',
+
+    // === RUTE RAHASIA ===
+    rute_r1: 'disciplined', rute_r1_kirana: 'whimsicalArt', rute_r1_hendra: 'disciplined',
+    rute_r2: 'tense', rute_r3: 'dramatic', rute_r3_rekat: 'triumphant',
+    rute_r4: 'festival', rute_r_ending_1: 'triumphant',
+    rute_r_ending_2: 'romantic', rute_r_ending_2_a: 'romantic', rute_r_ending_2_b: 'romantic',
+};
+
+/** Ambil mood BGM untuk sebuah scene key. Fallback ke 'dailyLife' kalau belum dipetakan
+    (misalnya kamu nambah scene baru dan lupa daftarin moodnya — game tetap jalan, cuma
+    pakai BGM netral sampai kamu tentukan mood yang lebih pas). */
+function getSceneBgmKey(sceneKey) {
+    return sceneBgmMap[sceneKey] || 'dailyLife';
+}
