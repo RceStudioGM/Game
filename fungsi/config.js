@@ -9,7 +9,7 @@
 const audioConfig = {
     BGM: {
         // Menu & transisi umum
-        lobby:               'assets/music/bgm/lobby.mp3',
+        lobby:               'assets/music/bgm/lobby/lobby.mp3',
         daily_common:        'assets/music/bgm/daily_common.mp3',   // hari-hari biasa, koridor, netral
         comedy:              'assets/music/bgm/comedy.mp3',          // godaan Bima, momen ringan/lucu
 
