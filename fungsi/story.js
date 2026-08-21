@@ -39,7 +39,31 @@ const storyData = {
         speaker: "Kirana",
         text: "Eh! Kamu, yang tadi lari-lari itu! Bantuin aku pegang ini dong, tanganku penuh cat!",
         bg: assets.BACKGROUNDS.seni.ruangSeni, charLeft: "", charRight: img('kirana', 'ceria'),
-        choices: [{ text: "Bantu Kirana menyeret kanvas", nextScene: "common_hari2" }]
+        choices: [{ text: "Bantu Kirana menyeret kanvas", nextScene: "sisip_kantin_1" }]
+    },
+    sisip_kantin_1: {
+        bgm: 'comedy',
+        speaker: "Bima",
+        text: "Njir, laper gila. Lo bawa duit lebih nggak? Gue ketinggalan dompet di kelas.",
+        bg: assets.BACKGROUNDS.sekolahUmum.kantin, charLeft: img('bima', 'jahil'), charRight: "",
+        choices: [{ text: "Kasih uang jajan ke Bima sambil geleng-geleng", nextScene: "sisip_kantin_2" }]
+    },
+    sisip_kantin_2: {
+        bgm: 'comedy',
+        speaker: "Bima",
+        text: "Eh btw gue denger-denger, katanya lo sama Pak Hendra tuh kayak ada 'chemistry' aneh gitu. Dia perhatian banget sama lo dibanding murid lain.",
+        bg: assets.BACKGROUNDS.sekolahUmum.kantin, charLeft: img('bima', 'jahil'), charRight: "",
+        choices: [
+            { text: "Bilang jujur kadang ngerasa gitu juga, tapi nggak tau kenapa", nextScene: "sisip_kantin_3a" },
+            { text: "Elak, bilang biasa aja", nextScene: "common_hari2" }
+        ]
+    },
+    sisip_kantin_3a: {
+        bgm: 'comedy',
+        speaker: "Bima",
+        text: "Ya mungkin dia liat potensi kali di lo. Atau lo emang sering bikin masalah jadi keinget mulu. (Narator: Bima ketawa sendiri sama leluconnya.)",
+        bg: assets.BACKGROUNDS.sekolahUmum.kantin, charLeft: img('bima', 'jahil'), charRight: "",
+        choices: [{ text: "Lanjut...", nextScene: "common_hari2" }]
     },
     common_hari2: {
         bgm: 'comedy',
@@ -130,7 +154,24 @@ const storyData = {
         speaker: "Alexandra",
         text: "Baca proposal ini. Tandai kalau ada yang tidak masuk akal. Jangan asal setuju cuma karena sungkan.",
         bg: assets.BACKGROUNDS.osis.sekretariat, charLeft: img('alexandra', 'tegas'), charRight: "",
-        choices: [{ text: "Bertanya ke Farah kenapa namaku dipilih", nextScene: "rute_a2c" }]
+        choices: [{ text: "Bertanya ke Farah kenapa namaku dipilih", nextScene: "sisip_a_farah_1" }]
+    },
+    sisip_a_farah_1: {
+        bgm: 'comedy',
+        speaker: "Farah",
+        text: "EH. Kamu tuh ya—kok nanya-nanya soal Alexandra ke aku doang, tapi belum pernah nanya kabarku sekalipun? Aku juga capek, tau. Ngurusin dia, ngurusin OSIS, ngurusin semuanya.",
+        bg: assets.BACKGROUNDS.osis.sekretariat, charLeft: img('farah', 'ngambek'), charRight: "",
+        choices: [
+            { text: "Tanya lebih jauh soal kesehariannya, bukan cuma soal Alexandra", nextScene: "sisip_a_farah_2a" },
+            { text: "Ketawa aja, bilang \"kamu emang capek ya jadi wakil rasa OSIS\"", nextScene: "rute_a2c" }
+        ]
+    },
+    sisip_a_farah_2a: {
+        bgm: 'comedy',
+        speaker: "Farah",
+        text: "Nah gitu dong! Aku baik kok, cuma pengen diperhatiin dikit doang, hehe. (Narator: Farah cerita santai soal hobinya nulis, obrolan kalian jadi terasa lebih akrab.)",
+        bg: assets.BACKGROUNDS.osis.sekretariat, charLeft: img('farah', 'ramah'), charRight: "",
+        choices: [{ text: "Lanjut...", nextScene: "rute_a2c" }]
     },
     rute_a2c: {
         bgm: 'council_focus',
@@ -178,13 +219,37 @@ const storyData = {
         speaker: "Narator",
         text: "Di taman, Alexandra mengaku takut ketinggalan sesuatu jika diam. Kamu menenangkannya.",
         bg: assets.BACKGROUNDS.sekolahUmum.taman, charLeft: img('alexandra', 'netral'), charRight: "",
-        choices: [{ text: "Lanjut ke Ujian Kepercayaan", nextScene: "rute_a3_ujian" }]
+        choices: [{ text: "Lanjut...", nextScene: "sisip_a_basket_1" }]
     },
     rute_a4_perpus: {
         bgm: 'tender',
         speaker: "Narator",
         text: "Di perpustakaan, dia membiarkan kamu duduk di dunianya yang paling sepi untuk pertama kalinya.",
         bg: assets.BACKGROUNDS.sekolahUmum.perpustakaan, charLeft: img('alexandra', 'netral'), charRight: "",
+        choices: [{ text: "Lanjut...", nextScene: "sisip_a_basket_1" }]
+    },
+    sisip_a_basket_1: {
+        bgm: 'comedy',
+        speaker: "Rangga",
+        text: "Woy, awas! (Narator: Bola basket nyasar kena bahumu—yang lempar ternyata Rangga. Bukan pertandingan resmi, cuma iseng abis latihan OSIS.) Sini gabung, kita kurang orang nih.",
+        bg: assets.BACKGROUNDS.sekolahUmum.lapanganBasket, charLeft: img('rangga', 'santai'), charRight: "",
+        choices: [
+            { text: "Ikutan main, meski kikuk", nextScene: "sisip_a_basket_2" },
+            { text: "Nolak sopan, bilang capek", nextScene: "rute_a3_ujian" }
+        ]
+    },
+    sisip_a_basket_2: {
+        bgm: 'comedy',
+        speaker: "Rangga",
+        text: "WOY itu mah lemparan anak SD! (Narator: Kamu jelas bukan atlet, tapi Rangga—yang biasanya kalem dan penuh perhitungan—ternyata paling berisik kalau lagi main, teriak-teriak nyemangatin sambil ngeledek.)",
+        bg: assets.BACKGROUNDS.sekolahUmum.lapanganBasket, charLeft: img('rangga', 'santai'), charRight: "",
+        choices: [{ text: "Lanjut...", nextScene: "sisip_a_basket_3" }]
+    },
+    sisip_a_basket_3: {
+        bgm: 'tender',
+        speaker: "Rangga",
+        text: "Lo tau nggak, ini pertama kalinya gue liat lo yang beneran nyantai. Serius deh—Alexandra tuh jarang banget bisa nyantai kayak gini. Kalo lo bisa bikin dia sesekali kayak gini juga, gue bakal seneng banget. Bukan buat gue. Buat dia.",
+        bg: assets.BACKGROUNDS.sekolahUmum.lapanganBasket, charLeft: img('rangga', 'lega'), charRight: "",
         choices: [{ text: "Lanjut ke Ujian Kepercayaan", nextScene: "rute_a3_ujian" }]
     },
     rute_a3_ujian: {
@@ -314,13 +379,37 @@ const storyData = {
         speaker: "Kirana",
         text: "Dia kayak kakak buat aku. Kenapa? Cemburu ya?",
         bg: assets.BACKGROUNDS.seni.sanggarLuar, charLeft: "", charRight: img('kirana', 'tertawa'),
-        choices: [{ text: "Lanjut...", nextScene: "rute_b4_taman" }]
+        choices: [{ text: "Lanjut...", nextScene: "sisip_b_warkop_1" }]
     },
     rute_b4_terpendam: {
         bgm: 'melancholy',
         speaker: "Narator",
         text: "Kamu memilih diam. Rasa tidak nyaman membuatmu salah mencampur warna. Kirana sadar ada yang aneh.",
         bg: assets.BACKGROUNDS.seni.ruangSeni, charLeft: "", charRight: img('kirana', 'kesal'),
+        choices: [{ text: "Lanjut...", nextScene: "sisip_b_warkop_1" }]
+    },
+    sisip_b_warkop_1: {
+        bgm: 'comedy',
+        speaker: "Narator",
+        text: "Sepulang dari sanggar, Kirana ngajak Adi mampir dulu ke warkop deket sana—tempat langganan anak-anak sanggar nongkrong. Bang Yusuf tiba-tiba nongol dari dalam warkop bawa nampan kopi.",
+        bg: assets.BACKGROUNDS.luarSekolah.warkopSanggar, charLeft: img('bangYusuf', 'ramah'), charRight: img('kirana', 'ceria'),
+        choices: [{ text: "Lanjut...", nextScene: "sisip_b_warkop_2" }]
+    },
+    sisip_b_warkop_2: {
+        bgm: 'comedy',
+        speaker: "Kirana",
+        text: "Eh serius deh, kalo Adi nggak protes waktu itu pas gue maksa dia pegangin kanvas gede, gue kayaknya bakal parno duluan sebelum ketemu ide buat mural.",
+        bg: assets.BACKGROUNDS.luarSekolah.warkopSanggar, charLeft: img('bangYusuf', 'ramah'), charRight: img('kirana', 'tertawa'),
+        choices: [
+            { text: "Ikut nimbrung obrolan teknik seni, coba nyambung meski awam", nextScene: "sisip_b_warkop_3a" },
+            { text: "Lebih banyak dengerin & senyum-senyum aja", nextScene: "rute_b4_taman" }
+        ]
+    },
+    sisip_b_warkop_3a: {
+        bgm: 'art_whimsy',
+        speaker: "Bang Yusuf",
+        text: "Asal nebak tapi bener mulu, itu namanya insting, bego. (Narator: Semua anak sanggar ketawa, suasananya jauh dari kaku—lebih kayak ngumpul base camp geng sendiri.)",
+        bg: assets.BACKGROUNDS.luarSekolah.warkopSanggar, charLeft: img('bangYusuf', 'ramah'), charRight: img('kirana', 'tertawa'),
         choices: [{ text: "Lanjut...", nextScene: "rute_b4_taman" }]
     },
     rute_b4_taman: {
@@ -336,9 +425,26 @@ const storyData = {
         text: "Aku mau minta pendapatmu soal dua sketsa ini. Pilih yang mana?",
         bg: assets.BACKGROUNDS.seni.ruangSeni, charLeft: "", charRight: img('kirana', 'ceria'),
         choices: [
-            { text: "Beri pendapat jujur, meski mengkritik salah satunya", nextScene: "rute_b5_dewi" },
+            { text: "Beri pendapat jujur, meski mengkritik salah satunya", nextScene: "sisip_b_dewi_1" },
             { text: "Puji semuanya biar dia nggak sedih", nextScene: "bad_end_b_x" }
         ]
+    },
+    sisip_b_dewi_1: {
+        bgm: 'comedy',
+        speaker: "Dewi",
+        text: "Eh, si Kirana deket banget ya sama kamu belakangan. Yaelah, jangan pura-pura polos deh. Semua kelas juga udah pada ngomongin. Tapi santai, aku nanya bukan buat julid kok, aku emang penasaran aja.",
+        bg: assets.BACKGROUNDS.sekolahUmum.kelas, charLeft: img('dewi', 'menggoda'), charRight: "",
+        choices: [
+            { text: "Jujur bilang lagi ada perasaan ke Kirana, agak canggung", nextScene: "sisip_b_dewi_2a" },
+            { text: "Elak, bilang cuma temenan biasa", nextScene: "rute_b5_dewi" }
+        ]
+    },
+    sisip_b_dewi_2a: {
+        bgm: 'tender',
+        speaker: "Dewi",
+        text: "Oke deh. Makasih udah jujur, nggak semua cowok berani ngaku gitu.",
+        bg: assets.BACKGROUNDS.sekolahUmum.kelas, charLeft: img('dewi', 'ramah'), charRight: "",
+        choices: [{ text: "Lanjut...", nextScene: "rute_b5_dewi" }]
     },
     bad_end_b_x: {
         bgm: 'ending_bad',
@@ -517,6 +623,13 @@ const storyData = {
         speaker: "Bima",
         text: "WOI. Katanya kamu ditugasin nemenin anak baru yang katanya dingin banget itu? Gosip bilang dia pindahan dari luar kota! Ada yang bilang dia punya masa lalu misterius!",
         bg: assets.BACKGROUNDS.sekolahUmum.koridor, charLeft: img('bima', 'jahil'), charRight: "",
+        choices: [{ text: "Nggak segitunya juga sih...", nextScene: "sisip_m_bima_2" }]
+    },
+    sisip_m_bima_2: {
+        bgm: 'tender',
+        speaker: "Bima",
+        text: "YAH. Pelit amat. (Narator: Bima manyun sebentar, terus nyengir lagi.) Yaudah deh, gue tungguin aja lo cerita sendiri kalo udah siap. Btw, lo baik-baik aja kan? Maksud gue, kadang lo suka kelewat baik sama orang sampe lupa jagain diri sendiri.",
+        bg: assets.BACKGROUNDS.sekolahUmum.koridor, charLeft: img('bima', 'jahil'), charRight: "",
         choices: [
             { text: "Abaikan gosip Bima, coba kenal Mira dari observasi sendiri", nextScene: "rute_m3" },
             { text: "Diam-diam penasaran, cari tahu di grup chat sekolah", nextScene: "rute_m2_gosip" }
@@ -551,13 +664,37 @@ const storyData = {
         speaker: "Mira",
         text: "...Tunggu. Kamu boleh... duduk sebentar. Kalau kamu diem aja. (Narator: Adi duduk di seberangnya dalam diam yang tidak canggung.)",
         bg: assets.BACKGROUNDS.rahasia.lotengArsip, charLeft: img('mira', 'netral'), charRight: "",
-        choices: [{ text: "Lanjut...", nextScene: "rute_m5_dewi" }]
+        choices: [{ text: "Lanjut...", nextScene: "sisip_m_santai_1" }]
     },
     rute_m4_ingin_tahu: {
         bgm: 'mystery',
         speaker: "Mira",
         text: "Ini tempat satu-satunya yang kerasa milikku. Aku udah pindah sekolah empat kali dalam tiga tahun. Aku belajar buat nggak terlalu deket sama tempat atau orang, karena aku juga bakal ninggalinnya lagi.",
         bg: assets.BACKGROUNDS.rahasia.lotengArsip, charLeft: img('mira', 'sedih'), charRight: "",
+        choices: [{ text: "Lanjut...", nextScene: "sisip_m_santai_1" }]
+    },
+    sisip_m_santai_1: {
+        bgm: 'tender',
+        speaker: "Narator",
+        text: "'Eh, lo suka baca genre apa emangnya?' tanya Adi random. Mira ngangkat alis, kaget ditanya hal se-random itu. '...Kenapa nanya?' 'Ya penasaran aja. Lo tiap hari di sini baca buku tebel-tebel mulu.'",
+        bg: assets.BACKGROUNDS.rahasia.lotengArsip, charLeft: img('mira', 'netral'), charRight: "",
+        choices: [{ text: "Lanjut...", nextScene: "sisip_m_santai_2" }]
+    },
+    sisip_m_santai_2: {
+        bgm: 'tender',
+        speaker: "Mira",
+        text: "Fiksi klasik, kebanyakan. Sama puisi. Kenapa, mau ngeledek? (Narator: Adi geleng, bilang malah keren, dia sendiri paling banter baca komik. Untuk pertama kalinya, Mira ketawa kecil—beneran ketawa, bukan cuma senyum tipis.)",
+        bg: assets.BACKGROUNDS.rahasia.lotengArsip, charLeft: img('mira', 'tertawa'), charRight: "",
+        choices: [
+            { text: "Lanjut ngobrol random, minta rekomendasi buku", nextScene: "sisip_m_santai_3" },
+            { text: "Nanya balik buku yang lagi dia baca sekarang", nextScene: "rute_m5_dewi" }
+        ]
+    },
+    sisip_m_santai_3: {
+        bgm: 'tender',
+        speaker: "Mira",
+        text: "Antusias, Mira mulai nyerocos ngasih rekomendasi buku satu-satu—nadanya jauh lebih hidup dari biasanya. Obrolan berlanjut santai, bukan soal masa lalunya yang berat, cuma dua orang ngobrolin buku kayak remaja biasa.",
+        bg: assets.BACKGROUNDS.rahasia.lotengArsip, charLeft: img('mira', 'tersenyum'), charRight: "",
         choices: [{ text: "Lanjut...", nextScene: "rute_m5_dewi" }]
     },
     rute_m5_dewi: {

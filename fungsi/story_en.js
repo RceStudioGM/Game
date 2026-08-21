@@ -39,7 +39,31 @@ const storyData = {
         speaker: "Kirana",
         text: "Hey! You, the one running earlier! Help me hold this, my hands are covered in paint!",
         bg: assets.BACKGROUNDS.seni.ruangSeni, charLeft: "", charRight: img('kirana', 'ceria'),
-        choices: [{ text: "Help Kirana drag the canvas", nextScene: "common_hari2" }]
+        choices: [{ text: "Help Kirana drag the canvas", nextScene: "sisip_kantin_1" }]
+    },
+    sisip_kantin_1: {
+        bgm: 'comedy',
+        speaker: "Bima",
+        text: "Ugh, I'm starving. You got extra cash? I left my wallet in class.",
+        bg: assets.BACKGROUNDS.sekolahUmum.kantin, charLeft: img('bima', 'jahil'), charRight: "",
+        choices: [{ text: "Hand over some allowance, shaking your head", nextScene: "sisip_kantin_2" }]
+    },
+    sisip_kantin_2: {
+        bgm: 'comedy',
+        speaker: "Bima",
+        text: "By the way, I heard there's gonna be a new teacher next week covering for Ms. Ratna. Hope they're not as strict as Mr. Hendra. Actually, no joke, I sometimes think you and Mr. Hendra have some weird 'chemistry'. He pays way more attention to you than other students.",
+        bg: assets.BACKGROUNDS.sekolahUmum.kantin, charLeft: img('bima', 'jahil'), charRight: "",
+        choices: [
+            { text: "Admit you sometimes feel that too, though you don't know why", nextScene: "sisip_kantin_3a" },
+            { text: "Brush it off, say it's nothing", nextScene: "common_hari2" }
+        ]
+    },
+    sisip_kantin_3a: {
+        bgm: 'comedy',
+        speaker: "Bima",
+        text: "Maybe he sees potential in you or something. Or you just cause enough trouble that he can't forget your face. (Narrator: Bima cracks up at his own joke.)",
+        bg: assets.BACKGROUNDS.sekolahUmum.kantin, charLeft: img('bima', 'jahil'), charRight: "",
+        choices: [{ text: "Continue...", nextScene: "common_hari2" }]
     },
 
     // ================= HARI 2 =================
@@ -137,7 +161,24 @@ const storyData = {
         speaker: "Alexandra",
         text: "I heard that, Farah. Read this proposal. Mark anything that doesn't make sense from a regular student's perspective. Don't just agree because you're too nervous to say no.",
         bg: assets.BACKGROUNDS.osis.sekretariat, charLeft: img('alexandra', 'tegas'), charRight: "",
-        choices: [{ text: "Ask Farah why your name was chosen", nextScene: "rute_a2c" }]
+        choices: [{ text: "Ask Farah why your name was chosen", nextScene: "sisip_a_farah_1" }]
+    },
+    sisip_a_farah_1: {
+        bgm: 'comedy',
+        speaker: "Farah",
+        text: "HEY. You know what—you keep asking me about Alexandra, but you've never once asked how I'M doing. I'm tired too, you know. Managing her, managing OSIS, managing everything.",
+        bg: assets.BACKGROUNDS.osis.sekretariat, charLeft: img('farah', 'ngambek'), charRight: "",
+        choices: [
+            { text: "Ask more about her day-to-day life, not just about Alexandra", nextScene: "sisip_a_farah_2a" },
+            { text: "Laugh it off, say \"Guess you're basically OSIS's designated feelings-handler\"", nextScene: "rute_a2c" }
+        ]
+    },
+    sisip_a_farah_2a: {
+        bgm: 'comedy',
+        speaker: "Farah",
+        text: "See, now THAT'S the question I like! I'm doing fine, honestly—just wanted a little attention too, hehe. (Narrator: Farah chats casually about her hobby of writing, the conversation growing noticeably warmer.)",
+        bg: assets.BACKGROUNDS.osis.sekretariat, charLeft: img('farah', 'ramah'), charRight: "",
+        choices: [{ text: "Continue...", nextScene: "rute_a2c" }]
     },
     rute_a2c: {
         bgm: 'council_focus',
@@ -185,13 +226,37 @@ const storyData = {
         speaker: "Narrator",
         text: "Under the shady trees of the school park, Alexandra sits stiffly at the edge of the bench. 'I'm not used to this. It feels like if I stay still too long, I'll miss something.' You reassure her, 'Nothing's going to fall apart just because you rest for five minutes.'",
         bg: assets.BACKGROUNDS.sekolahUmum.taman, charLeft: img('alexandra', 'netral'), charRight: "",
-        choices: [{ text: "Proceed to the Trust Test", nextScene: "rute_a3_ujian" }]
+        choices: [{ text: "Continue...", nextScene: "sisip_a_basket_1" }]
     },
     rute_a4_perpus: {
         bgm: 'tender',
         speaker: "Narrator",
         text: "You follow Alexandra to the library. She sits alone in the corner, accompanied by a bitter cup of black coffee. 'The only place that doesn't demand anything from me.' For the first time, she lets someone sit in her loneliest world without chasing them away.",
         bg: assets.BACKGROUNDS.sekolahUmum.perpustakaan, charLeft: img('alexandra', 'netral'), charRight: "",
+        choices: [{ text: "Continue...", nextScene: "sisip_a_basket_1" }]
+    },
+    sisip_a_basket_1: {
+        bgm: 'comedy',
+        speaker: "Rangga",
+        text: "Watch out! (Narrator: A stray basketball hits your shoulder—turns out Rangga's the one who threw it. Not an official match, just messing around after OSIS practice.) Come on, join us, we're short a player.",
+        bg: assets.BACKGROUNDS.sekolahUmum.lapanganBasket, charLeft: img('rangga', 'santai'), charRight: "",
+        choices: [
+            { text: "Join in, even though you're awkward at it", nextScene: "sisip_a_basket_2" },
+            { text: "Politely decline, say you're tired", nextScene: "rute_a3_ujian" }
+        ]
+    },
+    sisip_a_basket_2: {
+        bgm: 'comedy',
+        speaker: "Rangga",
+        text: "DUDE that throw was elementary school level! (Narrator: You're clearly no athlete, but Rangga—usually so calm and calculated—turns out to be the loudest one on the court, yelling encouragement and teasing every miss.)",
+        bg: assets.BACKGROUNDS.sekolahUmum.lapanganBasket, charLeft: img('rangga', 'santai'), charRight: "",
+        choices: [{ text: "Continue...", nextScene: "sisip_a_basket_3" }]
+    },
+    sisip_a_basket_3: {
+        bgm: 'tender',
+        speaker: "Rangga",
+        text: "You know, this is the first time I've seen you actually relax. Seriously though—Alexandra almost never gets to be this carefree. If you can get her to loosen up like this sometimes too, I'd be really glad. Not for me. For her.",
+        bg: assets.BACKGROUNDS.sekolahUmum.lapanganBasket, charLeft: img('rangga', 'lega'), charRight: "",
         choices: [{ text: "Proceed to the Trust Test", nextScene: "rute_a3_ujian" }]
     },
     rute_a3_ujian: {
@@ -322,13 +387,37 @@ const storyData = {
         speaker: "Kirana",
         text: "He's like an older brother to me. He used to scold me the most when I slacked off practicing. Why? Are you jealous?",
         bg: assets.BACKGROUNDS.seni.sanggarLuar, charLeft: "", charRight: img('kirana', 'tertawa'),
-        choices: [{ text: "Continue...", nextScene: "rute_b4_taman" }]
+        choices: [{ text: "Continue...", nextScene: "sisip_b_warkop_1" }]
     },
     rute_b4_terpendam: {
         bgm: 'melancholy',
         speaker: "Narrator",
         text: "You choose to stay silent. Your unease causes you to lose focus, and you accidentally mix the wrong paint colors, ruining part of the mural. Kirana notices something is off but doesn't pry.",
         bg: assets.BACKGROUNDS.seni.ruangSeni, charLeft: "", charRight: img('kirana', 'kesal'),
+        choices: [{ text: "Continue...", nextScene: "sisip_b_warkop_1" }]
+    },
+    sisip_b_warkop_1: {
+        bgm: 'comedy',
+        speaker: "Narrator",
+        text: "On the way back from the studio, Kirana drags you along to a nearby warkop—the regular hangout spot for the studio kids. Bang Yusuf suddenly appears from inside carrying a tray of coffee.",
+        bg: assets.BACKGROUNDS.luarSekolah.warkopSanggar, charLeft: img('bangYusuf', 'ramah'), charRight: img('kirana', 'ceria'),
+        choices: [{ text: "Continue...", nextScene: "sisip_b_warkop_2" }]
+    },
+    sisip_b_warkop_2: {
+        bgm: 'comedy',
+        speaker: "Kirana",
+        text: "Ngh, seriously though, if you hadn't put up with me when I forced you to hold that huge canvas that one time, I probably would've panicked before I even found an idea for the mural.",
+        bg: assets.BACKGROUNDS.luarSekolah.warkopSanggar, charLeft: img('bangYusuf', 'ramah'), charRight: img('kirana', 'tertawa'),
+        choices: [
+            { text: "Join the art-technique chatter, try to keep up despite knowing nothing", nextScene: "sisip_b_warkop_3a" },
+            { text: "Mostly just listen and smile along", nextScene: "rute_b4_taman" }
+        ]
+    },
+    sisip_b_warkop_3a: {
+        bgm: 'art_whimsy',
+        speaker: "Bang Yusuf",
+        text: "A random guess that happens to be right every time isn't 'luck', dummy, that's called instinct. (Narrator: Everyone at the table cracks up. The whole vibe is nothing like school—more like hanging out at your own little crew's base camp.)",
+        bg: assets.BACKGROUNDS.luarSekolah.warkopSanggar, charLeft: img('bangYusuf', 'ramah'), charRight: img('kirana', 'tertawa'),
         choices: [{ text: "Continue...", nextScene: "rute_b4_taman" }]
     },
     rute_b4_taman: {
@@ -344,9 +433,26 @@ const storyData = {
         text: "I want your opinion on these two sketches. Which one should I pick?",
         bg: assets.BACKGROUNDS.seni.ruangSeni, charLeft: "", charRight: img('kirana', 'ceria'),
         choices: [
-            { text: "Give honest feedback, even if it means criticizing one of them", nextScene: "rute_b5_dewi" },
+            { text: "Give honest feedback, even if it means criticizing one of them", nextScene: "sisip_b_dewi_1" },
             { text: "Praise both so she won't feel sad", nextScene: "bad_end_b_x" }
         ]
+    },
+    sisip_b_dewi_1: {
+        bgm: 'comedy',
+        speaker: "Dewi",
+        text: "So, you and Kirana have been pretty close lately, huh? Oh come on, don't play innocent. The whole class has been talking about it. Relax though, I'm not asking to be catty, I'm just genuinely curious.",
+        bg: assets.BACKGROUNDS.sekolahUmum.kelas, charLeft: img('dewi', 'menggoda'), charRight: "",
+        choices: [
+            { text: "Admit honestly you have feelings for Kirana, a bit awkwardly", nextScene: "sisip_b_dewi_2a" },
+            { text: "Deflect, say you're just friends", nextScene: "rute_b5_dewi" }
+        ]
+    },
+    sisip_b_dewi_2a: {
+        bgm: 'tender',
+        speaker: "Dewi",
+        text: "Fair enough. Thanks for being honest—not every guy has the guts to admit that.",
+        bg: assets.BACKGROUNDS.sekolahUmum.kelas, charLeft: img('dewi', 'ramah'), charRight: "",
+        choices: [{ text: "Continue...", nextScene: "rute_b5_dewi" }]
     },
     bad_end_b_x: {
         bgm: 'ending_bad',
@@ -527,6 +633,13 @@ const storyData = {
         speaker: "Bima",
         text: "WOI. I heard you got assigned to help that supposedly cold new girl? Gossip says she transferred from out of town! Some say she has a mysterious past!",
         bg: assets.BACKGROUNDS.sekolahUmum.koridor, charLeft: img('bima', 'jahil'), charRight: "",
+        choices: [{ text: "Not really that bad, honestly...", nextScene: "sisip_m_bima_2" }]
+    },
+    sisip_m_bima_2: {
+        bgm: 'tender',
+        speaker: "Bima",
+        text: "AW. So stingy. (Narrator: Bima pouts for a second, then grins again.) Fine, I'll just wait for you to tell me yourself when you're ready. By the way, you doing okay? I mean, you tend to be so busy being nice to everyone else you forget to take care of yourself.",
+        bg: assets.BACKGROUNDS.sekolahUmum.koridor, charLeft: img('bima', 'jahil'), charRight: "",
         choices: [
             { text: "Ignore Bima's gossip, try to know Mira through observation", nextScene: "rute_m3" },
             { text: "Get curious too, dig around in the school group chat", nextScene: "rute_m2_gosip" }
@@ -561,13 +674,37 @@ const storyData = {
         speaker: "Mira",
         text: "...Wait. You can... sit for a bit. If you stay quiet. (Narrator: Adi sits across from her in a silence that doesn't feel awkward.)",
         bg: assets.BACKGROUNDS.rahasia.lotengArsip, charLeft: img('mira', 'netral'), charRight: "",
-        choices: [{ text: "Continue...", nextScene: "rute_m5_dewi" }]
+        choices: [{ text: "Continue...", nextScene: "sisip_m_santai_1" }]
     },
     rute_m4_ingin_tahu: {
         bgm: 'mystery',
         speaker: "Mira",
         text: "This is the only place that feels like mine. I've moved schools four times in three years. I learned not to get too attached to places or people, because I'll leave them anyway.",
         bg: assets.BACKGROUNDS.rahasia.lotengArsip, charLeft: img('mira', 'sedih'), charRight: "",
+        choices: [{ text: "Continue...", nextScene: "sisip_m_santai_1" }]
+    },
+    sisip_m_santai_1: {
+        bgm: 'tender',
+        speaker: "Narrator",
+        text: "'Hey, what genre do you even like reading?' Adi asks, out of the blue. Mira raises an eyebrow, caught off guard by such a random question. '...Why do you ask?' 'Just curious. You're always here reading those thick books.'",
+        bg: assets.BACKGROUNDS.rahasia.lotengArsip, charLeft: img('mira', 'netral'), charRight: "",
+        choices: [{ text: "Continue...", nextScene: "sisip_m_santai_2" }]
+    },
+    sisip_m_santai_2: {
+        bgm: 'tender',
+        speaker: "Mira",
+        text: "Classic fiction, mostly. And poetry. Why, gonna make fun of me? (Narrator: Adi shakes his head, says it's cool actually—he can barely manage comic books himself. For the first time, Mira lets out a small laugh—a real one, not just a faint smile.)",
+        bg: assets.BACKGROUNDS.rahasia.lotengArsip, charLeft: img('mira', 'tertawa'), charRight: "",
+        choices: [
+            { text: "Keep chatting, ask for book recommendations", nextScene: "sisip_m_santai_3" },
+            { text: "Ask what she's reading right now instead", nextScene: "rute_m5_dewi" }
+        ]
+    },
+    sisip_m_santai_3: {
+        bgm: 'tender',
+        speaker: "Mira",
+        text: "Excited, Mira starts rattling off book recommendations one after another—her voice far more alive than usual. The conversation drifts on, easy and light, not about her heavy past, just two people talking about books like ordinary teenagers.",
+        bg: assets.BACKGROUNDS.rahasia.lotengArsip, charLeft: img('mira', 'tersenyum'), charRight: "",
         choices: [{ text: "Continue...", nextScene: "rute_m5_dewi" }]
     },
     rute_m5_dewi: {
