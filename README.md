@@ -22,8 +22,8 @@
 Terlambat di hari pertama sekolah adalah hal yang biasa bagi **{Player}**. Namun, berlari terburu-buru menyusuri koridor sambil membawa roti lalu menabrak Ketua OSIS yang paling disegani di sekolah? Itu awal dari sebuah kisah yang tak terduga!
 
 Di tengah dinamika kehidupan SMA, kamu akan terombang-ambing di antara persimpangan jalan dan perasaan:
-- **Alexandra**, Ketua OSIS perfeksionis yang tegas namun menyimpan kepedulian tersembunyi.
-- **Kirana**, gadis jenius seni yang ceria, bebas, tetapi diam-diam meragukan bakatnya sendiri.
+- **Alexandra**, Ketua OSIS perfeksionis yang tegas memiliki sifat seperti kulkas yang dingin namun akan kah ada soup hangat dalam kulkas yang dingin itu.
+- **Kirana**, gadis jenius seni yang ceria, bebas, tetapi penuh akan keraguan yang mendalam.
 - **Mira**, sosok murid pindahan misterius di loteng arsip yang membawa sudut pandang baru dalam perjalanan hidupmu.
 
 Setiap pilihan kata dan keputusan yang kamu ambil akan menentukan rute cintamu, mengungkapkan rahasia di balik masa lalu mereka, dan membawamu menuju takdir akhir!
