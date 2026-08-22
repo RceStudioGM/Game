@@ -1,4 +1,4 @@
-# 🌸 Persimpangan Hati (Visual Novel)
+# 🌸 My Favorite Corridor (Visual Novel)
 
 <div align="center">
 
@@ -24,7 +24,7 @@ Terlambat di hari pertama sekolah adalah hal yang biasa bagi **{Player}**. Namun
 Di tengah dinamika kehidupan SMA, kamu akan terombang-ambing di antara persimpangan jalan dan perasaan:
 - **Alexandra**, Ketua OSIS perfeksionis yang tegas namun menyimpan kepedulian tersembunyi.
 - **Kirana**, gadis jenius seni yang ceria, bebas, tetapi diam-diam meragukan bakatnya sendiri.
-- **Mira**, sosok penuh warna yang membawa sudut pandang baru dalam perjalanan hidupmu.
+- **Mira**, sosok murid pindahan misterius di loteng arsip yang membawa sudut pandang baru dalam perjalanan hidupmu.
 
 Setiap pilihan kata dan keputusan yang kamu ambil akan menentukan rute cintamu, mengungkapkan rahasia di balik masa lalu mereka, dan membawamu menuju takdir akhir!
 
@@ -44,21 +44,21 @@ Setiap pilihan kata dan keputusan yang kamu ambil akan menentukan rute cintamu, 
 ## ✨ Fitur-Fitur Keunggulan (Key Features)
 
 * 🌐 **Dukungan Multi-Bahasa (Bilingual ID/EN):**
-  Mainkan game dalam **Bahasa Indonesia** atau **Bahasa Inggris** yang dapat beralih secara langsung melalui menu pengaturan!
+  Mainkan game dalam **Bahasa Indonesia** atau **Bahasa Inggris** yang dapat beralih secara dinamis melalui menu pengaturan!
 * 🎬 **Animasi GSAP Mulus & Sinematik:**
-  Diintegrasikan dengan **GSAP (GreenSock) & MotionPathPlugin** untuk gerakan sprite karakter, efek transisi latar, dan animasi UI yang terasa hidup.
+  Diintegrasikan dengan **GSAP (GreenSock) & MotionPathPlugin** untuk gerakan sprite karakter, efek jatuhnya kelopak sakura, dan animasi UI yang terasa hidup.
 * 🔀 **Branching Storyline & Multiple Endings:**
   Pilihanmu berdampak nyata! Buka berbagai rute romansa **Alexandra**, **Kirana**, **Mira**, **True Ending (Konstelasi)**, hingga **Secret Route**.
-* 💾 **Sistem Multi-Slot Save & Load:**
-  Penyimpanan progres berbasis *LocalStorage* dengan dukungan **banyak slot simpanan** (Auto-Save & Manual) agar kamu bisa mencoba berbagai rute cerita kapan saja.
+* 💾 **Sistem Multi-Slot Save & Load (9 Slot):**
+  Penyimpanan progres berbasis *LocalStorage* dengan dukungan **9 slot simpanan** (Auto-Save & Manual) agar kamu bisa mencoba berbagai rute cerita kapan saja.
 * ⌨️ **Navigasi Keyboard Penuh:**
-  Mendukung kontrol penuh keyboard (Tombol Panah, Enter, Esc) untuk navigasi lobi, menu jeda, hingga pilihan dialog tanpa hambatan.
+  Mendukung kontrol penuh keyboard (Tombol Panah, Enter, Esc, Spasi) untuk navigasi lobi, menu jeda, hingga pilihan dialog tanpa hambatan.
 * 🎧 **Audio Controller & Immersion:**
-  Pengaturan volume independen untuk BGM (Background Music) dan SFX (Sound Effects) untuk suasana bermain yang imersif.
+  Pengaturan volume independen dengan sistem *crossfade* dinamis untuk BGM (Background Music) dan efek interaktif SFX (Sound Effects).
 * 🖥️ **Resolusi Layar Adaptif:**
-  Dukungan ubah resolusi dinamis mulai dari **960x600**, **1280x720 (HD)**, hingga **1920x1080 (Full HD)**.
+  Dukungan ubah resolusi dinamis mulai dari **960x600 (Standard)**, **1152x720**, hingga **1280x800**.
 * 🎨 **UI/UX Modern & Elegan:**
-  Tampilan antarmuka stylish dibangun menggunakan **Tailwind CSS**, lengkap dengan *Toast Notifications*, *Confirmation Modals*, dan modal pengaturan responsif.
+  Tampilan antarmuka stylish dibangun menggunakan **Tailwind CSS**, lengkap dengan *Toast Notifications*, *Confirmation Modals*, dan sistem overlay responsif.
 * 🔓 **Gallery & Profile Unlocks:**
   Buka kartu profil karakter (*Profile Cards*) dan koleksi *Quotes Epilog* langka seiring jalannya permainan.
 * 🌐 **100% Web Native (Zero Install):**
@@ -73,9 +73,9 @@ Game ini dibangun secara *custom web-based engine* dari nol tanpa menggunakan en
 - **Frontend Framework / Styling:** HTML5, CSS3, [Tailwind CSS](https://tailwindcss.com/)
 - **Animation Engine:** [GSAP (GreenSock)](https://greensock.com/gsap/) & MotionPathPlugin
 - **Core Engine & Logic:** Vanilla JavaScript (ES6+)
-- **Localization:** Dynamic Multi-Language System 
+- **Localization:** Dynamic Multi-Language System (`story.js` & `story_en.js`)
 - **Data Persistence:** Web Storage API (LocalStorage Multi-Slot)
-- **Typography:** Google Fonts 
+- **Typography:** Google Fonts (*Playfair Display* & *Nunito*)
 
 ---
 
