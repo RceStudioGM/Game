@@ -68,7 +68,7 @@ const storyData = {
     common_hari2: {
         bgm: 'comedy',
         speaker: "Bima",
-        text: "Wanjayy, denger-denger ada yang disuruh bantuin OSIS sama anak seni nih. Lu mau punya harem ya lu, {player}?",
+        text: "Wanjayy, denger-denger ada yang disuruh bantuin OSIS sama anak seni nih. Lo mau punya harem ya lo, {player}?",
         bg: assets.BACKGROUNDS.sekolahUmum.koridor, charLeft: img('bima', 'jahil'), charRight: "",
         choices: [
             { text: "Curhat balik ke Bima soal bingung mau pilih", nextScene: "common_hari2_curhat" },
@@ -78,14 +78,14 @@ const storyData = {
     common_hari2_curhat: {
         bgm: 'comedy',
         speaker: "Bima",
-        text: "Hah, pusing lu? Ya udah, kalau nggak yakin, jangan dipikirin! (Narator: Saran ngawur Bima bikin kamu makin bingung.)",
+        text: "Hah, pusing lo? Ya udah, kalau nggak yakin, jangan dipikirin! (Narator: Saran ngawur Bima bikin kamu makin bingung.)",
         bg: assets.BACKGROUNDS.sekolahUmum.koridor, charLeft: img('bima', 'jahil'), charRight: "",
         choices: [{ text: "Menuju Ruang Guru...", nextScene: "common_hari2_pakhendra" }]
     },
     common_hari2_diam: {
         bgm: 'comedy',
         speaker: "Bima",
-        text: "Eh, beneran diem? Yaelah, baperan amat sih. (Narator: Bima ngambek pura-pura sebentar, lalu cepat baikan lagi.)",
+        text: "Eh, lo beneran diem? Yaelah, baperan amat sih. (Narator: Bima ngambek pura-pura sebentar, lalu cepat baikan lagi.)",
         bg: assets.BACKGROUNDS.sekolahUmum.koridor, charLeft: img('bima', 'jahil'), charRight: "",
         choices: [{ text: "Menuju Ruang Guru...", nextScene: "common_hari2_pakhendra" }]
     },
@@ -131,7 +131,7 @@ const storyData = {
     common_hari4: {
         bgm: 'comedy',
         speaker: "Bima",
-        text: "Eh, Dewi kayaknya naksir kamu deh. Cewek IPS pindahan itu, kan? Kamu sih masih sibuk mikirin pilihan besar besok.",
+        text: "Eh, Dewi kayaknya naksir lo deh. Cewek IPS pindahan itu, kan? Lo sih masih sibuk mikirin pilihan besar besok.",
         bg: assets.BACKGROUNDS.sekolahUmum.kelas, charLeft: img('bima', 'jahil'), charRight: "",
         choices: [{ text: "Lanjut ke Hari 5...", nextScene: "bab1_pilihan" }]
     },
@@ -272,7 +272,7 @@ const storyData = {
     rute_a5_rangga: {
         bgm: 'tension',
         speaker: "Rangga",
-        text: "Alexandra udah terlalu banyak dikecewakan orang. Kalau kamu nggak serius, mundur sekarang.",
+        text: "Alexandra udah terlalu banyak dikecewakan orang. Kalau lo nggak serius, mundur sekarang.",
         bg: assets.BACKGROUNDS.sekolahUmum.koridor, charLeft: img('rangga', 'curiga'), charRight: "",
         choices: [
             { text: "Yakinkan Rangga niatku tulus", nextScene: "rute_a5_percaya" },
@@ -398,7 +398,7 @@ const storyData = {
     sisip_b_warkop_2: {
         bgm: 'comedy',
         speaker: "Kirana",
-        text: "Eh serius deh, kalo Adi nggak protes waktu itu pas gue maksa dia pegangin kanvas gede, gue kayaknya bakal parno duluan sebelum ketemu ide buat mural.",
+        text: "Eh serius deh, kalo Adi nggak protes waktu itu pas aku maksa dia pegangin kanvas gede, aku kayaknya bakal parno duluan sebelum ketemu ide buat mural.",
         bg: assets.BACKGROUNDS.luarSekolah.warkopSanggar, charLeft: img('bangYusuf', 'ramah'), charRight: img('kirana', 'tertawa'),
         choices: [
             { text: "Ikut nimbrung obrolan teknik seni, coba nyambung meski awam", nextScene: "sisip_b_warkop_3a" },
@@ -516,7 +516,7 @@ const storyData = {
     rute_c2c: {
         bgm: 'tension',
         speaker: "Bima",
-        text: "Kamu bukan pemeran utama drama, Di. Cepat atau lambat mereka bakal sadar.",
+        text: "Lo bukan pemeran utama drama, Di. Cepat atau lambat mereka bakal sadar.",
         bg: assets.BACKGROUNDS.sekolahUmum.koridor, charLeft: img('bima', 'jahil'), charRight: "",
         choices: [
             { text: "Tetap keras kepala jalani keduanya", nextScene: "rute_c3_bertahan" },
@@ -621,7 +621,7 @@ const storyData = {
     rute_m2_bima: {
         bgm: 'comedy',
         speaker: "Bima",
-        text: "WOI. Katanya kamu ditugasin nemenin anak baru yang katanya dingin banget itu? Gosip bilang dia pindahan dari luar kota! Ada yang bilang dia punya masa lalu misterius!",
+        text: "WOI. Katanya lo ditugasin nemenin anak baru yang katanya dingin banget itu? Gosip bilang dia pindahan dari luar kota! Ada yang bilang dia punya masa lalu misterius!",
         bg: assets.BACKGROUNDS.sekolahUmum.koridor, charLeft: img('bima', 'jahil'), charRight: "",
         choices: [{ text: "Nggak segitunya juga sih...", nextScene: "sisip_m_bima_2" }]
     },
@@ -859,7 +859,7 @@ const storyData = {
     rute_r1_hendra: {
         bgm: 'council_focus',
         speaker: "Pak Hendra",
-        text: "Pendekatan berbeda. Aku penasaran lihat hasilnya. Cobalah.",
+        text: "Pendekatan yang berbeda. Bapak penasaran lihat hasilnya. Coba saja.",
         bg: assets.BACKGROUNDS.sekolahUmum.ruangGuruBK, charLeft: img('pakHendra', 'ramah'), charRight: "",
         choices: [{ text: "Lanjut ke Bab 2R...", nextScene: "rute_r2" }]
     },
