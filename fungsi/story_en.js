@@ -70,7 +70,7 @@ const storyData = {
     common_hari2: {
         bgm: 'comedy',
         speaker: "Bima",
-        text: "Wanjayy, I heard someone got asked to help both the OSIS and the art kid. You wanna build a harem or what, {player}?",
+        text: "Yooo, heard someone's helping out BOTH the student council prez AND the art club now. Building yourself a harem or what, {player}?",
         bg: assets.BACKGROUNDS.sekolahUmum.koridor, charLeft: img('bima', 'jahil'), charRight: "",
         choices: [
             { text: "Complain back to Bima about being confused on what to choose", nextScene: "common_hari2_curhat" },
@@ -80,14 +80,14 @@ const storyData = {
     common_hari2_curhat: {
         bgm: 'comedy',
         speaker: "Bima",
-        text: "Hah, you're confused? Then just don't think about it! (Narrator: Bima's nonsense advice only makes you more confused.)",
+        text: "Ha, stressed out? Then don't overthink it, man! (Narrator: Bima's nonsense advice only leaves you more confused.)",
         bg: assets.BACKGROUNDS.sekolahUmum.koridor, charLeft: img('bima', 'jahil'), charRight: "",
         choices: [{ text: "Head to the Teacher's Room...", nextScene: "common_hari2_pakhendra" }]
     },
     common_hari2_diam: {
         bgm: 'comedy',
         speaker: "Bima",
-        text: "Eh, you're really quiet? Geez, so dramatic. (Narrator: Bima acts fake sulky for a moment, then quickly gets over it.)",
+        text: "Wait, you're seriously giving me the silent treatment? Come on, don't be so dramatic. (Narrator: Bima fake-sulks for a moment, then quickly gets over it.)",
         bg: assets.BACKGROUNDS.sekolahUmum.koridor, charLeft: img('bima', 'jahil'), charRight: "",
         choices: [{ text: "Head to the Teacher's Room...", nextScene: "common_hari2_pakhendra" }]
     },
@@ -137,7 +137,7 @@ const storyData = {
     common_hari4: {
         bgm: 'comedy',
         speaker: "Bima",
-        text: "Eh, looks like Dewi has a crush on you. The transfer student from the Social Studies track, right? You're still too busy thinking about your big decision tomorrow.",
+        text: "Yo, pretty sure Dewi's got a crush on you. That transfer student from Social Studies, right? And you're STILL too busy stressing over your big decision tomorrow.",
         bg: assets.BACKGROUNDS.sekolahUmum.kelas, charLeft: img('bima', 'jahil'), charRight: "",
         choices: [{ text: "Proceed to Day 5...", nextScene: "bab1_pilihan" }]
     },
@@ -279,7 +279,7 @@ const storyData = {
     rute_a5_rangga: {
         bgm: 'tension',
         speaker: "Rangga",
-        text: "Alexandra has been let down too many times by people who say they 'care' and then leave when she actually needs them. If you're not serious, back off now, before she gets her hopes up.",
+        text: "Alexandra's been let down by too many people who said they 'cared' and then bailed the moment she actually needed them. If you're not serious about this, back off now, man—before she gets her hopes up.",
         bg: assets.BACKGROUNDS.sekolahUmum.koridor, charLeft: img('rangga', 'curiga'), charRight: "",
         choices: [
             { text: "Convince Rangga that your intentions are sincere", nextScene: "rute_a5_percaya" },
@@ -474,7 +474,7 @@ const storyData = {
     rute_b6_klarifikasi: {
         bgm: 'tender',
         speaker: "Kirana",
-        text: "It was Dewi who asked me out, I didn't— You don't need to explain to me. It's none of my business who you get close to. But I like you, not because you're good at painting. I like your carefree laughter, your enthusiasm even when you're tired, the way you brighten people around you.",
+        text: "I don't like you because you're good at art. I like how passionate you are.",
         bg: assets.BACKGROUNDS.seni.ruangSeni, charLeft: "", charRight: img('kirana', 'melankolis'),
         choices: [{ text: "Proceed to the Sudden Rain", nextScene: "rute_b6_hujan" }]
     },
@@ -525,7 +525,7 @@ const storyData = {
     rute_c2c: {
         bgm: 'tension',
         speaker: "Bima",
-        text: "You're not the main character of a drama, Di. Sooner or later, they'll realize.",
+        text: "You're not the lead in some drama, man. Sooner or later, they're both gonna figure it out.",
         bg: assets.BACKGROUNDS.sekolahUmum.koridor, charLeft: img('bima', 'jahil'), charRight: "",
         choices: [
             { text: "Stubbornly keep doing both", nextScene: "rute_c3_bertahan" },
@@ -631,7 +631,7 @@ const storyData = {
     rute_m2_bima: {
         bgm: 'comedy',
         speaker: "Bima",
-        text: "WOI. I heard you got assigned to help that supposedly cold new girl? Gossip says she transferred from out of town! Some say she has a mysterious past!",
+        text: "DUDE. I heard you got assigned to help that supposedly cold new girl? Gossip says she transferred from out of town! Some say she's got a mysterious past!",
         bg: assets.BACKGROUNDS.sekolahUmum.koridor, charLeft: img('bima', 'jahil'), charRight: "",
         choices: [{ text: "Not really that bad, honestly...", nextScene: "sisip_m_bima_2" }]
     },
@@ -744,7 +744,7 @@ const storyData = {
     rute_m7_tanya: {
         bgm: 'tender',
         speaker: "Mira",
-        text: "You two... are really close, huh? Why? Jealous? (Narrator: Mira chuckles at your reaction). Alvin is my friend from elementary school. He's nice, but... he chose not to finish that sentence.",
+        text: "You two... are really close, huh? Why? Jealous? (Narrator: Mira chuckles at your reaction). Alvin is my friend from elementary school. He's a good guy, but... he chose not to take it any further.",
         bg: assets.BACKGROUNDS.rahasia.lotengArsip, charLeft: img('mira', 'tertawa'), charRight: "",
         choices: [{ text: "Continue...", nextScene: "rute_m8_alvin" }]
     },
