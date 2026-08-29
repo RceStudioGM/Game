@@ -88,15 +88,12 @@ const assets = {
 };
 
 const allQuotes = {
-    quote_a1: "Kamu nggak bikin aku harus jadi 'Ketua OSIS' terus. Cukup jadi Alexandra aja. — Alexandra",
-    quote_b1: "Ini karya paling berarti yang pernah aku buat. Bukan karena hasilnya, tapi karena siapa yang bikin bareng aku. — Kirana",
-    quote_m1: "Ini pertama kalinya aku milih buat tinggal, bukan cuma nurutin ke mana pun aku dibawa pergi. Dan aku milih di sini. Sama kamu. — Mira",
-    quote_c: "Nilai ulanganmu minggu ini naik. Saya masih belum tahu jawabannya, Pak. Nggak masalah, yang penting kamu nggak lari dari pertanyaannya. — Pak Hendra",
-    quote_r1: "Bukan kisah cinta segitiga dengan satu pemenang, tapi tiga orang yang saling menemukan versi terbaik diri mereka. — Narator",
-    quote_r2: "Terima kasih sudah memilihku. / Senang banget kamu memilihku! — Alexandra & Kirana",
-    quote_a2: "Aku cuma takut kalau aku jujur, aku bakal kelihatan lemah. — Alexandra",
-    quote_b2: "Ternyata seru juga jadi orang biasa. Makasih udah nunjukin ini. — Kirana",
-    quote_m3: "Makasih udah jadi tempat yang nggak pernah bikin aku ngerasa cuma 'numpang lewat'. Aku bakal selalu inget loteng itu. Dan kamu. — Mira",
+    quote_alexandra: "Kamu nggak bikin aku harus jadi 'Ketua OSIS' terus. Cukup jadi Alexandra aja. — Alexandra",
+    quote_bad: "Aku cuma takut kalau aku jujur, aku bakal kelihatan lemah. — Alexandra",
+    quote_kirana: "Ini karya paling berarti yang pernah aku buat. Bukan karena hasilnya, tapi karena siapa yang bikin bareng aku. — Kirana",
+    quote_normal: "Nggak masalah, yang penting kamu nggak lari dari pertanyaannya. — Pak Hendra",
+    quote_mira: "Ini pertama kalinya aku milih buat tinggal, bukan cuma nurutin ke mana pun aku dibawa pergi. Dan aku milih di sini. Sama kamu. — Mira",
+    quote_epilog: "Bukan kisah cinta segitiga dengan satu pemenang, tapi tiga orang yang saling menemukan versi terbaik diri mereka. — Narator",
 };
 
 const locales = {
@@ -187,6 +184,12 @@ const locales = {
         desc_alvin: "Mira's friend since elementary school. Has liked her for a long time but is too afraid to say it. Kind-hearted, but can become a serious rival.",
         desc_dewi: "Sweet and shy, secretly has a crush on MC at the start of the story. Has the emotional maturity to accept reality without resentment, and becomes one of Mira's first friends at her new school.",
         desc_bangYusuf: "A 3rd-year senior, leader of an art studio outside school. Calm and mature, he treats Kirana like a little sister. Loyal without ever expecting anything in return.",
+        quote_alexandra: "You don't make me feel like I always have to be the 'Council President'. I can just be Alexandra. — Alexandra",
+        quote_bad: "I was just afraid that if I were honest, I'd look weak. — Alexandra",
+        quote_kirana: "This is the most meaningful piece I've ever made. Not because of how it turned out, but because of who made it with me. — Kirana",
+        quote_normal: "It's fine. What matters is that you didn't run from the question. — Mr. Hendra",
+        quote_mira: "This is the first time I've ever chosen to stay, instead of just going along with wherever I'm taken. And I choose here. With you. — Mira",
+        quote_epilog: "Not a love triangle with one winner, but three people who helped each other become the best version of themselves. — Narrator",
         lockText: "🔒 Locked",
         lockRouteA: "🔒 Complete Alexandra's Route",
         lockRouteB: "🔒 Complete Kirana's Route",
@@ -280,6 +283,12 @@ const locales = {
         desc_alvin: "Sahabat Mira sejak SD. Sudah lama menyukainya tapi takut mengungkapkan. Baik hati, tapi bisa menjadi rival yang serius.",
         desc_dewi: "Manis dan pemalu, diam-diam menyukai MC di awal cerita. Punya kedewasaan emosional untuk menerima kenyataan tanpa dendam, dan jadi salah satu sahabat pertama Mira di sekolah baru.",
         desc_bangYusuf: "Senior kelas 3, ketua sanggar lukis di luar sekolah. Kalem dan dewasa, menganggap Kirana seperti adik sendiri. Loyal tanpa pernah menuntut balasan.",
+        quote_alexandra: "Kamu nggak bikin aku harus jadi 'Ketua OSIS' terus. Cukup jadi Alexandra aja. — Alexandra",
+        quote_bad: "Aku cuma takut kalau aku jujur, aku bakal kelihatan lemah. — Alexandra",
+        quote_kirana: "Ini karya paling berarti yang pernah aku buat. Bukan karena hasilnya, tapi karena siapa yang bikin bareng aku. — Kirana",
+        quote_normal: "Nggak masalah, yang penting kamu nggak lari dari pertanyaannya. — Pak Hendra",
+        quote_mira: "Ini pertama kalinya aku milih buat tinggal, bukan cuma nurutin ke mana pun aku dibawa pergi. Dan aku milih di sini. Sama kamu. — Mira",
+        quote_epilog: "Bukan kisah cinta segitiga dengan satu pemenang, tapi tiga orang yang saling menemukan versi terbaik diri mereka. — Narator",
         lockText: "🔒 Terkunci",
         lockRouteA: "🔒 Selesaikan Rute Alexandra",
         lockRouteB: "🔒 Selesaikan Rute Kirana",
